@@ -35,12 +35,15 @@ DROP TABLE IF EXISTS `RamoIEEE`.`Usuário` ;
 
 CREATE TABLE IF NOT EXISTS `RamoIEEE`.`Usuário` (
   `ID_Usuário` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `N_Matricula` VARCHAR(45) NOT NULL,
+  `N_Carteirinha` VARCHAR(20) NOT NULL,
+  `N_Matricula` VARCHAR(20) NOT NULL,
   `Nome` VARCHAR(100) NOT NULL,
   `Email` VARCHAR(45) NOT NULL,
   `ID_Curso` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`ID_Usuário`),
   INDEX `fk_Usuário_Curso1_idx` (`ID_Curso` ASC) VISIBLE,
+  UNIQUE INDEX `N_Carteirinha_UNIQUE` (`N_Carteirinha` ASC) VISIBLE,
+  UNIQUE INDEX `N_Matricula_UNIQUE` (`N_Matricula` ASC) VISIBLE,
   CONSTRAINT `fk_Usuário_Curso1`
     FOREIGN KEY (`ID_Curso`)
     REFERENCES `RamoIEEE`.`Curso` (`ID_Curso`)
