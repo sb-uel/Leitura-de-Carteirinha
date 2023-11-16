@@ -1,0 +1,3 @@
+TAMANHO_JANELA = "1365x768"
+FONTE_INPUT = "Courierprime"
+FONTE_TELAS = "Horta"

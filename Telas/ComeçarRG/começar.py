@@ -8,7 +8,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from Telas.defs import *
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
@@ -20,7 +20,7 @@ def relative_to_assets(path: str) -> Path:
 
 window = Tk()
 
-window.geometry("1365x768")
+window.geometry(TAMANHO_JANELA)
 window.configure(bg = "#FFFFFF")
 
 
@@ -49,7 +49,7 @@ canvas.create_text(
     anchor="nw",
     text="Local de salvamento:",
     fill="#FFFFFF",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 canvas.create_rectangle(
