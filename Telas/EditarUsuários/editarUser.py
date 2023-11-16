@@ -8,7 +8,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
-
+from Telas.defs import *
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
@@ -20,7 +20,7 @@ def relative_to_assets(path: str) -> Path:
 
 window = Tk()
 
-window.geometry("1365x768")
+window.geometry(TAMANHO_JANELA)
 window.configure(bg = "#FFFFFF")
 
 
@@ -57,7 +57,7 @@ canvas.create_text(
     anchor="nw",
     text="EDIÇÃO DE USUÁRIOS",
     fill="#FFFFFF",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 canvas.create_text(
@@ -66,7 +66,7 @@ canvas.create_text(
     anchor="nw",
     text="NOME:",
     fill="#FFFFFF",
-    font=("Horta", 40 * -1)
+    font=(FONTE_TELAS, 40 * -1)
 )
 
 canvas.create_text(
@@ -75,7 +75,7 @@ canvas.create_text(
     anchor="nw",
     text="N° DE MATRICULA:",
     fill="#FFFFFF",
-    font=("Horta", 40 * -1)
+    font=(FONTE_TELAS, 40 * -1)
 )
 
 canvas.create_text(
@@ -84,7 +84,7 @@ canvas.create_text(
     anchor="nw",
     text="CURSO",
     fill="#FFFFFF",
-    font=("Horta", 40 * -1)
+    font=(FONTE_TELAS, 40 * -1)
 )
 
 canvas.create_text(
@@ -93,7 +93,7 @@ canvas.create_text(
     anchor="nw",
     text="EMAIL:",
     fill="#FFFFFF",
-    font=("Horta", 40 * -1)
+    font=(FONTE_TELAS, 40 * -1)
 )
 
 canvas.create_text(
@@ -102,7 +102,7 @@ canvas.create_text(
     anchor="nw",
     text="N° DE DIAS PRESENTES:",
     fill="#FFFFFF",
-    font=("Horta", 40 * -1)
+    font=(FONTE_TELAS, 40 * -1)
 )
 
 entry_image_1 = PhotoImage(
@@ -117,7 +117,7 @@ entry_1 = Text(
     bg="#FFFFFF",
     fg="#000716",
     highlightthickness=0,
-    font=('Courierprime 25')
+    font=(FONTE_INPUT, 25)
 )
 entry_1.place(
     x=126.0,
@@ -138,7 +138,7 @@ entry_2 = Text(
     bg="#FFFFFF",
     fg="#000716",
     highlightthickness=0,
-    font=('Courierprime 25')
+    font=(FONTE_INPUT, 25)
 )
 entry_2.place(
     x=272.0,
@@ -159,7 +159,7 @@ entry_3 = Text(
     bg="#FFFFFF",
     fg="#000716",
     highlightthickness=0,
-    font=('Courierprime 25')
+    font=(FONTE_INPUT, 25)
 )
 entry_3.place(
     x=139.0,
@@ -198,7 +198,7 @@ canvas.create_text(
     anchor="nw",
     text="Data da RG",
     fill="#000000",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 canvas.create_text(
@@ -207,7 +207,7 @@ canvas.create_text(
     anchor="nw",
     text="Presente",
     fill="#000000",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 button_image_1 = PhotoImage(
@@ -262,11 +262,11 @@ def changeMonth():
     comboExample["values"] = ["Engenharia Elétrica", "Ciência da Computação",]
     
 comboExample = ttk.Combobox(
-    window, values=["Engenharia Elétrica", "Ciência da Computação"], postcommand=changeMonth, font="Courierprime 25 bold"
+    window, values=["Engenharia Elétrica", "Ciência da Computação"], postcommand=changeMonth, font=(FONTE_INPUT, 25, "bold")
 )
 comboExample.pack()
 
-comboExample.option_add("*TCombobox*Listbox*Font", ("Courierprime", 16))
+comboExample.option_add("*TCombobox*Listbox*Font", (FONTE_INPUT, 16))
 
 comboExample.config(width=21) 
 comboExample.place(x=135, y=303)

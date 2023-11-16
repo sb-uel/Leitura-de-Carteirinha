@@ -8,7 +8,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+from Telas.defs import *
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
@@ -20,7 +20,7 @@ def relative_to_assets(path: str) -> Path:
 
 window = Tk()
 
-window.geometry("1365x768")
+window.geometry(TAMANHO_JANELA)
 window.configure(bg = "#FFFFFF")
 
 
@@ -49,7 +49,7 @@ canvas.create_text(
     anchor="nw",
     text="Inicio:",
     fill="#FFFFFF",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 canvas.create_rectangle(
@@ -72,7 +72,7 @@ entry_1 = Text(
     bg="#FFFFFF",
     fg="#000716",
     highlightthickness=0,
-    font=('Courierprime 20')
+    font=(FONTE_INPUT, 20)
 )
 entry_1.place(
     x=181.0,
@@ -87,7 +87,7 @@ canvas.create_text(
     anchor="nw",
     text="Fim:",
     fill="#FFFFFF",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 canvas.create_rectangle(
@@ -110,7 +110,7 @@ entry_2 = Text(
     bg="#FFFFFF",
     fg="#000716",
     highlightthickness=0,
-    font=('Courierprime 20')
+    font=(FONTE_INPUT, 20)
 )
 entry_2.place(
     x=643.0,
@@ -141,7 +141,7 @@ canvas.create_text(
     anchor="nw",
     text="Data da RG",
     fill="#000000",
-    font=("Horta", 48 * -1)
+    font=(FONTE_TELAS, 48 * -1)
 )
 
 button_image_1 = PhotoImage(
