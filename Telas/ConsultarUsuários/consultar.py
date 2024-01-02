@@ -3,15 +3,15 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
+
 from pathlib import Path
-
 from tkinter import *
-# Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
-from Telas.defs import *
-
+from tkinter import ttk
+import sys
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
+sys.path.append(str(OUTPUT_PATH.parent))
+from defs import *
 
 
 def relative_to_assets(path: str) -> Path:
