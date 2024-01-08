@@ -2,7 +2,13 @@ import tkinter as tk
 from tkinter import ttk
 from Telas.defs import *
 from tkinter import ttk
-from Telas.ComeçarRG.começar import criar_tela_comecar_rg
+from tab_functions import (
+    abrir_aba_cadastrar_usuario,
+    abrir_aba_consultar_rg,
+    abrir_aba_comecar_rg,
+    abrir_aba_consultar_usuarios,
+    abrir_aba_exportar,
+)
 
 # Root window
 root = tk.Tk()
@@ -26,14 +32,12 @@ imagens_dict = {
     "BuscarRG": {},
 }
 
-# Tela principal ao abrir o programa
+# Telas principais ao abrir o programa
+abrir_aba_comecar_rg(notebook, imagens_dict)
+abrir_aba_consultar_rg(notebook, imagens_dict)
+abrir_aba_consultar_usuarios(notebook, imagens_dict)
+abrir_aba_cadastrar_usuario(notebook, imagens_dict)
+abrir_aba_exportar(notebook, imagens_dict)
 
-# Adiciona tela de Começar RG
-frame_comecar_rg = ttk.Frame(
-    notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
-)
-frame_comecar_rg.pack(fill="both", expand=True)
-criar_tela_comecar_rg(frame_comecar_rg, imagens_dict["ComecarRG"], notebook, imagens_dict)
-notebook.add(frame_comecar_rg, text="Começar RG")
 
 root.mainloop()

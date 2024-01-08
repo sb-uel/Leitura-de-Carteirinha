@@ -12,7 +12,7 @@ ROOT_PATH = Path(__file__).parent.parent.parent
 if str(ROOT_PATH) not in sys.path:
     sys.path.append(str(ROOT_PATH))
 from Telas.defs import *
-from tab_functions import abrir_abas_principais
+from tab_functions import abrir_aba_leitura
 
 
 def relative_to_assets(path: str) -> Path:
@@ -60,7 +60,7 @@ def criar_tela_comecar_rg(frame: ttk.Frame, imagens : dict[str, dict], notebook 
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda:(notebook.hide(frame), abrir_abas_principais(notebook, imagens_dict)), # Fecha a aba e abre as principais
+        command=lambda:(notebook.forget(frame), abrir_aba_leitura(notebook, imagens_dict)), # Fecha a aba e abre a de leitura
         relief="flat",
     )
     button_1.place(x=483.0, y=334.0, width=400.0, height=100.0)
