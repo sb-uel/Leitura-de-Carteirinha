@@ -16,7 +16,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def cria_tela_comecar_rg(frame, imagens):
+def criar_tela_comecar_rg(frame, imagens):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))

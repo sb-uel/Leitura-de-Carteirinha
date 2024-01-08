@@ -15,7 +15,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def cria_tela_consultar_usuarios(frame, imagens):
+def criar_tela_consultar_usuarios(frame, imagens):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))

@@ -18,7 +18,7 @@ def relative_to_assets(path: str) -> Path:
 from tkinter import Tk, Canvas, Text, Button, PhotoImage
 
 
-def cria_tela_editar_rg(frame, imagens):
+def criar_tela_editar_rg(frame, imagens):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
