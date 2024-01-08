@@ -8,8 +8,9 @@ def abrir_aba_leitura(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
     frame_leitura.pack(fill="both", expand=True)
-    criar_tela_leitura(frame_leitura, imagens_dict["Leitura"])
+    criar_tela_leitura(frame_leitura, imagens_dict["Leitura"], notebook, imagens_dict)
     notebook.insert(0, frame_leitura, text="Leitura")  # Insere na primeira posição
+    notebook.select(frame_leitura)
 
 
 def abrir_aba_consultar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
@@ -92,4 +93,11 @@ def abrir_aba_comecar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
     criar_tela_comecar_rg(
         frame_comecar_rg, imagens_dict["ComecarRG"], notebook, imagens_dict
     )
-    notebook.add(frame_comecar_rg, text="Começar RG")
+    if notebook.index("end") == 0:
+        # Não existe nenhuma aba
+        notebook.add(frame_comecar_rg, text="Começar RG")
+    else:
+        # Existe outra aba aberta então adicionamos no começo
+        notebook.insert(0, frame_comecar_rg, text="Começar RG")
+        notebook.select(frame_comecar_rg)
+        
