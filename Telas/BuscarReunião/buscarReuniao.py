@@ -6,10 +6,12 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import sys
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / "assets" / "frame0"
-sys.path.append(str(OUTPUT_PATH.parent))
-from defs import *
+
+ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
+ROOT_PATH = Path(__file__).parent.parent.parent
+if str(ROOT_PATH) not in sys.path:
+    sys.path.append(str(ROOT_PATH))
+from Telas.defs import *
 
 
 def relative_to_assets(path: str) -> Path:
