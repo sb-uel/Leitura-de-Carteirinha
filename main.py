@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from Telas.BuscarReunião.buscarReuniao import cria_tela_buscar_rg
 from Telas.Cadastro.cadastro import cria_tela_cadastro_usuarios
 from Telas.ComeçarRG.começar import cria_tela_comecar_rg
 from Telas.ConsultarUsuários.consultar import cria_tela_consultar_usuarios
@@ -28,6 +29,7 @@ imagens = {
     "ConsultarUsuarios": {},
     "ComecarRG": {},
     "CadastroUsuario": {},
+    "BuscarRG": {},
 }
 
 # Adiciona as abas das telas principais
@@ -87,5 +89,13 @@ frame_cadastrar_usuario = ttk.Frame(
 frame_cadastrar_usuario.pack(fill="both", expand=True)
 cria_tela_cadastro_usuarios(frame_cadastrar_usuario, imagens["CadastroUsuario"])
 notebook.add(frame_cadastrar_usuario, text="CadastroUsuario")
+
+# Adiciona tela de Buscar RG
+frame_buscar_rg = ttk.Frame(
+    notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
+)
+frame_buscar_rg.pack(fill="both", expand=True)
+cria_tela_buscar_rg(frame_buscar_rg, imagens["BuscarRG"])
+notebook.add(frame_buscar_rg, text="BuscarRG")
 
 root.mainloop()
