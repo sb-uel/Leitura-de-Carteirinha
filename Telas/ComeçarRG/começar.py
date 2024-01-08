@@ -16,86 +16,55 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-window = Tk()
+def cria_tela_comecar_rg(frame, imagens):
+    # Imagens
+    imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
+    imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
+    imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
+    imagens["image_3"] = PhotoImage(file=relative_to_assets("image_3.png"))
+    imagens["image_4"] = PhotoImage(file=relative_to_assets("image_4.png"))
 
-window.geometry(TAMANHO_JANELA)
-window.configure(bg = "#FFFFFF")
+    # Canvas
+    canvas = Canvas(
+        frame,
+        bg="#FFFFFF",
+        height=768,
+        width=1365,
+        bd=0,
+        highlightthickness=0,
+        relief="ridge",
+    )
+    canvas.place(x=0, y=0)
 
+    # Adiciona imagens, textos, retângulos ao canvas
+    canvas.create_image(682.0, 384.0, image=imagens["image_1"])
+    canvas.create_text(
+        61.0,
+        155.0,
+        anchor="nw",
+        text="Local de salvamento:",
+        fill="#FFFFFF",
+        font=(FONTE_TELAS, 48 * -1),
+    )
+    canvas.create_rectangle(411.0, 165.0, 1321.0, 211.0, fill="#FFFFFF", outline="")
+    canvas.create_image(682.0, 619.0, image=imagens["image_2"])
+    canvas.create_image(74.0, 58.0, image=imagens["image_3"])
+    canvas.create_image(1276.0, 58.0, image=imagens["image_4"])
 
-canvas = Canvas(
-    window,
-    bg = "#FFFFFF",
-    height = 768,
-    width = 1365,
-    bd = 0,
-    highlightthickness = 0,
-    relief = "ridge"
-)
+    # Botão
+    button_1 = Button(
+        frame,
+        image=imagens["button_1"],
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: print("Começar RG"),
+        relief="flat",
+    )
+    button_1.place(x=483.0, y=334.0, width=400.0, height=100.0)
 
-canvas.place(x = 0, y = 0)
-image_image_1 = PhotoImage(
-    file=relative_to_assets("image_1.png"))
-image_1 = canvas.create_image(
-    682.0,
-    384.0,
-    image=image_image_1
-)
-
-canvas.create_text(
-    61.0,
-    155.0,
-    anchor="nw",
-    text="Local de salvamento:",
-    fill="#FFFFFF",
-    font=(FONTE_TELAS, 48 * -1)
-)
-
-canvas.create_rectangle(
-    411.0,
-    165.0,
-    1321.0,
-    211.0,
-    fill="#FFFFFF",
-    outline="")
-
-button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
-button_1 = Button(
-    image=button_image_1,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("Começar RG"),
-    relief="flat"
-)
-button_1.place(
-    x=483.0,
-    y=334.0,
-    width=400.0,
-    height=100.0
-)
-
-image_image_2 = PhotoImage(
-    file=relative_to_assets("image_2.png"))
-image_2 = canvas.create_image(
-    682.0,
-    619.0,
-    image=image_image_2
-)
-
-image_image_3 = PhotoImage(
-    file=relative_to_assets("image_3.png"))
-image_3 = canvas.create_image(
-    74.0,
-    58.0,
-    image=image_image_3
-)
-
-image_image_4 = PhotoImage(
-    file=relative_to_assets("image_4.png"))
-image_4 = canvas.create_image(
-    1276.0,
-    58.0,
-    image=image_image_4
-)
-window.resizable(False, False)
-window.mainloop()
+# imagens = {}
+# window = Tk()
+# window.geometry(TAMANHO_JANELA)
+# window.configure(bg="#FFFFFF")
+# cria_tela_comecar_rg(window, imagens)
+# window.mainloop()

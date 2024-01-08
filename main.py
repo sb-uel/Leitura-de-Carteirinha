@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from Telas.ComeçarRG.começar import cria_tela_comecar_rg
 from Telas.ConsultarUsuários.consultar import cria_tela_consultar_usuarios
 from Telas.defs import *
 from Telas.EditarRG.editar import cria_tela_editar_rg
@@ -18,7 +19,7 @@ notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
 # Dicionário aninhado para armazenar imagens em cada aba
-imagens = {"Leitura": {}, "Exportar": {}, "EditarUsuario": {}, "EditarRG": {}, "ConsultarUsuarios": {}}
+imagens = {"Leitura": {}, "Exportar": {}, "EditarUsuario": {}, "EditarRG": {}, "ConsultarUsuarios": {}, "ComecarRG" : {}}
 
 # Adiciona as abas das telas principais
 
@@ -61,5 +62,13 @@ frame_consultar_usuario = ttk.Frame(
 frame_consultar_usuario.pack(fill="both", expand=True)
 cria_tela_consultar_usuarios(frame_consultar_usuario, imagens["ConsultarUsuarios"])
 notebook.add(frame_consultar_usuario, text="ConsultarUsuarios")
+
+# Adiciona tela de Começar RG
+frame_comecar_rg = ttk.Frame(
+    notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
+)
+frame_comecar_rg.pack(fill="both", expand=True)
+cria_tela_comecar_rg(frame_comecar_rg, imagens["ComecarRG"])
+notebook.add(frame_comecar_rg, text="ComecarRG")
 
 root.mainloop()
