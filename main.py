@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from Telas.ConsultarUsuários.consultar import cria_tela_consultar_usuarios
 from Telas.defs import *
 from Telas.EditarRG.editar import cria_tela_editar_rg
 from Telas.EditarUsuários.editarUser import cria_tela_edicao_usuarios
@@ -17,7 +18,7 @@ notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
 # Dicionário aninhado para armazenar imagens em cada aba
-imagens = {"Leitura": {}, "Exportar": {}, "EditarUsuario": {}, "EditarRG": {}}
+imagens = {"Leitura": {}, "Exportar": {}, "EditarUsuario": {}, "EditarRG": {}, "ConsultarUsuarios": {}}
 
 # Adiciona as abas das telas principais
 
@@ -52,5 +53,13 @@ frame_editar_rg = ttk.Frame(
 frame_editar_rg.pack(fill="both", expand=True)
 cria_tela_editar_rg(frame_editar_rg, imagens["EditarRG"])
 notebook.add(frame_editar_rg, text="EditarRG")
+
+# Adiciona tela de Consultar Usuários
+frame_consultar_usuario = ttk.Frame(
+    notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
+)
+frame_consultar_usuario.pack(fill="both", expand=True)
+cria_tela_consultar_usuarios(frame_consultar_usuario, imagens["ConsultarUsuarios"])
+notebook.add(frame_consultar_usuario, text="ConsultarUsuarios")
 
 root.mainloop()

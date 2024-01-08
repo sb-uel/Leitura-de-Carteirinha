@@ -84,6 +84,7 @@ def cria_tela_editar_rg(frame, imagens):
         font=(FONTE_TELAS, 40 * -1),
     )
 
+    # Entrada de texto
     entry_1 = Text(
         frame,
         bd=0,
@@ -94,6 +95,7 @@ def cria_tela_editar_rg(frame, imagens):
     )
     entry_1.place(x=208.0, y=77.0, width=162.0, height=28.0)
 
+    # Botões
     button_1 = Button(
         frame,
         image=imagens["button_1"],
@@ -119,5 +121,5 @@ def cria_tela_editar_rg(frame, imagens):
 # window = Tk()
 # window.geometry(TAMANHO_JANELA)
 # window.configure(bg="#FFFFFF")
-# cria_tela_lista_usuarios(window, imagens)
+# cria_tela_editar_rg(window, imagens)
 # window.mainloop()
