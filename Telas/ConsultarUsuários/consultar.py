@@ -5,6 +5,8 @@ from pathlib import Path
 from tkinter import PhotoImage, Canvas, Text, Button, ttk
 import sys
 
+from tab_functions import abrir_aba_editar_usuario
+
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
@@ -17,7 +19,12 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_consultar_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
+def criar_tela_consultar_usuarios(
+    frame: ttk.Frame,
+    imagens: dict[str, dict],
+    notebook: ttk.Notebook,
+    imagens_dict: dict[str, dict],
+):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
@@ -117,7 +124,7 @@ def criar_tela_consultar_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  
         image=imagens["button_3"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Editar"),
+        command=lambda: abrir_aba_editar_usuario(notebook,imagens_dict),
         relief="flat",
     )
     button_3.place(x=859.0, y=275.0, width=138.0, height=49.0)

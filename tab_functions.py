@@ -20,7 +20,12 @@ def abrir_aba_consultar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
     frame_buscar_rg.pack(fill="both", expand=True)
-    criar_tela_buscar_rg(frame_buscar_rg, imagens_dict["BuscarRG"])
+    criar_tela_buscar_rg(
+        frame_buscar_rg,
+        imagens_dict["BuscarRG"],
+        notebook,
+        imagens_dict,
+    )
     notebook.add(frame_buscar_rg, text="Buscar RG")
 
 
@@ -32,7 +37,10 @@ def abrir_aba_consultar_usuarios(notebook: ttk.Notebook, imagens_dict: dict[str,
     )
     frame_consultar_usuario.pack(fill="both", expand=True)
     criar_tela_consultar_usuarios(
-        frame_consultar_usuario, imagens_dict["ConsultarUsuarios"]
+        frame_consultar_usuario,
+        imagens_dict["ConsultarUsuarios"],
+        notebook,
+        imagens_dict,
     )
     notebook.add(frame_consultar_usuario, text="Consultar Usuários")
 
@@ -70,6 +78,11 @@ def abrir_aba_editar_usuario(notebook: ttk.Notebook, imagens_dict: dict[str, dic
     frame_editar_usuario.pack(fill="both", expand=True)
     criar_tela_edicao_usuarios(frame_editar_usuario, imagens_dict["EditarUsuario"])
     notebook.add(frame_editar_usuario, text="Editar Usuário")
+    notebook.select(frame_editar_usuario)
+    notebook.bind(
+        "<<NotebookTabChanged>>",
+        lambda event: fechar_aba_ao_sair(notebook, frame_editar_usuario),
+    )
 
 
 def abrir_aba_editar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
@@ -81,6 +94,11 @@ def abrir_aba_editar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
     frame_editar_rg.pack(fill="both", expand=True)
     criar_tela_editar_rg(frame_editar_rg, imagens_dict["EditarRG"])
     notebook.add(frame_editar_rg, text="Editar RG")
+    notebook.select(frame_editar_rg)
+    notebook.bind(
+        "<<NotebookTabChanged>>",
+        lambda event: fechar_aba_ao_sair(notebook, frame_editar_rg),
+    )
 
 
 def abrir_aba_comecar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
@@ -100,4 +118,9 @@ def abrir_aba_comecar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
         # Existe outra aba aberta então adicionamos no começo
         notebook.insert(0, frame_comecar_rg, text="Começar RG")
         notebook.select(frame_comecar_rg)
-        
+
+
+def fechar_aba_ao_sair(notebook: ttk.Notebook, frame: ttk.Frame):
+    if notebook.index("current") != notebook.index(frame):
+        notebook.unbind("<<NotebookTabChanged>>")
+        notebook.forget(frame)

@@ -7,18 +7,25 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
 import sys
 
 
+
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
 if str(ROOT_PATH) not in sys.path:
     sys.path.append(str(ROOT_PATH))
 from Telas.defs import *
+from tab_functions import abrir_aba_editar_rg
 
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_buscar_rg(frame: ttk.Frame, imagens : dict[str, dict])  :
+def criar_tela_buscar_rg(
+    frame: ttk.Frame,
+    imagens: dict[str, dict],
+    notebook: ttk.Notebook,
+    imagens_dict: dict[str, dict],
+):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
@@ -85,7 +92,7 @@ def criar_tela_buscar_rg(frame: ttk.Frame, imagens : dict[str, dict])  :
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Editar"),
+        command=lambda: abrir_aba_editar_rg(notebook,imagens_dict),
         relief="flat",
     )
     button_1.place(x=855.0, y=262.0, width=138.0, height=49.0)
