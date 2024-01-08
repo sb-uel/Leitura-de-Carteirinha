@@ -15,6 +15,7 @@ root = tk.Tk()
 root.title("Leitura de Carteirinha")
 root.geometry(TAMANHO_JANELA)
 root.resizable(True, True)
+root.iconbitmap("ieee.ico")
 
 # Cria o notebook
 notebook = ttk.Notebook(root)
