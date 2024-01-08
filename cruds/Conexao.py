@@ -1,4 +1,6 @@
+from tkinter import messagebox
 import mysql.connector as mysql
+
 
 # Usa o padrão de projeto Singleton para a conexão do banco de dados
 class Conexao:
@@ -12,24 +14,26 @@ class Conexao:
 
         try:
             cls._conexao = mysql.connect(
-                host=host,
-                user=user,
-                password=password,
-                database=db_name
+                host=host, user=user, password=password, database=db_name
             )
         except Exception as e:
             # Mostra uma mensagem de erro
-            ...
-            
+            messagebox.showerror(title="Erro na conexão com o banco", message=e)
+
     @classmethod
     def get_conexao(cls):
         if cls._conexao is None:
-            raise Exception("A conexão não está configurada. Use o método 'configurar' primeiro.")
+            raise Exception(
+                "A conexão não está configurada. Use o método 'configurar' primeiro."
+            )
         return cls._conexao
-    
+
     @classmethod
     def fechar_conexao(cls):
         if cls._conexao:
             cls._conexao.close()
             print("Conexão fechada.")
 
+    @classmethod
+    def is_connected(cls):
+        return cls._conexao is not None and cls._conexao.is_connected()
