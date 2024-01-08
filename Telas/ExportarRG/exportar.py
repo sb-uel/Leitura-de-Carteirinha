@@ -38,11 +38,15 @@ def cria_tela_exportar(frame, imagens):
     )
     canvas.place(x=0, y=0)
 
-    # Adiciona imagens ao canvas
+    # Adiciona imagens, textos, retângulos ao canvas
     canvas.create_image(682.0, 384.0, image=imagens["image_1"])
     canvas.create_image(1180.0, 448.0, image=imagens["image_2"])
     canvas.create_image(262.0, 69.0, image=imagens["entry_1"])
     canvas.create_image(724.0, 69.0, image=imagens["entry_2"])
+    canvas.create_rectangle(153.0, 44.0, 354.0, 89.0, fill="#FFFFFF", outline="")
+    canvas.create_rectangle(615.0, 44.0, 816.0, 89.0, fill="#FFFFFF", outline="")
+    canvas.create_rectangle(22.0, 182.0, 994.0, 251.0, fill="#D9D9D9", outline="")
+    canvas.create_rectangle(22.0, 251.0, 994.0, 719.0, fill="#FFFFFF", outline="")
     canvas.create_text(
         36.0,
         37.0,
@@ -67,10 +71,6 @@ def cria_tela_exportar(frame, imagens):
         fill="#000000",
         font=(FONTE_TELAS, 48 * -1),
     )
-    canvas.create_rectangle(153.0, 44.0, 354.0, 89.0, fill="#FFFFFF", outline="")
-    canvas.create_rectangle(615.0, 44.0, 816.0, 89.0, fill="#FFFFFF", outline="")
-    canvas.create_rectangle(22.0, 182.0, 994.0, 251.0, fill="#D9D9D9", outline="")
-    canvas.create_rectangle(22.0, 251.0, 994.0, 719.0, fill="#FFFFFF", outline="")
 
     # Entrada de texto
     entry_1 = Text(
@@ -125,12 +125,9 @@ def cria_tela_exportar(frame, imagens):
     button_3.place(x=1076.0, y=642.0, width=209.0, height=77.0)
 
 
-# root = Tk()
-# root.title("Sua Demo")
-# root.geometry(TAMANHO_JANELA)
-# root.resizable(True, True)
 # imagens = {}
-# frame = ttk.Frame(root)
-# frame.pack(expand=True, fill="both")
-# cria_tela_exportar(frame, imagens)
-# root.mainloop()
+# window = Tk()
+# window.geometry(TAMANHO_JANELA)
+# window.configure(bg="#FFFFFF")
+# cria_tela_exportar(window, imagens)
+# window.mainloop()

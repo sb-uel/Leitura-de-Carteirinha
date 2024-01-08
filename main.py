@@ -3,6 +3,7 @@ from tkinter import ttk
 from Telas.defs import *
 from Telas.Leitura.leitura import cria_tela_leitura
 from Telas.ExportarRG.exportar import cria_tela_exportar
+from Telas.EditarUsuários.editarUser import cria_tela_edicao_usuarios
 
 # Root window
 root = tk.Tk()
@@ -15,7 +16,7 @@ notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
 # Dicionário aninhado para armazenar imagens em cada aba
-imagens = {"Leitura": {}, "Exportar": {}}
+imagens = {"Leitura": {}, "Exportar": {}, "EditarUsuario": {}}
 
 # Adiciona as abas das telas principais
 
@@ -34,5 +35,13 @@ frame_exportar = ttk.Frame(
 frame_exportar.pack(fill="both", expand=True)
 cria_tela_exportar(frame_exportar, imagens["Exportar"])
 notebook.add(frame_exportar, text="Exportar")
+
+# Adiciona tela de Edição de Usuario
+frame_editar_usuario = ttk.Frame(
+    notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
+)
+frame_editar_usuario.pack(fill="both", expand=True)
+cria_tela_edicao_usuarios(frame_editar_usuario, imagens["EditarUsuario"])
+notebook.add(frame_editar_usuario, text="EditarUsuario")
 
 root.mainloop()

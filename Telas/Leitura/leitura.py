@@ -74,12 +74,9 @@ def cria_tela_leitura(frame, imagens):
     button_2.place(x=33.0, y=681.0, width=143.0, height=47.0)
 
 
-# root = Tk()
-# root.title('Sua Demo')
-# root.geometry(TAMANHO_JANELA)
-# root.resizable(True, True)
 # imagens = {}
-# frame = ttk.Frame(root)
-# frame.pack(expand=True, fill='both')
-# cria_tela_leitura(frame,imagens)
-# root.mainloop()
+# window = Tk()
+# window.geometry(TAMANHO_JANELA)
+# window.configure(bg="#FFFFFF")
+# cria_tela_leitura(window, imagens)
+# window.mainloop()
