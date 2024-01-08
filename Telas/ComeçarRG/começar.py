@@ -19,7 +19,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_comecar_rg(frame: ttk.Frame, imagens : dict[str, dict])  :
+def criar_tela_comecar_rg(frame: ttk.Frame, imagens : dict[str, dict], notebook : ttk.Notebook, imagens_dict : dict[str, dict])  :
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
@@ -60,7 +60,7 @@ def criar_tela_comecar_rg(frame: ttk.Frame, imagens : dict[str, dict])  :
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda:print('Ola'),
+        command=lambda:(notebook.hide(frame), abrir_abas_principais(notebook, imagens_dict)), # Fecha a aba e abre as principais
         relief="flat",
     )
     button_1.place(x=483.0, y=334.0, width=400.0, height=100.0)
