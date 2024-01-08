@@ -11,23 +11,24 @@ if str(ROOT_PATH) not in sys.path:
 from cruds.Conexao import Conexao
 
 
-def salvar_credenciais(credenciais):
+def salvar_credenciais(credenciais: dict[str, tk.StringVar]):
     credenciais_serializaveis = {key: value.get() for key, value in credenciais.items()}
     with open("credenciais.json", "w") as file:
         json.dump(credenciais_serializaveis, file)
 
-def carregar_credenciais(credenciais):
+
+def carregar_credenciais(credenciais: dict[str, tk.StringVar]):
     try:
         with open("credenciais.json", "r") as file:
             credenciais_carregadas = json.load(file)
-            for key, value in credenciais.items():
-                value.set(credenciais_carregadas.get(key, ""))
+            for key, value in credenciais_carregadas.items():
+                credenciais[key].set(value)
     except FileNotFoundError:
         # Se não encontrou é porque não tem salvo
         pass
 
 
-def validar_login(ip, usuario, senha, db_name, **kwargs):
+def validar_login(ip, usuario, senha, db_name):
     if not ip or not usuario or not senha or not db_name:
         messagebox.showerror("Erro de Login", "Por favor, preencha todos os campos.")
         return False
@@ -101,7 +102,9 @@ def abrir_tela_login():
                 root.destroy()
 
     # Botão de login
-    ttk.Button(root, text="Logar", command=logar).grid(column=1, row=4, sticky=tk.E)
+    btn = ttk.Button(root, text="Logar", command=logar)
+    btn.grid(column=1, row=4, sticky=tk.E)
+    root.bind("<Return>", lambda event: btn.invoke())
 
     # Adiciona espaçamento para cada widget
     for widget in root.winfo_children():

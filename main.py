@@ -44,5 +44,4 @@ if Conexao.is_connected():
     abrir_aba_cadastrar_usuario(notebook, imagens_dict)
     abrir_aba_exportar(notebook, imagens_dict)
 
-
     root.mainloop()
