@@ -34,7 +34,7 @@ frame_comecar_rg = ttk.Frame(
 )
 frame_comecar_rg.pack(fill="both", expand=True)
 criar_tela_comecar_rg(frame_comecar_rg, imagens["ComecarRG"])
-notebook.add(frame_comecar_rg, text="ComecarRG")
+notebook.add(frame_comecar_rg, text="Começar RG")
 
 abrir_abas_principais(notebook, imagens)
 abrir_aba_editar_rg(notebook, imagens)
