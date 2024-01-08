@@ -17,7 +17,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_leitura(frame, imagens):
+def criar_tela_leitura(frame: ttk.Frame, imagens : dict[str, dict])  :
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))

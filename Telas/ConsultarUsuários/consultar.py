@@ -2,7 +2,7 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 from pathlib import Path
-from tkinter import PhotoImage, Canvas, Text, Button
+from tkinter import PhotoImage, Canvas, Text, Button, ttk
 import sys
 
 
@@ -17,7 +17,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_consultar_usuarios(frame, imagens):
+def criar_tela_consultar_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))

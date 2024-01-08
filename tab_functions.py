@@ -1,5 +1,4 @@
 from tkinter import ttk
-from tkinter.tix import NoteBook
 from Telas.BuscarReunião.buscarReuniao import criar_tela_buscar_rg
 from Telas.Cadastro.cadastro import criar_tela_cadastro_usuarios
 from Telas.ExportarRG.exportar import criar_tela_exportar
@@ -9,7 +8,7 @@ from Telas.EditarRG.editar import criar_tela_editar_rg
 from Telas.EditarUsuários.editarUser import criar_tela_edicao_usuarios
 
 
-def abrir_abas_principais(notebook: NoteBook, imagens: dict[str, dict]):
+def abrir_abas_principais(notebook: ttk.Notebook, imagens: dict[str, dict]):
     # Telas principais quando iniciada a reunião
 
     # Adiciona tela de Leitura
@@ -53,7 +52,7 @@ def abrir_abas_principais(notebook: NoteBook, imagens: dict[str, dict]):
     notebook.add(frame_exportar, text="Exportar")
 
 
-def abrir_aba_editar_usuario(notebook: NoteBook, imagens: dict[str, dict]):
+def abrir_aba_editar_usuario(notebook: ttk.Notebook, imagens: dict[str, dict]):
     # Adiciona tela de Edição de Usuario
     frame_editar_usuario = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
@@ -63,7 +62,7 @@ def abrir_aba_editar_usuario(notebook: NoteBook, imagens: dict[str, dict]):
     notebook.add(frame_editar_usuario, text="Editar Usuario")
 
 
-def abrir_aba_editar_rg(notebook: NoteBook, imagens: dict[str, dict]):
+def abrir_aba_editar_rg(notebook: ttk.Notebook, imagens: dict[str, dict]):
     # Adiciona tela de Edição de RG
     frame_editar_rg = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
