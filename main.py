@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from Telas.Cadastro.cadastro import cria_tela_cadastro_usuarios
 from Telas.ComeçarRG.começar import cria_tela_comecar_rg
 from Telas.ConsultarUsuários.consultar import cria_tela_consultar_usuarios
 from Telas.defs import *
@@ -19,7 +20,15 @@ notebook = ttk.Notebook(root)
 notebook.pack(fill="both", expand=True)
 
 # Dicionário aninhado para armazenar imagens em cada aba
-imagens = {"Leitura": {}, "Exportar": {}, "EditarUsuario": {}, "EditarRG": {}, "ConsultarUsuarios": {}, "ComecarRG" : {}}
+imagens = {
+    "Leitura": {},
+    "Exportar": {},
+    "EditarUsuario": {},
+    "EditarRG": {},
+    "ConsultarUsuarios": {},
+    "ComecarRG": {},
+    "CadastroUsuario": {},
+}
 
 # Adiciona as abas das telas principais
 
@@ -70,5 +79,13 @@ frame_comecar_rg = ttk.Frame(
 frame_comecar_rg.pack(fill="both", expand=True)
 cria_tela_comecar_rg(frame_comecar_rg, imagens["ComecarRG"])
 notebook.add(frame_comecar_rg, text="ComecarRG")
+
+# Adiciona tela de Cadastrar Usuário
+frame_cadastrar_usuario = ttk.Frame(
+    notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
+)
+frame_cadastrar_usuario.pack(fill="both", expand=True)
+cria_tela_cadastro_usuarios(frame_cadastrar_usuario, imagens["CadastroUsuario"])
+notebook.add(frame_cadastrar_usuario, text="CadastroUsuario")
 
 root.mainloop()
