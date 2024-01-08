@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import sys
 import tkinter as tk
@@ -10,7 +11,23 @@ if str(ROOT_PATH) not in sys.path:
 from cruds.Conexao import Conexao
 
 
-def validar_login(ip, usuario, senha, db_name):
+def salvar_credenciais(credenciais):
+    credenciais_serializaveis = {key: value.get() for key, value in credenciais.items()}
+    with open("credenciais.json", "w") as file:
+        json.dump(credenciais_serializaveis, file)
+
+def carregar_credenciais(credenciais):
+    try:
+        with open("credenciais.json", "r") as file:
+            credenciais_carregadas = json.load(file)
+            for key, value in credenciais.items():
+                value.set(credenciais_carregadas.get(key, ""))
+    except FileNotFoundError:
+        # Se não encontrou é porque não tem salvo
+        pass
+
+
+def validar_login(ip, usuario, senha, db_name, **kwargs):
     if not ip or not usuario or not senha or not db_name:
         messagebox.showerror("Erro de Login", "Por favor, preencha todos os campos.")
         return False
@@ -23,47 +40,53 @@ def abrir_tela_login():
     root.resizable(False, False)
 
     # Variáveis para armazenar os valores dos campos de entrada
-    ip_var = tk.StringVar()
-    user_var = tk.StringVar()
-    password_var = tk.StringVar()
-    db_name_var = tk.StringVar()
-    remember_me_var = tk.StringVar()
+    credenciais = {
+        "ip": tk.StringVar(value="localhost"),
+        "usuario": tk.StringVar(),
+        "senha": tk.StringVar(),
+        "db_name": tk.StringVar(value="ramoieee"),
+        "remember_me": tk.StringVar(),
+    }
+
+    # Tenta carregar as credenciais salvas
+    carregar_credenciais(credenciais)
 
     # Input IP
     ttk.Label(root, text="IP:").grid(column=0, row=0, sticky=tk.W)
-    ip_input = ttk.Entry(root, width=30, textvariable=ip_var)
+    ip_input = ttk.Entry(root, width=30, textvariable=credenciais["ip"])
     ip_input.grid(column=1, row=0, sticky=tk.W)
 
     # Input Usuário
     ttk.Label(root, text="Usuario:").grid(column=0, row=1, sticky=tk.W)
-    user_input = ttk.Entry(root, width=30, textvariable=user_var)
+    user_input = ttk.Entry(root, width=30, textvariable=credenciais["usuario"])
     user_input.grid(column=1, row=1, sticky=tk.W)
 
     # Input Senha
     ttk.Label(root, text="Senha:").grid(column=0, row=2, sticky=tk.W)
-    password_input = ttk.Entry(root, width=30, textvariable=password_var, show="*")
+    password_input = ttk.Entry(
+        root, width=30, textvariable=credenciais["senha"], show="*"
+    )
     password_input.grid(column=1, row=2, sticky=tk.W)
 
     # Input Nome do Banco
     ttk.Label(root, text="DB Name:").grid(column=0, row=3, sticky=tk.W)
-    db_name_input = ttk.Entry(root, width=30, textvariable=db_name_var)
+    db_name_input = ttk.Entry(root, width=30, textvariable=credenciais["db_name"])
     db_name_input.grid(column=1, row=3, sticky=tk.W)
 
     # Lembrar de mim
     remember_me_check = ttk.Checkbutton(
         root,
         text="Lembrar de mim",
-        variable=remember_me_var,
-        command=lambda: print(remember_me_var.get()),
+        variable=credenciais["remember_me"],
     )
     remember_me_check.grid(column=0, row=4, sticky=tk.W)
 
-    # Função para lidar com o botão de login
+    # Função do botão de login
     def logar():
-        ip = ip_var.get()
-        usuario = user_var.get()
-        senha = password_var.get()
-        db_name = db_name_var.get()
+        ip = credenciais["ip"].get()
+        usuario = credenciais["usuario"].get()
+        senha = credenciais["senha"].get()
+        db_name = credenciais["db_name"].get()
 
         if validar_login(ip, usuario, senha, db_name):
             Conexao.configurar(
@@ -73,8 +96,11 @@ def abrir_tela_login():
                 db_name=db_name,
             )
             if Conexao.is_connected():
+                if credenciais["remember_me"].get():
+                    salvar_credenciais(credenciais)
                 root.destroy()
 
+    # Botão de login
     ttk.Button(root, text="Logar", command=logar).grid(column=1, row=4, sticky=tk.E)
 
     # Adiciona espaçamento para cada widget
