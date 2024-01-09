@@ -45,3 +45,4 @@ if Conexao.is_connected():
     abrir_aba_exportar(notebook, imagens_dict)
 
     root.mainloop()
+Conexao.fechar_conexao()
