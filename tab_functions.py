@@ -14,7 +14,7 @@ def abrir_aba_leitura(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
 
 
 def abrir_aba_consultar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
-    from Telas.BuscarReunião.buscarReuniao import criar_tela_buscar_rg
+    from Telas.ConsultarRG.buscarReuniao import criar_tela_buscar_rg
 
     frame_buscar_rg = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
@@ -46,7 +46,7 @@ def abrir_aba_consultar_usuarios(notebook: ttk.Notebook, imagens_dict: dict[str,
 
 
 def abrir_aba_cadastrar_usuario(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
-    from Telas.Cadastro.cadastro import criar_tela_cadastro_usuarios
+    from Telas.CadastroUsuário.cadastro import criar_tela_cadastro_usuarios
 
     frame_cadastrar_usuario = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
