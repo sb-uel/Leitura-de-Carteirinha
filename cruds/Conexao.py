@@ -14,7 +14,7 @@ class Conexao:
 
         try:
             cls._conexao = mysql.connect(
-                host=host, user=user, password=password, database=db_name
+                host=host, user=user, password=password, database=db_name, autocommit=True
             )
         except Exception as e:
             # Mostra uma mensagem de erro
