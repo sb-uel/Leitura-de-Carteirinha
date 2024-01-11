@@ -29,3 +29,6 @@ build/
 
 # Pipenv
 Pipfile.lock
+
+# Outros
+credenciais.json
