@@ -12,13 +12,14 @@ ROOT_PATH = Path(__file__).parent.parent.parent
 if str(ROOT_PATH) not in sys.path:
     sys.path.append(str(ROOT_PATH))
 from Telas.defs import *
+from cruds.Curso import consultar_cursos
 
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
+def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens: dict[str, dict]):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
@@ -65,7 +66,7 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
         67.0,
         293.0,
         anchor="nw",
-        text="N° DE MATRICULA:",
+        text="N° DA CARTEIRINHA:",
         fill="#FFFFFF",
         font=(FONTE_TELAS, 48 * -1),
     )
@@ -120,21 +121,8 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
     )
     entry_3.place(x=214.0, y=557.0, width=647.0, height=43.0)
 
-    # Combo Box
-    def changeMonth():
-        comboExample["values"] = ["Engenharia Elétrica", "Ciência da Computação"]
-
-    comboExample = ttk.Combobox(
-        frame,
-        values=["Engenharia Elétrica", "Ciência da Computação"],
-        postcommand=changeMonth,
-        font=(FONTE_INPUT, 25, "bold"),
-    )
-    comboExample.pack()
-    comboExample.option_add("*TCombobox*Listbox*Font", (FONTE_INPUT, 16))
-    comboExample.config(width=21)
-    comboExample.place(x=199, y=430)
-
+    _cria_menu_cursos(frame)
+    
     # Botões
     button_1 = Button(
         frame,
@@ -157,9 +145,32 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
     button_2.place(x=1012.0, y=644.0, width=303.0, height=84.0)
 
 
-# imagens = {}
-# window = Tk()
-# window.geometry(TAMANHO_JANELA)
-# window.configure(bg="#FFFFFF")
-# cria_tela_cadastro_usuarios(window, imagens)
-# window.mainloop()
+def _cria_menu_cursos(frame):
+    # Menu de seleção
+    cursos_dict = {}
+    
+    # Função a ser chamada quando o menu for acionado
+    def atualizar_menu_cursos(event=None):
+        # Atualizar os valores do Combobox
+        nonlocal cursos_dict
+        cursos = consultar_cursos()
+        menu_cursos["values"] = [curso[1] for curso in cursos]
+        # Criar um dicionário para mapear nomes de cursos para IDs
+        cursos_dict = {curso[1]: curso[0] for curso in cursos}
+    
+    # Função para obter o id do curso selecionado
+    def obter_id_curso_selecionado(event=None):
+        curso_selecionado = menu_cursos.get()
+        id_curso_selecionado = cursos_dict.get(curso_selecionado)
+        print(id_curso_selecionado)
+             
+    menu_cursos = ttk.Combobox(
+        frame,
+        font=(FONTE_INPUT, 25, "bold"),
+        state="readonly",
+        postcommand=atualizar_menu_cursos,
+        width=21,
+    )
+    menu_cursos.place(x=199, y=430)
+    menu_cursos.option_add("*TCombobox*Listbox*Font", (FONTE_INPUT, 16))
+    menu_cursos.bind("<<ComboboxSelected>>", obter_id_curso_selecionado)
