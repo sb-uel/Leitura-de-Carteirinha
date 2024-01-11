@@ -13,6 +13,10 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
     try:
         with conn.cursor() as cursor:
             cursor.execute(query, values)
+        messagebox.showinfo(
+            title="Cadastro bem sucedido",
+            message="O usuário foi cadastrado com sucesso!",
+        )
     except Exception as e:
         messagebox.showerror(title="Erro ao inserir usuário no banco", message=e)
 

@@ -3,8 +3,11 @@
 
 
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Canvas, Entry, Text, Button, PhotoImage, ttk
 import sys
+import tkinter as tk
+
+from cruds.Usuario import cadastrar_usuario
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -28,7 +31,6 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens: dict[str, dict]):
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
     imagens["image_3"] = PhotoImage(file=relative_to_assets("image_3.png"))
     imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
-    imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
 
     # Canvas
     canvas = Canvas(
@@ -90,65 +92,68 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens: dict[str, dict]):
     canvas.create_image(112.0, 54.0, image=imagens["image_2"])
     canvas.create_image(1253.0, 54.0, image=imagens["image_3"])
 
+    # Variáveis dos campos
+    nome_var = tk.StringVar()
+    n_carteirinha_var = tk.StringVar()
+    email_var = tk.StringVar()
+    id_curso_var = tk.StringVar()
+
     # Entrada de texto
-    entry_1 = Text(
+    entry_nome = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 25),
+        textvariable=nome_var,
     )
-    entry_1.place(x=204.0, y=179.0, width=647.0, height=43.0)
+    entry_nome.place(x=204.0, y=179.0, width=647.0, height=43.0)
 
-    entry_2 = Text(
+    entry_n_carteirinha = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 25),
+        textvariable=n_carteirinha_var,
     )
-    entry_2.place(x=374.0, y=300.0, width=372.0, height=43.0)
+    entry_n_carteirinha.place(x=374.0, y=300.0, width=372.0, height=43.0)
 
-    entry_3 = Text(
+    entry_email = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 25),
+        textvariable=email_var,
     )
-    entry_3.place(x=214.0, y=557.0, width=647.0, height=43.0)
+    entry_email.place(x=214.0, y=557.0, width=647.0, height=43.0)
 
-    _cria_menu_cursos(frame)
-    
-    # Botões
-    button_1 = Button(
+    _cria_menu_cursos(frame, id_curso_var)
+
+    button_cadastrar = Button(
         frame,
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Voltar"),
+        command=lambda: cadastrar_usuario(
+            nome=nome_var.get(),
+            email=email_var.get(),
+            id_curso=id_curso_var.get(),
+            n_carteirinha=n_carteirinha_var.get(),
+        ),
         relief="flat",
     )
-    button_1.place(x=33.0, y=681.0, width=143.0, height=47.0)
-
-    button_2 = Button(
-        frame,
-        image=imagens["button_2"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("Cadastrar"),
-        relief="flat",
-    )
-    button_2.place(x=1012.0, y=644.0, width=303.0, height=84.0)
+    button_cadastrar.place(x=1012.0, y=644.0, width=303.0, height=84.0)
 
 
-def _cria_menu_cursos(frame):
+def _cria_menu_cursos(frame: ttk.Frame, id_curso_var: tk.StringVar):
     # Menu de seleção
     cursos_dict = {}
-    
+
     # Função a ser chamada quando o menu for acionado
     def atualizar_menu_cursos(event=None):
         # Atualizar os valores do Combobox
@@ -157,13 +162,14 @@ def _cria_menu_cursos(frame):
         menu_cursos["values"] = [curso[1] for curso in cursos]
         # Criar um dicionário para mapear nomes de cursos para IDs
         cursos_dict = {curso[1]: curso[0] for curso in cursos}
-    
+
     # Função para obter o id do curso selecionado
     def obter_id_curso_selecionado(event=None):
+        nonlocal id_curso_var
         curso_selecionado = menu_cursos.get()
         id_curso_selecionado = cursos_dict.get(curso_selecionado)
-        print(id_curso_selecionado)
-             
+        id_curso_var.set(id_curso_selecionado)
+
     menu_cursos = ttk.Combobox(
         frame,
         font=(FONTE_INPUT, 25, "bold"),
