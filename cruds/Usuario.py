@@ -26,7 +26,7 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
         return
     n_matricula = n_carteirinha[:10]
 
-    query = (
+    sql = (
         "INSERT INTO `usuário` (`N_Carteirinha`, `N_Matricula`, `Nome`, `Email`, `ID_Curso`)"
         "VALUES(%s,%s,%s,%s,%s)"
     )
@@ -34,7 +34,7 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:
-            cursor.execute(query, values)
+            cursor.execute(sql, values)
         messagebox.showinfo(
             title="Cadastro bem sucedido",
             message="O usuário foi cadastrado com sucesso!",
@@ -43,16 +43,23 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
         messagebox.showerror(title="Erro ao inserir usuário no banco", message=e)
 
 
-def consultar_usuario():
+def consultar_usuario(termo: str = None):
     print("EXECUTADO SELECT USUARIOS")
     conn = Conexao.get_conexao()
+    sql = "SELECT `ID_Usuário`, `Nome`, `N_Matricula`, `Email` FROM `usuário`"
+    params = None
+    if termo is not None and termo.strip() != "":
+        sql += " WHERE `Nome` LIKE %s"
+        params = (f"%{termo}%",)
+    sql += " ORDER BY `Nome`"
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT `ID_Usuário`, `Nome`, `N_Matricula` FROM `usuário` ORDER BY `Nome`")
+            cursor.execute(sql, params)
             resultados = cursor.fetchall()
         return resultados
     except Exception as e:
         messagebox.showerror(title="Erro ao obter usuários", message=e)
+
 
 def atualizar_usuario():
     ...

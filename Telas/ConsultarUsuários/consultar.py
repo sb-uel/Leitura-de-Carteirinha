@@ -3,10 +3,11 @@
 
 from pathlib import Path
 from tkinter import Entry, PhotoImage, Canvas, Text, Button, ttk
+import tkinter as tk
 import sys
+from cruds.Usuario import consultar_usuario
 
 from tab_functions import abrir_aba_editar_usuario
-from widgets_functions import cria_tabela_usuarios
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -62,17 +63,6 @@ def criar_tela_consultar_usuarios(
         font=(FONTE_TELAS, 40 * -1),
     )
 
-    # Entrada de texto
-    entry_1 = Entry(
-        frame,
-        bd=0,
-        bg="#FFFFFF",
-        fg="#000716",
-        highlightthickness=0,
-        font=(FONTE_INPUT, 28),
-    )
-    entry_1.place(x=174.0, y=60.0, width=867.0, height=44.0)
-
     # Botões
     button_1 = Button(
         frame,
@@ -83,16 +73,6 @@ def criar_tela_consultar_usuarios(
         relief="flat",
     )
     button_1.place(x=1076.0, y=651.0, width=268.0, height=68.0)
-
-    button_2 = Button(
-        frame,
-        image=imagens["button_2"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("Pesquisar"),
-        relief="flat",
-    )
-    button_2.place(x=1124.0, y=55.0, width=176.0, height=60.0)
 
     button_3 = Button(
         master=frame,
@@ -106,5 +86,75 @@ def criar_tela_consultar_usuarios(
         activebackground="#FFD708",
     )
     button_3.place(x=1076.0, y=551.0, width=268.0, height=68.0)
-    
+
+    def cria_tabela_usuarios(frame_pai: ttk.Frame):
+        pesquisa = tk.StringVar()
+
+        entry_pesquisa = Entry(
+            frame_pai,
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0,
+            textvariable=pesquisa,
+            font=(FONTE_INPUT, 28),
+        )
+        entry_pesquisa.place(x=174.0, y=60.0, width=867.0, height=44.0)
+
+        button_pesquisa = Button(
+            frame,
+            image=imagens["button_2"],
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: atualizar_tabela(),
+            relief="flat",
+        )
+        button_pesquisa.place(x=1124.0, y=55.0, width=176.0, height=60.0)
+
+        # Novo Frame para conter a tabela e a barra de rolagem
+        frame_tabela = ttk.Frame(frame_pai)
+        frame_tabela.place(x=36.0, y=185.0, width=1015.0, height=550.0, anchor="nw")
+        tabela = ttk.Treeview(
+            frame_tabela, columns=("nome", "matrícula", "email"), show="headings"
+        )
+        tabela.heading("nome", text="Nome")
+        tabela.heading("matrícula", text="Matrícula")
+        tabela.heading("email", text="Email")
+        tabela.grid(row=0, column=0, sticky="nsew")
+
+        def atualizar_tabela(event=None):
+            nonlocal pesquisa
+
+            # Obtém o termo pesquisado caso ele exista
+            termo_pesquisado = pesquisa.get() if pesquisa.get() != "" else None
+
+            # Limpa os dados existentes na tabela
+            tabela.delete(*tabela.get_children())
+
+            # Obtém novos dados da função consultar_usuario
+            usuarios = consultar_usuario(termo_pesquisado)
+
+            # Insere os novos dados na tabela se eles não forem vazios
+            for id, *values in usuarios:
+                tabela.insert("", tk.END, iid=id, values=values)
+
+        def obter_iid_selecionado(event):
+            iid_selecionado = tabela.focus()
+            print("IID do item selecionado:", iid_selecionado)
+
+        # Adiciona o bind a função de recarregar a tabela
+        frame_pai.bind("<F5>", lambda event: atualizar_tabela())
+        entry_pesquisa.bind("<Return>", lambda event: atualizar_tabela())
+        tabela.bind("<<TreeviewSelect>>", obter_iid_selecionado)
+        # Adiciona uma barra de rolagem
+        scrollbar = ttk.Scrollbar(
+            frame_tabela, orient=tk.VERTICAL, command=tabela.yview
+        )
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        tabela.configure(yscrollcommand=scrollbar.set)
+
+        # Configuração para expandir a tabela e a barra de rolagem com o tamanho do frame_tabela
+        frame_tabela.columnconfigure(0, weight=1)
+        frame_tabela.rowconfigure(0, weight=1)
+
     cria_tabela_usuarios(frame)
