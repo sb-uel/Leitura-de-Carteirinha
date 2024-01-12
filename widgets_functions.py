@@ -4,7 +4,7 @@ from Telas.defs import *
 from cruds.Curso import consultar_cursos
 
 
-def cria_menu_cursos(frame: ttk.Frame, id_curso_var: tk.StringVar):
+def cria_menu_cursos(frame: ttk.Frame, id_curso_var: tk.StringVar, x : int, y : int):
     # Menu de seleção
     cursos_dict = {}
 
@@ -31,7 +31,7 @@ def cria_menu_cursos(frame: ttk.Frame, id_curso_var: tk.StringVar):
         postcommand=atualizar_menu_cursos,
         width=21,
     )
-    menu_cursos.place(x=199, y=430)
+    menu_cursos.place(x=x, y=y)
     menu_cursos.option_add("*TCombobox*Listbox*Font", (FONTE_INPUT, 16))
     menu_cursos.bind("<<ComboboxSelected>>", obter_id_curso_selecionado)
 

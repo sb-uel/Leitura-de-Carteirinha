@@ -60,6 +60,17 @@ def consultar_usuarios(termo: str = None):
     except Exception as e:
         messagebox.showerror(title="Erro ao obter usuários", message=e)
 
+def consultar_usuario(id : int):
+    print(f"EXECUTADO SELECT USUARIO ID={id}")
+    conn = Conexao.get_conexao()
+    sql = "SELECT `ID_Usuário`, `Nome`, `N_Matricula`, `Email` FROM `usuário` WHERE `ID_Usuário` = %s"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id,))
+            resultados = cursor.fetchone()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter usuários", message=e)
 
 def atualizar_usuario():
     ...

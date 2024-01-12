@@ -133,7 +133,7 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens: dict[str, dict]):
     )
     entry_email.place(x=214.0, y=557.0, width=647.0, height=43.0)
 
-    cria_menu_cursos(frame, id_curso_var)
+    cria_menu_cursos(frame, id_curso_var, x=199, y=430)
 
     button_cadastrar = Button(
         frame,
@@ -149,6 +149,3 @@ def criar_tela_cadastro_usuarios(frame: ttk.Frame, imagens: dict[str, dict]):
         relief="flat",
     )
     button_cadastrar.place(x=1012.0, y=644.0, width=303.0, height=84.0)
-
-
-

@@ -91,7 +91,7 @@ def criar_tela_consultar_usuarios(
         master=frame,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: abrir_aba_editar_usuario(notebook, imagens_dict),
+        command=lambda: abrir_aba_editar_usuario(notebook, imagens_dict, tabela.focus()),
         relief="flat",
         text="Editar Usuário",
         font=(FONTE_TELAS, 40),

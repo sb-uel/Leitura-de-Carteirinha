@@ -3,8 +3,11 @@
 
 
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk
+import tkinter as tk
 import sys
+
+from widgets_functions import cria_menu_cursos
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -18,7 +21,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
+def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id : int)  :
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
@@ -114,9 +117,12 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
         fill="#000000",
         font=(FONTE_TELAS, 48 * -1),
     )
+    
+    # Variáveis
+    id_curso = tk.StringVar()
 
     # Entrada de texto
-    entry_1 = Text(
+    entry_1 = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -126,7 +132,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
     )
     entry_1.place(x=126.0, y=130.0, width=530.0, height=43.0)
 
-    entry_2 = Text(
+    entry_2 = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -136,7 +142,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
     )
     entry_2.place(x=272.0, y=219.0, width=372.0, height=43.0)
 
-    entry_3 = Text(
+    entry_3 = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -178,25 +184,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict])  :
     button_3.place(x=125.0, y=606.0, width=325.0, height=84.0)
 
     # Caixa de seleção
-    def changeMonth():
-        comboExample["values"] = [
-            "Engenharia Elétrica",
-            "Ciência da Computação",
-        ]
-
-    comboExample = ttk.Combobox(
-        frame,
-        values=["Engenharia Elétrica", "Ciência da Computação"],
-        postcommand=changeMonth,
-        font=(FONTE_INPUT, 25, "bold"),
-    )
-    comboExample.pack()
-
-    comboExample.option_add("*TCombobox*Listbox*Font", (FONTE_INPUT, 16))
-
-    comboExample.config(width=21)
-    comboExample.place(x=135, y=303)
-
+    cria_menu_cursos(frame=frame,id_curso_var=id_curso,x=135,y=303)  
 
 # imagens = {}
 # window = Tk()
