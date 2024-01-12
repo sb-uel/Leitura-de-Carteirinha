@@ -10,6 +10,7 @@ from tab_functions import (
     abrir_aba_comecar_rg,
     abrir_aba_consultar_usuarios,
     abrir_aba_exportar,
+    ao_trocar_aba,
 )
 
 abrir_tela_login()
@@ -24,6 +25,9 @@ if Conexao.is_connected():
     # Cria o notebook
     notebook = ttk.Notebook(root)
     notebook.pack(fill="both", expand=True)
+    notebook.bind(
+        "<<NotebookTabChanged>>", lambda event: ao_trocar_aba(event, notebook)
+    )
 
     # Dicionário aninhado para armazenar imagens em cada aba
     imagens_dict = {
@@ -34,7 +38,7 @@ if Conexao.is_connected():
         "ConsultarUsuarios": {},
         "ComecarRG": {},
         "CadastroUsuario": {},
-        "BuscarRG": {},
+        "ConsultarRG": {},
     }
 
     # Telas principais ao abrir o programa
@@ -43,6 +47,5 @@ if Conexao.is_connected():
     abrir_aba_consultar_usuarios(notebook, imagens_dict)
     abrir_aba_cadastrar_usuario(notebook, imagens_dict)
     abrir_aba_exportar(notebook, imagens_dict)
-
     root.mainloop()
 Conexao.fechar_conexao()

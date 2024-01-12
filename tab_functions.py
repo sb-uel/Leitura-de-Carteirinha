@@ -22,11 +22,11 @@ def abrir_aba_consultar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]
     frame_buscar_rg.pack(fill="both", expand=True)
     criar_tela_buscar_rg(
         frame_buscar_rg,
-        imagens_dict["BuscarRG"],
+        imagens_dict["ConsultarRG"],
         notebook,
         imagens_dict,
     )
-    notebook.add(frame_buscar_rg, text="Buscar RG")
+    notebook.add(frame_buscar_rg, text="Consultar RG")
 
 
 def abrir_aba_consultar_usuarios(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
@@ -82,6 +82,7 @@ def abrir_aba_editar_usuario(notebook: ttk.Notebook, imagens_dict: dict[str, dic
     notebook.bind(
         "<<NotebookTabChanged>>",
         lambda event: fechar_aba_ao_sair(notebook, frame_editar_usuario),
+        add="+",
     )
 
 
@@ -98,6 +99,7 @@ def abrir_aba_editar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
     notebook.bind(
         "<<NotebookTabChanged>>",
         lambda event: fechar_aba_ao_sair(notebook, frame_editar_rg),
+        add="+",
     )
 
 
@@ -123,4 +125,24 @@ def abrir_aba_comecar_rg(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
 def fechar_aba_ao_sair(notebook: ttk.Notebook, frame: ttk.Frame):
     if notebook.index("current") != notebook.index(frame):
         notebook.unbind("<<NotebookTabChanged>>")
+        notebook.bind(
+            "<<NotebookTabChanged>>", lambda event: ao_trocar_aba(event, notebook)
+        )
         notebook.forget(frame)
+
+
+def atualizar_aba(aba_selecionada):
+    if aba_selecionada == "Consultar RG":
+        ...
+        print(f"Atualizando {aba_selecionada}")
+    elif aba_selecionada == "Consultar Usuários":
+        ...
+        print(f"Atualizando {aba_selecionada}")
+    elif aba_selecionada == "Exportar":
+        ...
+        print(f"Atualizando {aba_selecionada}")
+
+
+def ao_trocar_aba(event, notebook: ttk.Notebook):
+    aba_selecionada = notebook.tab(notebook.select(), "text")
+    atualizar_aba(aba_selecionada)
