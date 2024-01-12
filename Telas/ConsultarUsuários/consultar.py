@@ -121,9 +121,9 @@ def criar_tela_consultar_usuarios(
     tabela.heading("email", text="Email")
     tabela.grid(row=0, column=0, sticky="nsew")
 
-    def atualizar_tabela(pesquisa: tk.StringVar):
+    def atualizar_tabela(pesquisa : tk.StringVar = None):
         # Obtém o termo pesquisado caso ele exista
-        termo_pesquisado = pesquisa.get() if pesquisa.get() != "" else None
+        termo_pesquisado = pesquisa.get() if pesquisa is not None and pesquisa.get() != "" else None
 
         # Limpa os dados existentes na tabela
         tabela.delete(*tabela.get_children())
