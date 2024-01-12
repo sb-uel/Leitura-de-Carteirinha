@@ -44,8 +44,15 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
 
 
 def consultar_usuario():
-    ...
-
+    print("EXECUTADO SELECT USUARIOS")
+    conn = Conexao.get_conexao()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT `ID_Usuário`, `Nome`, `N_Matricula` FROM `usuário` ORDER BY `Nome`")
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter usuários", message=e)
 
 def atualizar_usuario():
     ...

@@ -131,18 +131,19 @@ def fechar_aba_ao_sair(notebook: ttk.Notebook, frame: ttk.Frame):
         notebook.forget(frame)
 
 
-def atualizar_aba(aba_selecionada):
+def atualizar_aba(aba_selecionada: str, frame_aba: ttk.Frame):
     if aba_selecionada == "Consultar RG":
-        ...
+        frame_aba.event_generate("<F5>")
         print(f"Atualizando {aba_selecionada}")
     elif aba_selecionada == "Consultar Usuários":
-        ...
+        frame_aba.event_generate("<F5>")
         print(f"Atualizando {aba_selecionada}")
     elif aba_selecionada == "Exportar":
-        ...
+        frame_aba.event_generate("<F5>")
         print(f"Atualizando {aba_selecionada}")
 
 
 def ao_trocar_aba(event, notebook: ttk.Notebook):
     aba_selecionada = notebook.tab(notebook.select(), "text")
-    atualizar_aba(aba_selecionada)
+    frame_aba = notebook.nametowidget(notebook.select())
+    atualizar_aba(aba_selecionada, frame_aba)

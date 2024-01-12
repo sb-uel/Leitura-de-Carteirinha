@@ -2,10 +2,11 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 from pathlib import Path
-from tkinter import PhotoImage, Canvas, Text, Button, ttk
+from tkinter import Entry, PhotoImage, Canvas, Text, Button, ttk
 import sys
 
 from tab_functions import abrir_aba_editar_usuario
+from widgets_functions import cria_tabela_usuarios
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -49,35 +50,9 @@ def criar_tela_consultar_usuarios(
     # Adiciona imagens, textos, retângulos ao canvas
     canvas.create_image(682.0, 384.0, image=imagens["image_1"])
     canvas.create_image(607.5, 83.0, image=imagens["entry_1"])
-    canvas.create_rectangle(36.0, 185.0, 1050.0, 251.0, fill="#D9D9D9", outline="")
-    canvas.create_rectangle(36.0, 251.0, 1050.0, 735.0, fill="#FFFFFF", outline="")
     canvas.create_rectangle(103.0, 55.0, 1050.0, 112.0, fill="#FFFFFF", outline="")
     canvas.create_image(1211.0, 421.0, image=imagens["image_2"])
     canvas.create_image(135.0, 82.0, image=imagens["image_3"])
-    canvas.create_text(
-        122.0,
-        190.0,
-        anchor="nw",
-        text="Nome",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-    canvas.create_text(
-        512.0,
-        191.0,
-        anchor="nw",
-        text="Matrícula",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-    canvas.create_text(
-        885.0,
-        190.0,
-        anchor="nw",
-        text="Ação",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
     canvas.create_text(
         36.0,
         142.0,
@@ -88,7 +63,7 @@ def criar_tela_consultar_usuarios(
     )
 
     # Entrada de texto
-    entry_1 = Text(
+    entry_1 = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -97,7 +72,7 @@ def criar_tela_consultar_usuarios(
         font=(FONTE_INPUT, 28),
     )
     entry_1.place(x=174.0, y=60.0, width=867.0, height=44.0)
-    
+
     # Botões
     button_1 = Button(
         frame,
@@ -120,19 +95,16 @@ def criar_tela_consultar_usuarios(
     button_2.place(x=1124.0, y=55.0, width=176.0, height=60.0)
 
     button_3 = Button(
-        frame,
-        image=imagens["button_3"],
+        master=frame,
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: abrir_aba_editar_usuario(notebook,imagens_dict),
+        command=lambda: abrir_aba_editar_usuario(notebook, imagens_dict),
         relief="flat",
+        text="Editar Usuário",
+        font=(FONTE_TELAS, 40),
+        background="#FFD708",
+        activebackground="#FFD708",
     )
-    button_3.place(x=859.0, y=275.0, width=138.0, height=49.0)
-
-
-# imagens = {}
-# window = Tk()
-# window.geometry(TAMANHO_JANELA)
-# window.configure(bg="#FFFFFF")
-# cria_tela_consultar_usuarios(window, imagens)
-# window.mainloop()
+    button_3.place(x=1076.0, y=551.0, width=268.0, height=68.0)
+    
+    cria_tabela_usuarios(frame)

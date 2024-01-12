@@ -3,6 +3,7 @@ from cruds.Conexao import Conexao
 import mysql.connector as mysql
 
 def consultar_cursos():
+    print("EXECUTADO SELECT CURSOS")
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:
