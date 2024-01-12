@@ -43,7 +43,7 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
         messagebox.showerror(title="Erro ao inserir usuário no banco", message=e)
 
 
-def consultar_usuario(termo: str = None):
+def consultar_usuarios(termo: str = None):
     print("EXECUTADO SELECT USUARIOS")
     conn = Conexao.get_conexao()
     sql = "SELECT `ID_Usuário`, `Nome`, `N_Matricula`, `Email` FROM `usuário`"
