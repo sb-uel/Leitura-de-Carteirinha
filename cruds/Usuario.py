@@ -60,7 +60,8 @@ def consultar_usuarios(termo: str = None):
     except Exception as e:
         messagebox.showerror(title="Erro ao obter usuários", message=e)
 
-def consultar_usuario(id : int):
+
+def consultar_usuario_pelo_id(id: int):
     print(f"EXECUTADO SELECT USUARIO ID={id}")
     conn = Conexao.get_conexao()
     sql = "SELECT `ID_Usuário`, `Nome`, `N_Matricula`, `Email` FROM `usuário` WHERE `ID_Usuário` = %s"
@@ -72,8 +73,27 @@ def consultar_usuario(id : int):
     except Exception as e:
         messagebox.showerror(title="Erro ao obter usuários", message=e)
 
-def atualizar_usuario():
-    ...
+
+def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
+    if not validar_campos(n_carteirinha, nome, email):
+        return
+    n_matricula = n_carteirinha[:10]
+
+    sql = (
+        "UPDATE `usuário` SET `N_Carteirinha` = %s, `N_Matricula` = %s, `Nome` = %s, `Email` = %s, `ID_Curso` = %s "
+        "WHERE (`ID_Usuário` = %s)"
+    )
+    values = (n_carteirinha, n_matricula, nome, email, id_curso, id_usuario)
+    conn = Conexao.get_conexao()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, values)
+        messagebox.showinfo(
+            title="Edição bem sucedida",
+            message="O usuário foi atualizado com sucesso!",
+        )
+    except Exception as e:
+        messagebox.showerror(title="Erro ao atualizar o usuário no banco", message=e)
 
 
 def deletar_usuario():

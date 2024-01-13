@@ -128,7 +128,7 @@ def criar_tela_consultar_usuarios(
         # Limpa os dados existentes na tabela
         tabela.delete(*tabela.get_children())
 
-        # Obtém novos dados da função consultar_usuario
+        # Obtém novos dados da função consultar_usuarios
         usuarios = consultar_usuarios(termo_pesquisado)
 
         # Insere os novos dados na tabela se eles não forem vazios
