@@ -20,12 +20,16 @@ def cadastrar_reuniao():
 
     # Se existir pergunte ao usuário se deseja continuar a partir dela, caso não exista crie uma nova
     if resultados:
-        messagebox.askyesno(
+        resposta = messagebox.askyesno(
             "Reunião existente",
             f"Já existe uma reunião com a data de hoje {data_hoje.strftime('%d/%m/%Y')}\nDeseja continuar a partir dela?",
         )
         print(resultados)
-        return resultados[0]
+        if resposta:
+            return resultados[0]
+        else:
+            # Lógica para cancelar retomada da reunião
+            pass
     else:
         sql = "INSERT INTO `reuniões` (`Data`) VALUES (%s)"
         id_inserido = None
