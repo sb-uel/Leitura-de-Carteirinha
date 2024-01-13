@@ -146,6 +146,7 @@ def fechar_aba_ao_sair(notebook: ttk.Notebook, frame: ttk.Frame):
 
 
 def atualizar_aba(aba_selecionada: str, frame_aba: ttk.Frame):
+    frame_aba.focus_set()
     if aba_selecionada == "Consultar RG":
         frame_aba.event_generate("<F5>")
         print(f"Atualizando {aba_selecionada}")

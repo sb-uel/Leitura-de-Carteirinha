@@ -6,7 +6,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk
 import tkinter as tk
 import sys
-from cruds.Usuario import consultar_usuario_pelo_id
+from cruds.Usuario import atualizar_usuario, consultar_usuario_pelo_id
 
 from widgets_functions import cria_menu_cursos
 
@@ -127,7 +127,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: i
     email_var = tk.StringVar(value=email)
 
     # Entrada de texto
-    entry_1 = Entry(
+    entry_nome = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -136,9 +136,9 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: i
         font=(FONTE_INPUT, 25),
         textvariable=nome_var,
     )
-    entry_1.place(x=126.0, y=130.0, width=530.0, height=43.0)
+    entry_nome.place(x=126.0, y=130.0, width=530.0, height=43.0)
 
-    entry_2 = Entry(
+    entry_n_carteirinha = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -147,9 +147,9 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: i
         font=(FONTE_INPUT, 25),
         textvariable=n_carteirinha_var,
     )
-    entry_2.place(x=272.0, y=219.0, width=372.0, height=43.0)
+    entry_n_carteirinha.place(x=272.0, y=219.0, width=372.0, height=43.0)
 
-    entry_3 = Entry(
+    entry_email = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
@@ -158,7 +158,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: i
         font=(FONTE_INPUT, 25),
         textvariable=email_var,
     )
-    entry_3.place(x=139.0, y=402.0, width=505.0, height=43.0)
+    entry_email.place(x=139.0, y=402.0, width=505.0, height=43.0)
 
     # Botões
     button_1 = Button(
@@ -181,23 +181,25 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: i
     )
     button_2.place(x=1206.0, y=190.0, width=51.0, height=51.0)
 
-    button_3 = Button(
+    button_salvar = Button(
         frame,
         image=imagens["button_3"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Salvar"),
+        command=lambda: atualizar_usuario(
+            id_usuario=id,
+            nome=nome_var.get(),
+            email=email_var.get(),
+            id_curso=id_curso_var.get(),
+            n_carteirinha=n_carteirinha_var.get(),
+        ),
         relief="flat",
     )
-    button_3.place(x=125.0, y=606.0, width=325.0, height=84.0)
+    button_salvar.place(x=125.0, y=606.0, width=325.0, height=84.0)
 
     # Caixa de seleção
     menu_cursos = cria_menu_cursos(frame=frame, id_curso_var=id_curso_var, x=135, y=303)
+    
+    # Coloca o curso selecionado e já obtém o id conforme o curso selecionado
     menu_cursos.set(curso)
-
-# imagens = {}
-# window = Tk()
-# window.geometry(TAMANHO_JANELA)
-# window.configure(bg="#FFFFFF")
-# cria_tela_edicao_usuarios(window, imagens)
-# window.mainloop()
+    menu_cursos.event_generate("<<ComboboxSelected>>")
