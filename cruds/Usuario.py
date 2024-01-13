@@ -101,5 +101,20 @@ def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
         messagebox.showerror(title="Erro ao atualizar o usuário no banco", message=e)
 
 
-def deletar_usuario():
-    ...
+def deletar_usuarios(ids: list[int]):
+    # Cria os placeholders com base no número de ids
+    placeholders = ', '.join(['%s' for _ in ids])
+    sql = f"DELETE FROM `usuário` WHERE `ID_Usuário` IN ({placeholders})"
+
+    conn = Conexao.get_conexao()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, ids)
+        messagebox.showinfo(
+            title="Edição bem sucedida",
+            message="O usuário foi atualizado com sucesso!",
+        )
+    except Exception as e:
+        messagebox.showerror(title="Erro ao excluir do banco", message=e)
+
+
