@@ -55,7 +55,7 @@ class Conexao:
     @classmethod
     def fazer_backup(cls, local_de_salvamento: Path):
         """Faz backup da base de dados"""
-        
+
         # Obtém a data do dia atual para nomear o arquivo
         data_atual = date.today().strftime("%d_%m_%Y")
 
@@ -63,9 +63,15 @@ class Conexao:
         nome_arquivo = f"backup_{data_atual}.sql"
         caminho_completo = local_de_salvamento / nome_arquivo
 
-        # Construir o comando mysqldump
-        comando_mysqldump = f"mysqldump -u {cls.__user} -p{cls.__password} {cls.__db} > {caminho_completo}"
+        # Cria um arquivo de opções (Método mais seguro)
+        arquivo_opcoes = local_de_salvamento / "mysql_options.cnf"
+        with arquivo_opcoes.open(mode="w") as arquivo:
+            arquivo.write(f"[mysqldump]\nuser={cls.__user}\npassword={cls.__password}")
+
         try:
+            # Construir o comando mysqldump com a opção --defaults-file
+            comando_mysqldump = f"mysqldump --defaults-file={arquivo_opcoes} {cls.__db} > {caminho_completo}"
+
             # Executa no console
             subprocess.run(comando_mysqldump, shell=True, check=True)
             
@@ -73,6 +79,10 @@ class Conexao:
             messagebox.showinfo("Backup Concluído", f"Backup realizado com sucesso em {caminho_completo}")
             
         except Exception as e:
-            
-            # Captura exceção para lidar com erros durante a execução
-            messagebox.showerror("Erro ao fazer backup", f"Erro: {e}")
+            # Exibe uma mensagem de erro
+            messagebox.showerror("Erro ao fazer backup", f"Erro durante o backup: {e}")
+
+        finally:
+            # Remove o arquivo de opções após o uso
+            arquivo_opcoes.unlink()
+
