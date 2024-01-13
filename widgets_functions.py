@@ -34,4 +34,6 @@ def cria_menu_cursos(frame: ttk.Frame, id_curso_var: tk.StringVar, x : int, y : 
     menu_cursos.place(x=x, y=y)
     menu_cursos.option_add("*TCombobox*Listbox*Font", (FONTE_INPUT, 16))
     menu_cursos.bind("<<ComboboxSelected>>", obter_id_curso_selecionado)
+    
+    return menu_cursos
 

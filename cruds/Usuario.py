@@ -64,7 +64,12 @@ def consultar_usuarios(termo: str = None):
 def consultar_usuario_pelo_id(id: int):
     print(f"EXECUTADO SELECT USUARIO ID={id}")
     conn = Conexao.get_conexao()
-    sql = "SELECT `ID_Usuário`, `Nome`, `N_Matricula`, `Email` FROM `usuário` WHERE `ID_Usuário` = %s"
+    sql = (
+        "SELECT u.`Nome`, u.`N_Carteirinha`, u.`Email`, c.`Curso` "
+        "FROM `usuário` u "
+        "INNER JOIN `curso` c ON u.`ID_Curso` = c.`ID_Curso` "
+        "WHERE u.`ID_Usuário` = %s"
+    )
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id,))

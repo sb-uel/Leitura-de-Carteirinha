@@ -6,6 +6,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk
 import tkinter as tk
 import sys
+from cruds.Usuario import consultar_usuario_pelo_id
 
 from widgets_functions import cria_menu_cursos
 
@@ -21,7 +22,7 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id : int)  :
+def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: int):
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
@@ -73,7 +74,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id :
         22.0,
         219.0,
         anchor="nw",
-        text="N° DE MATRICULA:",
+        text="N° DE CARTEIRINHA:",
         fill="#FFFFFF",
         font=(FONTE_TELAS, 40 * -1),
     )
@@ -117,9 +118,13 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id :
         fill="#000000",
         font=(FONTE_TELAS, 48 * -1),
     )
-    
+
     # Variáveis
-    id_curso = tk.StringVar()
+    nome, n_carteirinha, email, curso = consultar_usuario_pelo_id(id)
+    nome_var = tk.StringVar(value=nome)
+    id_curso_var = tk.StringVar()
+    n_carteirinha_var = tk.StringVar(value=n_carteirinha)
+    email_var = tk.StringVar(value=email)
 
     # Entrada de texto
     entry_1 = Entry(
@@ -129,6 +134,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id :
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 25),
+        textvariable=nome_var,
     )
     entry_1.place(x=126.0, y=130.0, width=530.0, height=43.0)
 
@@ -139,6 +145,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id :
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 25),
+        textvariable=n_carteirinha_var,
     )
     entry_2.place(x=272.0, y=219.0, width=372.0, height=43.0)
 
@@ -149,6 +156,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id :
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 25),
+        textvariable=email_var,
     )
     entry_3.place(x=139.0, y=402.0, width=505.0, height=43.0)
 
@@ -184,7 +192,8 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens : dict[str, dict], id :
     button_3.place(x=125.0, y=606.0, width=325.0, height=84.0)
 
     # Caixa de seleção
-    cria_menu_cursos(frame=frame,id_curso_var=id_curso,x=135,y=303)  
+    menu_cursos = cria_menu_cursos(frame=frame, id_curso_var=id_curso_var, x=135, y=303)
+    menu_cursos.set(curso)
 
 # imagens = {}
 # window = Tk()
