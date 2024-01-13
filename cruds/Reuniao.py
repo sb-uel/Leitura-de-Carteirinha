@@ -51,8 +51,24 @@ def cadastrar_reuniao():
             messagebox.showerror(title="Erro ao iniciar reunião", message=e)
 
 
-def consultar_reunioes(termo: str = None):
-    ...
+def consultar_reunioes(data: date = None):
+    print("EXECUTANDO SELECT REUNIOES + PRESENCAS")
+    conn = Conexao.get_conexao()
+    sql = (
+        "SELECT r.ID_Reuniões, r.Data, COUNT(p.ID_Presenças) AS TotalPresencas "
+        "FROM reuniões r LEFT JOIN presenças p ON r.ID_Reuniões = p.ID_Reuniões AND p.Presente = 1 "
+        "GROUP BY r.ID_Reuniões, r.Data"
+    )
+    if data is not None:
+        sql += " WHERE `Data` = %s"
+    sql += " ORDER BY `Data`"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (data,))
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter reuniões", message=e)
 
 
 def consultar_reuniao_pelo_id(id: int):
