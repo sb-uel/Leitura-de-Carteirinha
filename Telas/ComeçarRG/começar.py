@@ -6,6 +6,8 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
 import sys
 
+from cruds.Reuniao import cadastrar_reuniao
+
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
@@ -60,23 +62,18 @@ def criar_tela_comecar_rg(
     canvas.create_image(1276.0, 58.0, image=imagens["image_4"])
 
     # Botão
-    button_1 = Button(
+    button_iniciar = Button(
         frame,
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: (
-            notebook.forget(frame),
-            abrir_aba_leitura(notebook, imagens_dict),
-        ),
+        command=lambda: iniciar_reuniao(),
         relief="flat",
     )
-    button_1.place(x=483.0, y=334.0, width=400.0, height=100.0)
-
-
-# imagens = {}
-# window = Tk()
-# window.geometry(TAMANHO_JANELA)
-# window.configure(bg="#FFFFFF")
-# cria_tela_comecar_rg(window, imagens)
-# window.mainloop()
+    button_iniciar.place(x=483.0, y=334.0, width=400.0, height=100.0)
+    
+    def iniciar_reuniao():
+        id_reuniao = cadastrar_reuniao()
+        if id_reuniao:
+            notebook.forget(frame)
+            abrir_aba_leitura(notebook, imagens_dict)

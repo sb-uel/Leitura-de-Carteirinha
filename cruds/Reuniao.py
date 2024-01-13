@@ -24,12 +24,10 @@ def cadastrar_reuniao():
             "Reunião existente",
             f"Já existe uma reunião com a data de hoje {data_hoje.strftime('%d/%m/%Y')}\nDeseja continuar a partir dela?",
         )
-        print(resultados)
         if resposta:
             return resultados[0]
         else:
-            # Lógica para cancelar retomada da reunião
-            pass
+            return None
     else:
         sql = "INSERT INTO `reuniões` (`Data`) VALUES (%s)"
         id_inserido = None
@@ -40,8 +38,8 @@ def cadastrar_reuniao():
                 # Inicializa com os ids presentes na tabela usuário e com as presenças como falso (0)
                 # E usando o id da reunião criada anteriormente
                 sql = (
-                    "INSERT INTO presencas (id_usuario, presenca, id_reuniao)"
-                    "SELECT id_usuario, 0, %s FROM usuarios"
+                    "INSERT INTO `presenças` (`ID_Usuário`, `Presente`, `ID_Reuniões`)"
+                    "SELECT `ID_Usuário`, 0, %s FROM `usuário`"
                 )
                 cursor.execute(sql, (id_inserido,))
                 messagebox.showinfo(
