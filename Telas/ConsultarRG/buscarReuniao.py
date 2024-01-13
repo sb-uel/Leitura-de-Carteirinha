@@ -2,19 +2,20 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
+from datetime import date
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
-from ttkbootstrap import DateEntry
+from tkinter import Canvas, Button, PhotoImage, messagebox, ttk
+from tkcalendar import DateEntry
 import tkinter as tk
 import sys
+from Telas.defs import *
+from cruds.Reuniao import consultar_reunioes
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
 if str(ROOT_PATH) not in sys.path:
     sys.path.append(str(ROOT_PATH))
-from Telas.defs import *
-from tab_functions import abrir_aba_editar_rg
 
 
 def relative_to_assets(path: str) -> Path:
@@ -30,7 +31,6 @@ def criar_tela_buscar_rg(
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
-    imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
     imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
 
     # Canvas
@@ -56,57 +56,56 @@ def criar_tela_buscar_rg(
         fill="#FFFFFF",
         font=(FONTE_TELAS, 48 * -1),
     )
-    canvas.create_rectangle(70.0, 190.0, 1084.0, 256.0, fill="#D9D9D9", outline="")
-    canvas.create_rectangle(70.0, 256.0, 1084.0, 322.0, fill="#FFFFFF", outline="")
-    canvas.create_text(
-        156.0,
-        195.0,
-        anchor="nw",
-        text="Data",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-    canvas.create_text(
-        450.0,
-        195.0,
-        anchor="nw",
-        text="N° de presenças",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-    canvas.create_text(
-        872.0,
-        195.0,
-        anchor="nw",
-        text="Ações",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-
-    data_var = tk.StringVar()
 
     # Input data
-    input_data = DateEntry(master=frame, dateformat="%d/%m/%Y")
-    input_data.entry.config(textvariable=data_var)
-    input_data.place(x=180.0, y=80.0)
-
-    # Botões
-    button_1 = Button(
-        frame,
-        image=imagens["button_1"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: abrir_aba_editar_rg(notebook, imagens_dict),
-        relief="flat",
-    )
-    button_1.place(x=855.0, y=262.0, width=138.0, height=49.0)
+    date_entry = DateEntry(master=frame, font=(FONTE_TELAS, 20))
+    date_entry.place(x=180.0, y=70.0, width=200)
 
     button_2 = Button(
         frame,
         image=imagens["button_2"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print(data_var.get()),
+        command=lambda: atualizar_tabela(date_entry.get_date()),
         relief="flat",
     )
     button_2.place(x=610.0, y=58.0, width=164.0, height=69.0)
+
+    # Novo frame para conter a tabela e a barra de rolagem
+    frame_tabela = ttk.Frame(frame)
+    frame_tabela.place(x=70.0, y=190.0, width=1014.0, height=550.0, anchor="nw")
+    tabela = ttk.Treeview(
+        frame_tabela, columns=("data", "n_presencas"), show="headings"
+    )
+    tabela.heading("data", text="Data")
+    tabela.heading("n_presencas", text="Nº Presenças")
+    tabela.grid(row=0, column=0, sticky="nsew")
+
+    def atualizar_tabela(data: date = None):
+        # Limpa os dados existentes na tabela
+        tabela.delete(*tabela.get_children())
+
+        # Obtém novos dados da função consultar_usuarios
+        reunioes = consultar_reunioes(data)
+
+        # Insere os novos dados na tabela
+        for id, data_reuniao, n_presencas in reunioes:
+            data_reuniao : date
+            tabela.insert("", tk.END, iid=id, values=(data_reuniao.strftime('%d/%m/%Y'), n_presencas))
+
+    def obter_iid_selecionado(event):
+        iid_selecionado = tabela.focus()
+        print("IID do item selecionado:", iid_selecionado)
+
+    # Adiciona o bind a função de recarregar a tabela
+    frame.bind("<F5>", lambda event: atualizar_tabela())
+    tabela.bind("<<TreeviewSelect>>", obter_iid_selecionado)
+
+    # Adiciona uma barra de rolagem
+    scrollbar = ttk.Scrollbar(frame_tabela, orient=tk.VERTICAL, command=tabela.yview)
+    scrollbar.grid(row=0, column=1, sticky="ns")
+    tabela.configure(yscrollcommand=scrollbar.set)
+
+    # Configuração para expandir a tabela e a barra de rolagem com o tamanho do frame_tabela
+    frame_tabela.columnconfigure(0, weight=1)
+    frame_tabela.rowconfigure(0, weight=1)

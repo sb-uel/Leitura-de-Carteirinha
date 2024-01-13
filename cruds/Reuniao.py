@@ -57,14 +57,17 @@ def consultar_reunioes(data: date = None):
     sql = (
         "SELECT r.ID_Reuniões, r.Data, COUNT(p.ID_Presenças) AS TotalPresencas "
         "FROM reuniões r LEFT JOIN presenças p ON r.ID_Reuniões = p.ID_Reuniões AND p.Presente = 1 "
-        "GROUP BY r.ID_Reuniões, r.Data"
     )
+    params = None
     if data is not None:
-        sql += " WHERE `Data` = %s"
-    sql += " ORDER BY `Data`"
+        sql += " WHERE r.Data = %s"
+        sql +=  "GROUP BY r.ID_Reuniões, r.Data"
+        params = (data,)
+    else:
+        sql += "GROUP BY r.ID_Reuniões, r.Data ORDER BY Data"
     try:
         with conn.cursor() as cursor:
-            cursor.execute(sql, (data,))
+            cursor.execute(sql, params)
             resultados = cursor.fetchall()
         return resultados
     except Exception as e:
