@@ -3,7 +3,18 @@
 
 
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import (
+    Tk,
+    Canvas,
+    Entry,
+    Text,
+    Button,
+    PhotoImage,
+    filedialog,
+    messagebox,
+    ttk,
+)
+import tkinter as tk
 import sys
 
 from cruds.Reuniao import cadastrar_reuniao
@@ -61,19 +72,55 @@ def criar_tela_comecar_rg(
     canvas.create_image(74.0, 58.0, image=imagens["image_3"])
     canvas.create_image(1276.0, 58.0, image=imagens["image_4"])
 
-    # Botão
+    # Variáveis
+    pasta_escolhida = tk.StringVar()
+
+    # Rótulo para exibir a pasta escolhida
+    label_pasta_escolhida = ttk.Label(
+        master=frame,
+        textvariable=pasta_escolhida,
+        font=(FONTE_TELAS, 24),
+        background="#FFFFFF",
+    )
+    label_pasta_escolhida.place(x=467.0, y=165.0, height=46.0)
+
+    # Botões
+    button_escolher_pasta = Button(
+        frame,
+        text="Escolher\nPasta",
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: escolher_pasta(),
+        relief="flat",
+    )
+    button_escolher_pasta.place(x=411.0, y=165.0, width=46.0, height=46.0)
+
     button_iniciar = Button(
         frame,
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: iniciar_reuniao(),
+        command=lambda: iniciar_reuniao(pasta_escolhida.get()),
         relief="flat",
     )
     button_iniciar.place(x=483.0, y=334.0, width=400.0, height=100.0)
-    
-    def iniciar_reuniao():
+
+    def iniciar_reuniao(local_de_salvamento : str):
+        if local_de_salvamento == "Nenhuma pasta escolhida" or local_de_salvamento == "":
+            messagebox.showerror(
+                title="Local de salvamento",
+                message="Nenhuma pasta foi escolhida para salvar o dump",
+            )
+            return
         id_reuniao = cadastrar_reuniao()
         if id_reuniao:
             notebook.forget(frame)
-            abrir_aba_leitura(notebook, imagens_dict)
+            abrir_aba_leitura(notebook, imagens_dict, id_reuniao, Path(local_de_salvamento))
+
+    def escolher_pasta():
+        nonlocal pasta_escolhida
+        pasta = filedialog.askdirectory()
+        if pasta:
+            pasta_escolhida.set(pasta)
+        else:
+            pasta_escolhida.set("Nenhuma pasta escolhida")
