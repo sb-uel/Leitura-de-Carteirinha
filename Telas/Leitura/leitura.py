@@ -32,7 +32,6 @@ def criar_tela_leitura(
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
     imagens["entry_image"] = PhotoImage(file=relative_to_assets("entry_1.png"))
     imagens["button_image_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
-    imagens["button_image_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
 
     # Canvas
     canvas = Canvas(
@@ -50,19 +49,20 @@ def criar_tela_leitura(
     canvas.create_image(682.0, 384.0, image=imagens["image_1"])
     canvas.create_image(683.0, 275.0, image=imagens["image_2"])
     canvas.create_image(703.5, 524.0, image=imagens["entry_image"])
+    
+    n_carteirinha_var = tk.StringVar()
 
     # Entrada de texto
-    entry_1 = Text(
+    entry_1 = Entry(
         frame,
         bd=0,
         bg="#FFFFFF",
         fg="#000716",
         highlightthickness=0,
         font=(FONTE_INPUT, 35),
+        textvariable=n_carteirinha_var,
     )
     entry_1.place(x=520.0, y=490.0, width=367.0, height=66.0)
-
-    n_carteirinha_var = tk.StringVar()
 
     # Botões
     button_enviar = Button(
@@ -70,18 +70,21 @@ def criar_tela_leitura(
         image=imagens["button_image_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: ler_carteirinha(n_carteirinha_var, id_reuniao),
+        command=lambda: ler_carteirinha(n_carteirinha_var.get(), id_reuniao),
         relief="flat",
     )
     button_enviar.place(x=552.0, y=610.0, width=261.0, height=92.0)
 
     button_terminar = Button(
         frame,
-        image=imagens["button_image_2"],
         borderwidth=0,
         highlightthickness=0,
         command=lambda: terminar_reuniao(local_de_salvamento),
         relief="flat",
+        text="Terminar Reunião",
+        font=(FONTE_TELAS, 15),
+        background="#FFFFFF",
+        activebackground="#FFFFFF",
     )
     button_terminar.place(x=33.0, y=681.0, width=143.0, height=47.0)
 
