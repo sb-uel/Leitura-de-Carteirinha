@@ -1,14 +1,27 @@
+from pathlib import Path
 from tkinter import messagebox, ttk
 
 
-def abrir_aba_leitura(notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
+def abrir_aba_leitura(
+    notebook: ttk.Notebook,
+    imagens_dict: dict[str, dict],
+    id_reuniao: int,
+    local_de_salvamento: Path,
+):
     from Telas.Leitura.leitura import criar_tela_leitura
 
     frame_leitura = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
     frame_leitura.pack(fill="both", expand=True)
-    criar_tela_leitura(frame_leitura, imagens_dict["Leitura"], notebook, imagens_dict)
+    criar_tela_leitura(
+        frame_leitura,
+        imagens_dict["Leitura"],
+        notebook,
+        imagens_dict,
+        id_reuniao,
+        local_de_salvamento,
+    )
     notebook.insert(0, frame_leitura, text="Leitura")  # Insere na primeira posição
     notebook.select(frame_leitura)
 
@@ -75,15 +88,20 @@ def abrir_aba_editar_usuario(
     id: str,
 ):
     from Telas.EditarUsuários.editarUser import criar_tela_edicao_usuarios
-    if id == '':
-        messagebox.showerror("Nenhum Usuário Selecionado","Nenhum usuário foi selecionado na tabela")
+
+    if id == "":
+        messagebox.showerror(
+            "Nenhum Usuário Selecionado", "Nenhum usuário foi selecionado na tabela"
+        )
         return
-    
+
     frame_editar_usuario = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
     frame_editar_usuario.pack(fill="both", expand=True)
-    criar_tela_edicao_usuarios(frame_editar_usuario, imagens_dict["EditarUsuario"], int(id))
+    criar_tela_edicao_usuarios(
+        frame_editar_usuario, imagens_dict["EditarUsuario"], int(id)
+    )
     notebook.add(frame_editar_usuario, text="Editar Usuário")
     notebook.select(frame_editar_usuario)
     notebook.bind(
@@ -99,10 +117,13 @@ def abrir_aba_editar_rg(
     id: str,
 ):
     from Telas.EditarRG.editar import criar_tela_editar_rg
-    if id == '':
-        messagebox.showerror("Nenhuma Reunião Selecionada","Nenhuma reunião foi selecionada na tabela")
+
+    if id == "":
+        messagebox.showerror(
+            "Nenhuma Reunião Selecionada", "Nenhuma reunião foi selecionada na tabela"
+        )
         return
-    
+
     frame_editar_rg = ttk.Frame(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
