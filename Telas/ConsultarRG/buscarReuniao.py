@@ -4,8 +4,9 @@
 
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from ttkbootstrap import DateEntry
+import tkinter as tk
 import sys
-
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -29,10 +30,8 @@ def criar_tela_buscar_rg(
     # Imagens
     imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
     imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
-    imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
     imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
     imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
-    imagens["button_3"] = PhotoImage(file=relative_to_assets("button_3.png"))
 
     # Canvas
     canvas = Canvas(
@@ -57,8 +56,6 @@ def criar_tela_buscar_rg(
         fill="#FFFFFF",
         font=(FONTE_TELAS, 48 * -1),
     )
-    canvas.create_rectangle(180.0, 67.0, 381.0, 112.0, fill="#FFFFFF", outline="")
-    canvas.create_image(289.0, 92.0, image=imagens["entry_1"])
     canvas.create_rectangle(70.0, 190.0, 1084.0, 256.0, fill="#D9D9D9", outline="")
     canvas.create_rectangle(70.0, 256.0, 1084.0, 322.0, fill="#FFFFFF", outline="")
     canvas.create_text(
@@ -86,13 +83,20 @@ def criar_tela_buscar_rg(
         font=(FONTE_TELAS, 48 * -1),
     )
 
+    data_var = tk.StringVar()
+
+    # Input data
+    input_data = DateEntry(master=frame, dateformat="%d/%m/%Y")
+    input_data.entry.config(textvariable=data_var)
+    input_data.place(x=180.0, y=80.0)
+
     # Botões
     button_1 = Button(
         frame,
         image=imagens["button_1"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: abrir_aba_editar_rg(notebook,imagens_dict),
+        command=lambda: abrir_aba_editar_rg(notebook, imagens_dict),
         relief="flat",
     )
     button_1.place(x=855.0, y=262.0, width=138.0, height=49.0)
@@ -102,24 +106,7 @@ def criar_tela_buscar_rg(
         image=imagens["button_2"],
         borderwidth=0,
         highlightthickness=0,
-        command=lambda: print("Buscar"),
+        command=lambda: print(data_var.get()),
         relief="flat",
     )
     button_2.place(x=610.0, y=58.0, width=164.0, height=69.0)
-
-    button_3 = Button(
-        frame,
-        image=imagens["button_3"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("Voltar"),
-        relief="flat",
-    )
-    button_3.place(x=33.0, y=681.0, width=143.0, height=47.0)
-
-# imagens = {}
-# window = Tk()
-# window.geometry(TAMANHO_JANELA)
-# window.configure(bg="#FFFFFF")
-# cria_tela_buscar_rg(window, imagens)
-# window.mainloop()
