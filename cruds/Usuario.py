@@ -111,8 +111,8 @@ def deletar_usuarios(ids: list[int]):
         with conn.cursor() as cursor:
             cursor.execute(sql, ids)
         messagebox.showinfo(
-            title="Edição bem sucedida",
-            message="O usuário foi atualizado com sucesso!",
+            title="Exclusão bem sucedida",
+            message="Os usuários foram excluídos com sucesso!",
         )
     except Exception as e:
         messagebox.showerror(title="Erro ao excluir do banco", message=e)

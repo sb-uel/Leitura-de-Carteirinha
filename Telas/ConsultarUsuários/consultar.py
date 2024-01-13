@@ -2,10 +2,10 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 from pathlib import Path
-from tkinter import Entry, PhotoImage, Canvas, Text, Button, ttk
+from tkinter import Entry, PhotoImage, Canvas, Text, Button, messagebox, ttk
 import tkinter as tk
 import sys
-from cruds.Usuario import consultar_usuarios
+from cruds.Usuario import consultar_usuarios, deletar_usuarios
 
 from tab_functions import abrir_aba_editar_usuario
 
@@ -77,29 +77,6 @@ def criar_tela_consultar_usuarios(
     entry_pesquisa.place(x=174.0, y=60.0, width=867.0, height=44.0)
 
     # Botões
-    button_deletar = Button(
-        frame,
-        image=imagens["button_1"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("Deletar"),
-        relief="flat",
-    )
-    button_deletar.place(x=1076.0, y=651.0, width=268.0, height=68.0)
-
-    button_editar = Button(
-        master=frame,
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: abrir_aba_editar_usuario(notebook, imagens_dict, tabela.focus()),
-        relief="flat",
-        text="Editar Usuário",
-        font=(FONTE_TELAS, 40),
-        background="#FFD708",
-        activebackground="#FFD708",
-    )
-    button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
-
     button_pesquisa = Button(
         frame,
         image=imagens["button_2"],
@@ -109,6 +86,43 @@ def criar_tela_consultar_usuarios(
         relief="flat",
     )
     button_pesquisa.place(x=1124.0, y=55.0, width=176.0, height=60.0)
+
+    button_deletar = Button(
+        frame,
+        image=imagens["button_1"],
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: confirmar_exclusao(),
+        relief="flat",
+    )
+    button_deletar.place(x=1076.0, y=651.0, width=268.0, height=68.0)
+    
+    def confirmar_exclusao():
+        usuarios_ids = list(tabela.selection())
+        msg = 'Deseja excluir estes usuários?\n'
+        for usuario_id in usuarios_ids:
+            item = tabela.item(usuario_id)
+            msg += f"{item['values'][0]}\n" # Acessa o nome (índice 0)
+        resposta =  messagebox.askyesno(title="Confirmação de exclusão",message=msg)
+        if resposta:
+            deletar_usuarios(usuarios_ids)
+            atualizar_tabela()
+            
+
+    button_editar = Button(
+        master=frame,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: abrir_aba_editar_usuario(
+            notebook, imagens_dict, tabela.focus()
+        ),
+        relief="flat",
+        text="Editar Usuário",
+        font=(FONTE_TELAS, 40),
+        background="#FFD708",
+        activebackground="#FFD708",
+    )
+    button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
 
     # Novo Frame para conter a tabela e a barra de rolagem
     frame_tabela = ttk.Frame(frame)
@@ -121,9 +135,11 @@ def criar_tela_consultar_usuarios(
     tabela.heading("email", text="Email")
     tabela.grid(row=0, column=0, sticky="nsew")
 
-    def atualizar_tabela(pesquisa : tk.StringVar = None):
+    def atualizar_tabela(pesquisa: tk.StringVar = None):
         # Obtém o termo pesquisado caso ele exista
-        termo_pesquisado = pesquisa.get() if pesquisa is not None and pesquisa.get() != "" else None
+        termo_pesquisado = (
+            pesquisa.get() if pesquisa is not None and pesquisa.get() != "" else None
+        )
 
         # Limpa os dados existentes na tabela
         tabela.delete(*tabela.get_children())
