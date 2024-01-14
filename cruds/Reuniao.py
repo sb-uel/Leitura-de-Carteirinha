@@ -83,8 +83,8 @@ def consultar_reuniao_pelo_id(id: int):
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id,))
-            resultados = cursor.fetchall()
-        return resultados
+            resultados = cursor.fetchone()
+        return resultados[0]
     except Exception as e:
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 

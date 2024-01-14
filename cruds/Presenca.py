@@ -1,6 +1,7 @@
 from tkinter import messagebox
-from plyer import notification 
+from plyer import notification
 from cruds.Conexao import Conexao
+
 
 def ler_carteirinha(n_carteirinha, id_reuniao):
     resultados = None
@@ -37,6 +38,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
             message="Este número de carteirinha não foi encontrado no sistema",
         )
 
+
 def consultar_presencas_pelo_id(id_reuniao: int):
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_reuniao}")
     conn = Conexao.get_conexao()
@@ -54,17 +56,18 @@ def consultar_presencas_pelo_id(id_reuniao: int):
         return resultados
     except Exception as e:
         messagebox.showerror(title="Erro ao obter reunião", message=e)
-        
+
+
 def atualizar_presencas(id_reuniao: int, presencas: list):
     conn = Conexao.get_conexao()
-    sql = "UPDATE presencas SET Presente = CASE ID_Usuário "
+    sql = "UPDATE presenças SET Presente = CASE ID_Usuário "  # Atualize a tabela presenças nos seguintes casos
     placeholders = []
 
     for id_usuario, presente in presencas:
-        sql += "WHEN %s THEN %s "
+        sql += "WHEN %s THEN %s "  # Quando o ID do usuário for ... então Presente = ...
         placeholders.extend([id_usuario, presente])
 
-    sql += "END WHERE ID_Reunioes = %s"
+    sql += "END WHERE ID_Reuniões = %s"  # Onde ID da reunião for ...
     placeholders.append(id_reuniao)
     try:
         with conn.cursor() as cursor:
