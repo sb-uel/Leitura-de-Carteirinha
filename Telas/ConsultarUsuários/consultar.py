@@ -112,31 +112,31 @@ def criar_tela_consultar_usuarios(
         )
         button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
 
-    def criar_frame_tabela():
-        frame_tabela = ttk.Frame(frame)
-        frame_tabela.place(x=36.0, y=185.0, width=1015.0, height=550.0, anchor="nw")
-        return frame_tabela
+    def criar_tabela():
+        def criar_frame_tabela():
+            frame_tabela = ttk.Frame(frame)
+            frame_tabela.place(x=36.0, y=185.0, width=1015.0, height=550.0, anchor="nw")
+            frame_tabela.columnconfigure(0, weight=1)
+            frame_tabela.rowconfigure(0, weight=1)
+            return frame_tabela
 
-    def criar_tabela(frame_tabela):
+        def criar_scrollbar(frame_tabela, tabela):
+            scrollbar = ttk.Scrollbar(
+                frame_tabela, orient=tk.VERTICAL, command=tabela.yview
+            )
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            tabela.configure(yscrollcommand=scrollbar.set)
+
+        frame_tabela = criar_frame_tabela()
         tabela = ttk.Treeview(
             frame_tabela, columns=("nome", "matrícula", "email"), show="headings"
         )
+        criar_scrollbar(frame_tabela, tabela)
         tabela.heading("nome", text="Nome")
         tabela.heading("matrícula", text="Matrícula")
         tabela.heading("email", text="Email")
         tabela.grid(row=0, column=0, sticky="nsew")
         return tabela
-
-    def criar_scrollbar(frame_tabela, tabela):
-        scrollbar = ttk.Scrollbar(
-            frame_tabela, orient=tk.VERTICAL, command=tabela.yview
-        )
-        scrollbar.grid(row=0, column=1, sticky="ns")
-        tabela.configure(yscrollcommand=scrollbar.set)
-
-    def configurar_expandir(frame_tabela):
-        frame_tabela.columnconfigure(0, weight=1)
-        frame_tabela.rowconfigure(0, weight=1)
 
     def atualizar_tabela():
         termo_pesquisado = pesquisa.get() if pesquisa.get() != "" else None
@@ -165,17 +165,9 @@ def criar_tela_consultar_usuarios(
     criar_canvas()
     pesquisa, entry_pesquisa = criar_input_pesquisa()
     criar_botoes()
-    frame_tabela = criar_frame_tabela()
-    tabela = criar_tabela(frame_tabela)
+    tabela = criar_tabela()
 
     # Configuração e interação com a tabela
-    criar_scrollbar(frame_tabela, tabela)
-    configurar_expandir(frame_tabela)
     frame.bind("<F5>", lambda event: atualizar_tabela())
     entry_pesquisa.bind("<Return>", lambda event: atualizar_tabela())
     tabela.bind("<<TreeviewSelect>>", obter_iid_selecionado)
-    # Adiciona uma barra de rolagem
-
-    # Configuração para expandir a tabela e a barra de rolagem com o tamanho do frame_tabela
-    frame_tabela.columnconfigure(0, weight=1)
-    frame_tabela.rowconfigure(0, weight=1)

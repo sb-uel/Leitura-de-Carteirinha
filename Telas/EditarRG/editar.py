@@ -64,31 +64,31 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
         date_entry.place(x=180.0, y=67.0, width=201.0)
         return date_entry
 
-    def criar_frame_tabela():
-        frame_tabela = ttk.Frame(frame)
-        frame_tabela.place(x=36.0, y=185.0, width=1014.0, height=530.0, anchor="nw")
-        return frame_tabela
+    def criar_tabela():
+        def criar_frame_tabela():
+            frame_tabela = ttk.Frame(frame)
+            frame_tabela.place(x=36.0, y=185.0, width=1014.0, height=530.0, anchor="nw")
+            frame_tabela.columnconfigure(0, weight=1)
+            frame_tabela.rowconfigure(0, weight=1)
+            return frame_tabela
 
-    def criar_tabela(frame_tabela):
+        def criar_scrollbar(frame_tabela, tabela):
+            scrollbar = ttk.Scrollbar(
+                frame_tabela, orient=tk.VERTICAL, command=tabela.yview
+            )
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            tabela.configure(yscrollcommand=scrollbar.set)
+
+        frame_tabela = criar_frame_tabela()
         tabela = ttk.Treeview(
             frame_tabela, columns=("nome", "curso", "presente"), show="headings"
         )
+        criar_scrollbar(frame_tabela, tabela)
         tabela.heading("nome", text="Nome")
         tabela.heading("curso", text="Curso")
         tabela.heading("presente", text="Presente")
         tabela.grid(row=0, column=0, sticky="nsew")
         return tabela
-
-    def criar_scrollbar(frame_tabela, tabela):
-        scrollbar = ttk.Scrollbar(
-            frame_tabela, orient=tk.VERTICAL, command=tabela.yview
-        )
-        scrollbar.grid(row=0, column=1, sticky="ns")
-        tabela.configure(yscrollcommand=scrollbar.set)
-
-    def configurar_expandir(frame_tabela):
-        frame_tabela.columnconfigure(0, weight=1)
-        frame_tabela.rowconfigure(0, weight=1)
 
     def criar_botoes():
         button_salvar = Button(
@@ -101,7 +101,7 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
         )
         button_salvar.place(x=1154.0, y=342.0, width=170.0, height=68.0)
 
-        button_2 = Button(
+        button_deletar = Button(
             frame,
             image=imagens["button_2"],
             borderwidth=0,
@@ -109,16 +109,16 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
             command=lambda: print("Deletar RG"),
             relief="flat",
         )
-        button_2.place(x=1154.0, y=486.0, width=170.0, height=68.0)
-        
+        button_deletar.place(x=1154.0, y=486.0, width=170.0, height=68.0)
+
         button_editar = Button(
             master=frame,
             borderwidth=0,
             highlightthickness=0,
             command=lambda: print("Alternar presenca"),
             relief="flat",
-            text="Alternar Presença",
-            font=(FONTE_TELAS, 40),
+            text="Alternar\nPresença",
+            font=(FONTE_TELAS, 20),
             background="#FFD708",
             activebackground="#FFD708",
         )
@@ -129,7 +129,5 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
     criar_canvas()
     criar_botoes()
     date_entry = criar_input_data()
-    frame_tabela = criar_frame_tabela()
-    tabela = criar_tabela(frame_tabela)
-    criar_scrollbar(frame_tabela, tabela)
-    configurar_expandir(frame_tabela)
+    tabela = criar_tabela()
+

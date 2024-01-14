@@ -23,7 +23,12 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_buscar_rg(frame: ttk.Frame, imagens: dict[str, dict], notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
+def criar_tela_buscar_rg(
+    frame: ttk.Frame,
+    imagens: dict[str, dict],
+    notebook: ttk.Notebook,
+    imagens_dict: dict[str, dict],
+):
     def criar_imagens():
         imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
         imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
@@ -82,28 +87,30 @@ def criar_tela_buscar_rg(frame: ttk.Frame, imagens: dict[str, dict], notebook: t
         )
         button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
 
-    def criar_frame_tabela():
-        frame_tabela = ttk.Frame(frame)
-        frame_tabela.place(x=70.0, y=190.0, width=950.0, height=530.0, anchor="nw")
-        return frame_tabela
+    def criar_tabela():
+        def criar_frame_tabela():
+            frame_tabela = ttk.Frame(frame)
+            frame_tabela.place(x=70.0, y=190.0, width=950.0, height=530.0, anchor="nw")
+            frame_tabela.columnconfigure(0, weight=1)
+            frame_tabela.rowconfigure(0, weight=1)
+            return frame_tabela
 
-    def criar_tabela(frame_tabela):
+        def criar_scrollbar(frame_tabela, tabela):
+            scrollbar = ttk.Scrollbar(
+                frame_tabela, orient=tk.VERTICAL, command=tabela.yview
+            )
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            tabela.configure(yscrollcommand=scrollbar.set)
+
+        frame_tabela = criar_frame_tabela()
         tabela = ttk.Treeview(
             frame_tabela, columns=("data", "n_presencas"), show="headings"
         )
+        criar_scrollbar(frame_tabela, tabela)
         tabela.heading("data", text="Data")
         tabela.heading("n_presencas", text="Nº Presenças")
         tabela.grid(row=0, column=0, sticky="nsew")
         return tabela
-
-    def criar_scrollbar(frame_tabela, tabela):
-        scrollbar = ttk.Scrollbar(frame_tabela, orient=tk.VERTICAL, command=tabela.yview)
-        scrollbar.grid(row=0, column=1, sticky="ns")
-        tabela.configure(yscrollcommand=scrollbar.set)
-
-    def configurar_expandir(frame_tabela):
-        frame_tabela.columnconfigure(0, weight=1)
-        frame_tabela.rowconfigure(0, weight=1)
 
     def atualizar_tabela(data: date = None):
         tabela.delete(*tabela.get_children())
@@ -127,11 +134,8 @@ def criar_tela_buscar_rg(frame: ttk.Frame, imagens: dict[str, dict], notebook: t
     date_entry = criar_input_data()
     criar_botao_buscar(date_entry)
     criar_botao_editar()
-    frame_tabela = criar_frame_tabela()
-    tabela = criar_tabela(frame_tabela)
+    tabela = criar_tabela()
 
     # Configuração e interação com a tabela
-    criar_scrollbar(frame_tabela, tabela)
-    configurar_expandir(frame_tabela)
     frame.bind("<F5>", lambda event: atualizar_tabela())
     tabela.bind("<<TreeviewSelect>>", obter_iid_selecionado)
