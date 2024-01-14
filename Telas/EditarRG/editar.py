@@ -7,6 +7,8 @@ from tkcalendar import DateEntry
 import tkinter as tk
 import sys
 
+from cruds.Reuniao import consultar_reuniao_pelo_id
+
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
@@ -22,7 +24,7 @@ def relative_to_assets(path: str) -> Path:
 from tkinter import Tk, Canvas, Text, Button, PhotoImage
 
 
-def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
+def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict], id_reuniao: int):
     def criar_imagens():
         imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
         imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
@@ -87,8 +89,16 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
         tabela.heading("nome", text="Nome")
         tabela.heading("curso", text="Curso")
         tabela.heading("presente", text="Presente")
+        tabela.tag_configure("presente",background="pale green")
+        tabela.tag_configure("ausente",background="light coral")
         tabela.grid(row=0, column=0, sticky="nsew")
         return tabela
+
+    def atualizar_tabela():
+        tabela.delete(*tabela.get_children())
+        presentes = consultar_reuniao_pelo_id(id_reuniao)
+        for id_usuario, nome, curso, presenca in presentes:
+            tabela.insert("", tk.END, iid=id_usuario, values=(nome, curso, "Sim" if presenca else "Não"), tags="presente" if presenca else "ausente")
 
     def criar_botoes():
         button_salvar = Button(
@@ -130,4 +140,4 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
     criar_botoes()
     date_entry = criar_input_data()
     tabela = criar_tabela()
-
+    frame.bind("<F5>", lambda event: atualizar_tabela())

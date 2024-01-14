@@ -78,7 +78,7 @@ def consultar_reuniao_pelo_id(id: int):
     print(f"EXECUTANDO SELECT REUNIAO ID={id}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT u.Nome, c.Curso, p.Presente "
+        "SELECT u.ID_Usuário, u.Nome, c.Curso, p.Presente "
         "FROM presenças p "
         "INNER JOIN usuário u ON p.ID_Usuário = u.ID_Usuário "
         "INNER JOIN curso c ON u.ID_Curso = c.ID_Curso "

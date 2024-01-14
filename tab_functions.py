@@ -128,7 +128,7 @@ def abrir_aba_editar_rg(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
     frame_editar_rg.pack(fill="both", expand=True)
-    criar_tela_editar_rg(frame_editar_rg, imagens_dict["EditarRG"])
+    criar_tela_editar_rg(frame_editar_rg, imagens_dict["EditarRG"], int(id))
     notebook.add(frame_editar_rg, text="Editar RG")
     notebook.select(frame_editar_rg)
     notebook.bind(
@@ -175,6 +175,12 @@ def atualizar_aba(aba_selecionada: str, frame_aba: ttk.Frame):
         frame_aba.event_generate("<F5>")
         print(f"Atualizando {aba_selecionada}")
     elif aba_selecionada == "Exportar":
+        frame_aba.event_generate("<F5>")
+        print(f"Atualizando {aba_selecionada}")
+    elif aba_selecionada == "Editar Usuário":
+        frame_aba.event_generate("<F5>")
+        print(f"Atualizando {aba_selecionada}")
+    elif aba_selecionada == "Editar RG":
         frame_aba.event_generate("<F5>")
         print(f"Atualizando {aba_selecionada}")
 
