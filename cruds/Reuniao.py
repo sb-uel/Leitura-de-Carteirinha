@@ -2,6 +2,8 @@ from tkinter import messagebox
 from cruds.Conexao import Conexao
 from datetime import date
 
+from cruds.Presenca import atualizar_presencas
+
 
 def cadastrar_reuniao():
     data_atual = date.today()
@@ -77,13 +79,7 @@ def consultar_reunioes(data: date = None):
 def consultar_reuniao_pelo_id(id: int):
     print(f"EXECUTANDO SELECT REUNIAO ID={id}")
     conn = Conexao.get_conexao()
-    sql = (
-        "SELECT u.ID_Usuário, u.Nome, c.Curso, p.Presente "
-        "FROM presenças p "
-        "INNER JOIN usuário u ON p.ID_Usuário = u.ID_Usuário "
-        "INNER JOIN curso c ON u.ID_Curso = c.ID_Curso "
-        "WHERE p.ID_Reuniões = %s"
-    )
+    sql = "SELECT Data FROM reuniões WHERE ID_Reuniões = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id,))
@@ -93,9 +89,17 @@ def consultar_reuniao_pelo_id(id: int):
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
-def atualizar_reuniao():
-    ...
+def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
+    conn = Conexao.get_conexao()
+    atualizar_presencas(id_reuniao, presencas)
+    sql = "UPDATE reuniões SET Data = %s WHERE (ID_Reuniões = %s)"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (data, id_reuniao))
+        messagebox.showinfo("Reunião Salva", message="Reunião salva com sucesso!")
+    except Exception as e:
+        messagebox.showerror(title="Erro ao salvar reunião", message=e)
 
 
-def deletar_reunioes(ids: list[int]):
+def deletar_reunioes(id: int):
     ...
