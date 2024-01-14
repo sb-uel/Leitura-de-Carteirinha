@@ -23,183 +23,170 @@ def relative_to_assets(path: str) -> Path:
 
 
 def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id: int):
-    # Imagens
-    imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
-    imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
-    imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
-    imagens["entry_2"] = PhotoImage(file=relative_to_assets("entry_2.png"))
-    imagens["entry_3"] = PhotoImage(file=relative_to_assets("entry_3.png"))
-    imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
-    imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
-    imagens["button_3"] = PhotoImage(file=relative_to_assets("button_3.png"))
+    def criar_imagens():
+        imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
+        imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
+        imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
+        imagens["entry_2"] = PhotoImage(file=relative_to_assets("entry_2.png"))
+        imagens["entry_3"] = PhotoImage(file=relative_to_assets("entry_3.png"))
+        imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
+        imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
+        imagens["button_3"] = PhotoImage(file=relative_to_assets("button_3.png"))
 
-    # Canvas
-    canvas = Canvas(
-        frame,
-        bg="#FFFFFF",
-        height=768,
-        width=1365,
-        bd=0,
-        highlightthickness=0,
-        relief="ridge",
-    )
-    canvas.place(x=0, y=0)
+    def criar_canvas():
+        canvas = Canvas(
+            frame,
+            bg="#FFFFFF",
+            height=768,
+            width=1365,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge",
+        )
+        canvas.place(x=0, y=0)
 
-    # Adiciona imagens, textos, retângulos ao canvas
-    canvas.create_image(682.0, 384.0, image=imagens["image_1"])
-    canvas.create_image(569.0, 648.0, image=imagens["image_2"])
-    canvas.create_image(391.0, 152.5, image=imagens["entry_1"])
-    canvas.create_image(458.0, 241.5, image=imagens["entry_2"])
-    canvas.create_image(391.5, 424.5, image=imagens["entry_3"])
-    canvas.create_rectangle(307.0, 484.0, 394.0, 529.0, fill="#FFFFFF", outline="")
-    canvas.create_rectangle(743.0, 109.0, 1296.0, 175.0, fill="#D9D9D9", outline="")
-    canvas.create_rectangle(743.0, 175.0, 1296.0, 659.0, fill="#FFFFFF", outline="")
-    canvas.create_text(
-        514.0,
-        25.0,
-        anchor="nw",
-        text="EDIÇÃO DE USUÁRIOS",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-    canvas.create_text(
-        22.0,
-        132.0,
-        anchor="nw",
-        text="NOME:",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 40 * -1),
-    )
-    canvas.create_text(
-        22.0,
-        219.0,
-        anchor="nw",
-        text="N° DE CARTEIRINHA:",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 40 * -1),
-    )
-    canvas.create_text(
-        22.0,
-        302.0,
-        anchor="nw",
-        text="CURSO",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 40 * -1),
-    )
-    canvas.create_text(
-        22.0,
-        403.0,
-        anchor="nw",
-        text="EMAIL:",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 40 * -1),
-    )
-    canvas.create_text(
-        22.0,
-        484.0,
-        anchor="nw",
-        text="N° DE DIAS PRESENTES:",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 40 * -1),
-    )
-    canvas.create_text(
-        779.0,
-        115.0,
-        anchor="nw",
-        text="Data da RG",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
-    canvas.create_text(
-        1108.0,
-        114.0,
-        anchor="nw",
-        text="Presente",
-        fill="#000000",
-        font=(FONTE_TELAS, 48 * -1),
-    )
+        canvas.create_image(682.0, 384.0, image=imagens["image_1"])
+        canvas.create_image(569.0, 648.0, image=imagens["image_2"])
+        canvas.create_image(391.0, 152.5, image=imagens["entry_1"])
+        canvas.create_image(458.0, 241.5, image=imagens["entry_2"])
+        canvas.create_image(391.5, 424.5, image=imagens["entry_3"])
+        canvas.create_rectangle(307.0, 484.0, 394.0, 529.0, fill="#FFFFFF", outline="")
+        canvas.create_rectangle(743.0, 109.0, 1296.0, 175.0, fill="#D9D9D9", outline="")
+        canvas.create_rectangle(743.0, 175.0, 1296.0, 659.0, fill="#FFFFFF", outline="")
+        canvas.create_text(
+            514.0,
+            25.0,
+            anchor="nw",
+            text="EDIÇÃO DE USUÁRIOS",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 48 * -1),
+        )
+        canvas.create_text(
+            22.0,
+            132.0,
+            anchor="nw",
+            text="NOME:",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 40 * -1),
+        )
+        canvas.create_text(
+            22.0,
+            219.0,
+            anchor="nw",
+            text="N° DE CARTEIRINHA:",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 40 * -1),
+        )
+        canvas.create_text(
+            22.0,
+            302.0,
+            anchor="nw",
+            text="CURSO",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 40 * -1),
+        )
+        canvas.create_text(
+            22.0,
+            403.0,
+            anchor="nw",
+            text="EMAIL:",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 40 * -1),
+        )
+        canvas.create_text(
+            22.0,
+            484.0,
+            anchor="nw",
+            text="N° DE DIAS PRESENTES:",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 40 * -1),
+        )
+        canvas.create_text(
+            779.0,
+            115.0,
+            anchor="nw",
+            text="Data da RG",
+            fill="#000000",
+            font=(FONTE_TELAS, 48 * -1),
+        )
+        canvas.create_text(
+            1108.0,
+            114.0,
+            anchor="nw",
+            text="Presente",
+            fill="#000000",
+            font=(FONTE_TELAS, 48 * -1),
+        )
 
-    # Variáveis
-    nome, n_carteirinha, email, curso = consultar_usuario_pelo_id(id)
-    nome_var = tk.StringVar(value=nome)
-    id_curso_var = tk.StringVar()
-    n_carteirinha_var = tk.StringVar(value=n_carteirinha)
-    email_var = tk.StringVar(value=email)
+    def configurar_variaveis():
+        nome, n_carteirinha, email, curso = consultar_usuario_pelo_id(id)
+        nome_var = tk.StringVar(value=nome)
+        id_curso_var = tk.StringVar()
+        n_carteirinha_var = tk.StringVar(value=n_carteirinha)
+        email_var = tk.StringVar(value=email)
+        return nome_var, id_curso_var, n_carteirinha_var, email_var, curso
 
-    # Entrada de texto
-    entry_nome = Entry(
-        frame,
-        bd=0,
-        bg="#FFFFFF",
-        fg="#000716",
-        highlightthickness=0,
-        font=(FONTE_INPUT, 25),
-        textvariable=nome_var,
-    )
-    entry_nome.place(x=126.0, y=130.0, width=530.0, height=43.0)
+    def criar_entry(frame, text_variable, x, y, width, height):
+        entry = Entry(
+            frame,
+            bd=0,
+            bg="#FFFFFF",
+            fg="#000716",
+            highlightthickness=0,
+            font=(FONTE_INPUT, 25),
+            textvariable=text_variable,
+        )
+        entry.place(x=x, y=y, width=width, height=height)
+        return entry
 
-    entry_n_carteirinha = Entry(
-        frame,
-        bd=0,
-        bg="#FFFFFF",
-        fg="#000716",
-        highlightthickness=0,
-        font=(FONTE_INPUT, 25),
-        textvariable=n_carteirinha_var,
-    )
-    entry_n_carteirinha.place(x=272.0, y=219.0, width=372.0, height=43.0)
+    def criar_botoes():
+        button_1 = Button(
+            frame,
+            image=imagens["button_1"],
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("Confirmar"),
+            relief="flat",
+        )
+        button_1.place(x=1111.0, y=190.0, width=51.0, height=51.0)
 
-    entry_email = Entry(
-        frame,
-        bd=0,
-        bg="#FFFFFF",
-        fg="#000716",
-        highlightthickness=0,
-        font=(FONTE_INPUT, 25),
-        textvariable=email_var,
-    )
-    entry_email.place(x=139.0, y=402.0, width=505.0, height=43.0)
+        button_2 = Button(
+            frame,
+            image=imagens["button_2"],
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("Negar"),
+            relief="flat",
+        )
+        button_2.place(x=1206.0, y=190.0, width=51.0, height=51.0)
 
-    # Botões
-    button_1 = Button(
-        frame,
-        image=imagens["button_1"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("Confirmar"),
-        relief="flat",
-    )
-    button_1.place(x=1111.0, y=190.0, width=51.0, height=51.0)
+        button_salvar = Button(
+            frame,
+            image=imagens["button_3"],
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: atualizar_usuario(
+                id_usuario=id,
+                nome=nome_var.get(),
+                email=email_var.get(),
+                id_curso=id_curso_var.get(),
+                n_carteirinha=n_carteirinha_var.get(),
+            ),
+            relief="flat",
+        )
+        button_salvar.place(x=125.0, y=606.0, width=325.0, height=84.0)
 
-    button_2 = Button(
-        frame,
-        image=imagens["button_2"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: print("Negar"),
-        relief="flat",
-    )
-    button_2.place(x=1206.0, y=190.0, width=51.0, height=51.0)
+    def criar_menu_cursos():
+        menu_cursos = cria_menu_cursos(frame=frame, id_curso_var=id_curso_var, x=135, y=303)
+        menu_cursos.set(curso)
+        menu_cursos.event_generate("<<ComboboxSelected>>")
 
-    button_salvar = Button(
-        frame,
-        image=imagens["button_3"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: atualizar_usuario(
-            id_usuario=id,
-            nome=nome_var.get(),
-            email=email_var.get(),
-            id_curso=id_curso_var.get(),
-            n_carteirinha=n_carteirinha_var.get(),
-        ),
-        relief="flat",
-    )
-    button_salvar.place(x=125.0, y=606.0, width=325.0, height=84.0)
-
-    # Caixa de seleção
-    menu_cursos = cria_menu_cursos(frame=frame, id_curso_var=id_curso_var, x=135, y=303)
-    
-    # Coloca o curso selecionado e já obtém o id conforme o curso selecionado
-    menu_cursos.set(curso)
-    menu_cursos.event_generate("<<ComboboxSelected>>")
+    # Criação e configuração dos elementos da tela
+    criar_imagens()
+    criar_canvas()
+    nome_var, id_curso_var, n_carteirinha_var, email_var, curso = configurar_variaveis()
+    entry_nome = criar_entry(frame, nome_var, 126.0, 130.0, 530.0, 43.0)
+    entry_n_carteirinha = criar_entry(frame, n_carteirinha_var, 272.0, 219.0, 372.0, 43.0)
+    entry_email = criar_entry(frame, email_var, 139.0, 402.0, 505.0, 43.0)
+    criar_botoes()
+    criar_menu_cursos()
