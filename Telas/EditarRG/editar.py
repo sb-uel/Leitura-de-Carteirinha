@@ -3,6 +3,8 @@
 
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkcalendar import DateEntry
+import tkinter as tk
 import sys
 
 
@@ -38,36 +40,8 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
             relief="ridge",
         )
         canvas.place(x=0, y=0)
-
         canvas.create_image(682.0, 384.0, image=imagens["image_1"])
         canvas.create_image(289.0, 92.0, image=imagens["entry_1"])
-        canvas.create_rectangle(36.0, 185.0, 1050.0, 251.0, fill="#D9D9D9", outline="")
-        canvas.create_rectangle(36.0, 251.0, 1050.0, 735.0, fill="#FFFFFF", outline="")
-        canvas.create_rectangle(180.0, 67.0, 381.0, 112.0, fill="#FFFFFF", outline="")
-        canvas.create_text(
-            122.0,
-            190.0,
-            anchor="nw",
-            text="Nome",
-            fill="#000000",
-            font=(FONTE_TELAS, 48 * -1),
-        )
-        canvas.create_text(
-            514.0,
-            191.0,
-            anchor="nw",
-            text="Curso",
-            fill="#000000",
-            font=(FONTE_TELAS, 48 * -1),
-        )
-        canvas.create_text(
-            838.0,
-            190.0,
-            anchor="nw",
-            text="Presente",
-            fill="#000000",
-            font=(FONTE_TELAS, 48 * -1),
-        )
         canvas.create_text(
             81.0,
             57.0,
@@ -85,20 +59,39 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
             font=(FONTE_TELAS, 40 * -1),
         )
 
-    def criar_entrada_texto():
-        entry_1 = Text(
-            frame,
-            bd=0,
-            bg="#FFFFFF",
-            fg="#000716",
-            highlightthickness=0,
-            font=(FONTE_INPUT, 20),
+    def criar_input_data():
+        date_entry = DateEntry(master=frame, font=(FONTE_TELAS, 20))
+        date_entry.place(x=180.0, y=67.0, width=201.0)
+        return date_entry
+
+    def criar_frame_tabela():
+        frame_tabela = ttk.Frame(frame)
+        frame_tabela.place(x=36.0, y=185.0, width=1014.0, height=530.0, anchor="nw")
+        return frame_tabela
+
+    def criar_tabela(frame_tabela):
+        tabela = ttk.Treeview(
+            frame_tabela, columns=("nome", "curso", "presente"), show="headings"
         )
-        entry_1.place(x=208.0, y=77.0, width=162.0, height=28.0)
-        return entry_1
+        tabela.heading("nome", text="Nome")
+        tabela.heading("curso", text="Curso")
+        tabela.heading("presente", text="Presente")
+        tabela.grid(row=0, column=0, sticky="nsew")
+        return tabela
+
+    def criar_scrollbar(frame_tabela, tabela):
+        scrollbar = ttk.Scrollbar(
+            frame_tabela, orient=tk.VERTICAL, command=tabela.yview
+        )
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        tabela.configure(yscrollcommand=scrollbar.set)
+
+    def configurar_expandir(frame_tabela):
+        frame_tabela.columnconfigure(0, weight=1)
+        frame_tabela.rowconfigure(0, weight=1)
 
     def criar_botoes():
-        button_1 = Button(
+        button_salvar = Button(
             frame,
             image=imagens["button_1"],
             borderwidth=0,
@@ -106,7 +99,7 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
             command=lambda: print("Salvar RG"),
             relief="flat",
         )
-        button_1.place(x=1154.0, y=342.0, width=170.0, height=68.0)
+        button_salvar.place(x=1154.0, y=342.0, width=170.0, height=68.0)
 
         button_2 = Button(
             frame,
@@ -117,9 +110,26 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict]):
             relief="flat",
         )
         button_2.place(x=1154.0, y=486.0, width=170.0, height=68.0)
+        
+        button_editar = Button(
+            master=frame,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("Alternar presenca"),
+            relief="flat",
+            text="Alternar Presença",
+            font=(FONTE_TELAS, 40),
+            background="#FFD708",
+            activebackground="#FFD708",
+        )
+        button_editar.place(x=1154.0, y=630.0, width=170.0, height=68.0)
 
     # Criação e configuração dos elementos da tela
     criar_imagens()
     criar_canvas()
-    entry_1 = criar_entrada_texto()
     criar_botoes()
+    date_entry = criar_input_data()
+    frame_tabela = criar_frame_tabela()
+    tabela = criar_tabela(frame_tabela)
+    criar_scrollbar(frame_tabela, tabela)
+    configurar_expandir(frame_tabela)
