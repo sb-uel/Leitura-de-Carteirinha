@@ -2,7 +2,7 @@ from tkinter import messagebox
 from cruds.Conexao import Conexao
 from datetime import date
 
-from cruds.Presenca import atualizar_presencas
+from cruds.Presenca import atualizar_presencas, deletar_presencas
 
 
 def cadastrar_reuniao():
@@ -101,5 +101,13 @@ def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
         messagebox.showerror(title="Erro ao salvar reunião", message=e)
 
 
-def deletar_reunioes(id: int):
-    ...
+def deletar_reunioes(id_reuniao: int):
+    conn = Conexao.get_conexao()
+    deletar_presencas(id_reuniao)
+    sql = "DELETE FROM reuniões WHERE ID_Reuniões = %s"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id_reuniao,))
+        messagebox.showinfo("Reunião Deletada", message="Reunião e presenças deletadas com sucesso!")
+    except Exception as e:
+        messagebox.showerror(title="Erro ao deletar reunião", message=e)

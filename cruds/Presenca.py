@@ -74,3 +74,12 @@ def atualizar_presencas(id_reuniao: int, presencas: list):
             cursor.execute(sql, placeholders)
     except Exception as e:
         messagebox.showerror(title="Erro ao atualizar presenças", message=e)
+        
+def deletar_presencas(id_reuniao: int):
+    conn = Conexao.get_conexao()
+    sql = "DELETE FROM presenças WHERE ID_Reuniões = %s"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id_reuniao,))
+    except Exception as e:
+        messagebox.showerror(title="Erro ao deletar presenças", message=e)
