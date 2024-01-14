@@ -10,6 +10,7 @@ import tkinter as tk
 import sys
 from Telas.defs import *
 from cruds.Reuniao import consultar_reunioes
+from tab_functions import abrir_aba_editar_rg
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -61,7 +62,7 @@ def criar_tela_buscar_rg(
     date_entry = DateEntry(master=frame, font=(FONTE_TELAS, 20))
     date_entry.place(x=180.0, y=70.0, width=200)
 
-    button_2 = Button(
+    button_buscar = Button(
         frame,
         image=imagens["button_2"],
         borderwidth=0,
@@ -69,11 +70,24 @@ def criar_tela_buscar_rg(
         command=lambda: atualizar_tabela(date_entry.get_date()),
         relief="flat",
     )
-    button_2.place(x=610.0, y=58.0, width=164.0, height=69.0)
+    button_buscar.place(x=610.0, y=58.0, width=164.0, height=69.0)
+
+    button_editar = Button(
+        master=frame,
+        borderwidth=0,
+        highlightthickness=0,
+        command=lambda: abrir_aba_editar_rg(notebook, imagens_dict, tabela.focus()),
+        relief="flat",
+        text="Editar Reunião",
+        font=(FONTE_TELAS, 40),
+        background="#FFD708",
+        activebackground="#FFD708",
+    )
+    button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
 
     # Novo frame para conter a tabela e a barra de rolagem
     frame_tabela = ttk.Frame(frame)
-    frame_tabela.place(x=70.0, y=190.0, width=1014.0, height=550.0, anchor="nw")
+    frame_tabela.place(x=70.0, y=190.0, width=950.0, height=530.0, anchor="nw")
     tabela = ttk.Treeview(
         frame_tabela, columns=("data", "n_presencas"), show="headings"
     )
@@ -90,8 +104,13 @@ def criar_tela_buscar_rg(
 
         # Insere os novos dados na tabela
         for id, data_reuniao, n_presencas in reunioes:
-            data_reuniao : date
-            tabela.insert("", tk.END, iid=id, values=(data_reuniao.strftime('%d/%m/%Y'), n_presencas))
+            data_reuniao: date
+            tabela.insert(
+                "",
+                tk.END,
+                iid=id,
+                values=(data_reuniao.strftime("%d/%m/%Y"), n_presencas),
+            )
 
     def obter_iid_selecionado(event):
         iid_selecionado = tabela.focus()
