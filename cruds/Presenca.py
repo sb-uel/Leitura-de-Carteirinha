@@ -39,7 +39,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
         )
 
 
-def consultar_presencas_pelo_id(id_reuniao: int):
+def consultar_presencas_pela_reuniao(id_reuniao: int):
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_reuniao}")
     conn = Conexao.get_conexao()
     sql = (
@@ -58,6 +58,41 @@ def consultar_presencas_pelo_id(id_reuniao: int):
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
+def consultar_presencas_pelo_usuario(id_usuario: int):
+    print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
+    conn = Conexao.get_conexao()
+    sql = (
+        "SELECT u.ID_Usuário, u.Nome, c.Curso, p.Presente "
+        "FROM presenças p "
+        "INNER JOIN usuário u ON p.ID_Usuário = u.ID_Usuário "
+        "INNER JOIN curso c ON u.ID_Curso = c.ID_Curso "
+        "WHERE p.ID_Reuniões = %s"
+    )
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id_usuario,))
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter reunião", message=e)
+
+
+def consultar_dias_presentes(id_usuario: int):
+    print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
+    conn = Conexao.get_conexao()
+    sql = (
+        "SELECT COUNT(DISTINCT ID_Reuniões) AS TotalPresenças"
+        "FROM presenças WHERE ID_Usuário = %s AND Presente = 1"
+    )
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id_usuario,))
+            resultados = cursor.fetchone()
+        return resultados[0]
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter presenças", message=e)
+
+
 def atualizar_presencas(id_reuniao: int, presencas: list):
     conn = Conexao.get_conexao()
     sql = "UPDATE presenças SET Presente = CASE ID_Usuário "  # Atualize a tabela presenças nos seguintes casos
@@ -74,7 +109,8 @@ def atualizar_presencas(id_reuniao: int, presencas: list):
             cursor.execute(sql, placeholders)
     except Exception as e:
         messagebox.showerror(title="Erro ao atualizar presenças", message=e)
-        
+
+
 def deletar_presencas(id_reuniao: int):
     conn = Conexao.get_conexao()
     sql = "DELETE FROM presenças WHERE ID_Reuniões = %s"
