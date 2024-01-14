@@ -99,14 +99,41 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict], id_reuniao:
         presentes = consultar_reuniao_pelo_id(id_reuniao)
         for id_usuario, nome, curso, presenca in presentes:
             tabela.insert("", tk.END, iid=id_usuario, values=(nome, curso, "Sim" if presenca else "Não"), tags="presente" if presenca else "ausente")
+            
+    def alternar_presenca():
+        itens_selecionados = tabela.selection()
+        
+        for item_id in itens_selecionados:
+            # Obtém os dados do item
+            valores_atuais = tabela.item(item_id, "values")
+            tags_atuais = tabela.item(item_id, "tags")
+            valores_atuais = list(valores_atuais)
+            tags_atuais = list(tags_atuais)
+            # Alterna a presença
+            if "presente" in tags_atuais:
+                valores_atuais[2] = "Não"
+                tags_atuais.remove("presente")
+                tags_atuais.append("ausente")
+            else:
+                valores_atuais[2] = "Sim"
+                tags_atuais.remove("ausente")
+                tags_atuais.append("presente")
 
+            tabela.item(item_id, values=valores_atuais, tags=tags_atuais)
+    
+    def deletar_rg():
+        ...
+        
+    def salvar_rg():
+        ...
+        
     def criar_botoes():
         button_salvar = Button(
             frame,
             image=imagens["button_1"],
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("Salvar RG"),
+            command=lambda: salvar_rg(),
             relief="flat",
         )
         button_salvar.place(x=1154.0, y=342.0, width=170.0, height=68.0)
@@ -116,7 +143,7 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict], id_reuniao:
             image=imagens["button_2"],
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("Deletar RG"),
+            command=lambda: deletar_rg(),
             relief="flat",
         )
         button_deletar.place(x=1154.0, y=486.0, width=170.0, height=68.0)
@@ -125,7 +152,7 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict], id_reuniao:
             master=frame,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("Alternar presenca"),
+            command=lambda: alternar_presenca(),
             relief="flat",
             text="Alternar\nPresença",
             font=(FONTE_TELAS, 20),
