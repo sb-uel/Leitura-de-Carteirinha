@@ -7,7 +7,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox, ttk
 from tkcalendar import DateEntry
 import tkinter as tk
 import sys
-from cruds.Presenca import consultar_presencas_pelo_id
+from cruds.Presenca import consultar_presencas_pela_reuniao
 
 from cruds.Reuniao import atualizar_reuniao, consultar_reuniao_pelo_id, deletar_reunioes
 from tab_functions import selecionar_aba_por_nome
@@ -103,7 +103,7 @@ def criar_tela_editar_rg(
 
     def atualizar_tabela():
         tabela.delete(*tabela.get_children())
-        presentes = consultar_presencas_pelo_id(id_reuniao)
+        presentes = consultar_presencas_pela_reuniao(id_reuniao)
         for id_usuario, nome, curso, presenca in presentes:
             tabela.insert(
                 "",

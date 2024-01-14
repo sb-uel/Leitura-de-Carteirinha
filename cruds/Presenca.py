@@ -62,11 +62,8 @@ def consultar_presencas_pelo_usuario(id_usuario: int):
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT u.ID_Usuário, u.Nome, c.Curso, p.Presente "
-        "FROM presenças p "
-        "INNER JOIN usuário u ON p.ID_Usuário = u.ID_Usuário "
-        "INNER JOIN curso c ON u.ID_Curso = c.ID_Curso "
-        "WHERE p.ID_Reuniões = %s"
+        "SELECT r.ID_Reuniões, r.Data, p.Presente FROM reuniões r "
+        "LEFT JOIN presenças p ON r.ID_Reuniões = p.ID_Reuniões AND p.ID_Usuário = %s "
     )
     try:
         with conn.cursor() as cursor:
