@@ -23,86 +23,91 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_buscar_rg(
-    frame: ttk.Frame,
-    imagens: dict[str, dict],
-    notebook: ttk.Notebook,
-    imagens_dict: dict[str, dict],
-):
-    # Imagens
-    imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
-    imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
-    imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
+def criar_tela_buscar_rg(frame: ttk.Frame, imagens: dict[str, dict], notebook: ttk.Notebook, imagens_dict: dict[str, dict]):
+    def criar_imagens():
+        imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
+        imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
+        imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
 
-    # Canvas
-    canvas = Canvas(
-        frame,
-        bg="#FFFFFF",
-        height=768,
-        width=1365,
-        bd=0,
-        highlightthickness=0,
-        relief="ridge",
-    )
-    canvas.place(x=0, y=0)
+    def criar_canvas():
+        canvas = Canvas(
+            frame,
+            bg="#FFFFFF",
+            height=768,
+            width=1365,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge",
+        )
+        canvas.place(x=0, y=0)
 
-    # Adiciona imagens, textos, retângulos ao canvas
-    canvas.create_image(682.0, 384.0, image=imagens["image_1"])
-    canvas.create_image(682.0, 520.0, image=imagens["image_2"])
-    canvas.create_text(
-        80.0,
-        60.0,
-        anchor="nw",
-        text="Data:",
-        fill="#FFFFFF",
-        font=(FONTE_TELAS, 48 * -1),
-    )
+        canvas.create_image(682.0, 384.0, image=imagens["image_1"])
+        canvas.create_image(682.0, 520.0, image=imagens["image_2"])
+        canvas.create_text(
+            80.0,
+            60.0,
+            anchor="nw",
+            text="Data:",
+            fill="#FFFFFF",
+            font=(FONTE_TELAS, 48 * -1),
+        )
 
-    # Input data
-    date_entry = DateEntry(master=frame, font=(FONTE_TELAS, 20))
-    date_entry.place(x=180.0, y=70.0, width=200)
+    def criar_input_data():
+        date_entry = DateEntry(master=frame, font=(FONTE_TELAS, 20))
+        date_entry.place(x=180.0, y=70.0, width=200)
+        return date_entry
 
-    button_buscar = Button(
-        frame,
-        image=imagens["button_2"],
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: atualizar_tabela(date_entry.get_date()),
-        relief="flat",
-    )
-    button_buscar.place(x=610.0, y=58.0, width=164.0, height=69.0)
+    def criar_botao_buscar(date_entry):
+        button_buscar = Button(
+            frame,
+            image=imagens["button_2"],
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: atualizar_tabela(date_entry.get_date()),
+            relief="flat",
+        )
+        button_buscar.place(x=610.0, y=58.0, width=164.0, height=69.0)
 
-    button_editar = Button(
-        master=frame,
-        borderwidth=0,
-        highlightthickness=0,
-        command=lambda: abrir_aba_editar_rg(notebook, imagens_dict, tabela.focus()),
-        relief="flat",
-        text="Editar Reunião",
-        font=(FONTE_TELAS, 40),
-        background="#FFD708",
-        activebackground="#FFD708",
-    )
-    button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
+    def criar_botao_editar():
+        button_editar = Button(
+            master=frame,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: abrir_aba_editar_rg(notebook, imagens_dict, tabela.focus()),
+            relief="flat",
+            text="Editar Reunião",
+            font=(FONTE_TELAS, 40),
+            background="#FFD708",
+            activebackground="#FFD708",
+        )
+        button_editar.place(x=1076.0, y=551.0, width=268.0, height=68.0)
 
-    # Novo frame para conter a tabela e a barra de rolagem
-    frame_tabela = ttk.Frame(frame)
-    frame_tabela.place(x=70.0, y=190.0, width=950.0, height=530.0, anchor="nw")
-    tabela = ttk.Treeview(
-        frame_tabela, columns=("data", "n_presencas"), show="headings"
-    )
-    tabela.heading("data", text="Data")
-    tabela.heading("n_presencas", text="Nº Presenças")
-    tabela.grid(row=0, column=0, sticky="nsew")
+    def criar_frame_tabela():
+        frame_tabela = ttk.Frame(frame)
+        frame_tabela.place(x=70.0, y=190.0, width=950.0, height=530.0, anchor="nw")
+        return frame_tabela
+
+    def criar_tabela(frame_tabela):
+        tabela = ttk.Treeview(
+            frame_tabela, columns=("data", "n_presencas"), show="headings"
+        )
+        tabela.heading("data", text="Data")
+        tabela.heading("n_presencas", text="Nº Presenças")
+        tabela.grid(row=0, column=0, sticky="nsew")
+        return tabela
+
+    def criar_scrollbar(frame_tabela, tabela):
+        scrollbar = ttk.Scrollbar(frame_tabela, orient=tk.VERTICAL, command=tabela.yview)
+        scrollbar.grid(row=0, column=1, sticky="ns")
+        tabela.configure(yscrollcommand=scrollbar.set)
+
+    def configurar_expandir(frame_tabela):
+        frame_tabela.columnconfigure(0, weight=1)
+        frame_tabela.rowconfigure(0, weight=1)
 
     def atualizar_tabela(data: date = None):
-        # Limpa os dados existentes na tabela
         tabela.delete(*tabela.get_children())
-
-        # Obtém novos dados da função consultar_usuarios
         reunioes = consultar_reunioes(data)
-
-        # Insere os novos dados na tabela
         for id, data_reuniao, n_presencas in reunioes:
             data_reuniao: date
             tabela.insert(
@@ -116,15 +121,17 @@ def criar_tela_buscar_rg(
         iid_selecionado = tabela.focus()
         print("IID do item selecionado:", iid_selecionado)
 
-    # Adiciona o bind a função de recarregar a tabela
+    # Criação e configuração dos elementos da tela
+    criar_imagens()
+    criar_canvas()
+    date_entry = criar_input_data()
+    criar_botao_buscar(date_entry)
+    criar_botao_editar()
+    frame_tabela = criar_frame_tabela()
+    tabela = criar_tabela(frame_tabela)
+
+    # Configuração e interação com a tabela
+    criar_scrollbar(frame_tabela, tabela)
+    configurar_expandir(frame_tabela)
     frame.bind("<F5>", lambda event: atualizar_tabela())
     tabela.bind("<<TreeviewSelect>>", obter_iid_selecionado)
-
-    # Adiciona uma barra de rolagem
-    scrollbar = ttk.Scrollbar(frame_tabela, orient=tk.VERTICAL, command=tabela.yview)
-    scrollbar.grid(row=0, column=1, sticky="ns")
-    tabela.configure(yscrollcommand=scrollbar.set)
-
-    # Configuração para expandir a tabela e a barra de rolagem com o tamanho do frame_tabela
-    frame_tabela.columnconfigure(0, weight=1)
-    frame_tabela.rowconfigure(0, weight=1)
