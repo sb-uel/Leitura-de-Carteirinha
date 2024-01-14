@@ -35,12 +35,69 @@ def validar_login(ip, usuario, senha, db_name):
     return True
 
 
+def criar_widgets_login(root, credenciais):
+    ttk.Label(root, text="IP:").grid(column=0, row=0, sticky=tk.W)
+    ttk.Entry(root, width=30, textvariable=credenciais["ip"]).grid(
+        column=1, row=0, sticky=tk.W
+    )
+
+    ttk.Label(root, text="Usuário:").grid(column=0, row=1, sticky=tk.W)
+    ttk.Entry(root, width=30, textvariable=credenciais["usuario"]).grid(
+        column=1, row=1, sticky=tk.W
+    )
+
+    ttk.Label(root, text="Senha:").grid(column=0, row=2, sticky=tk.W)
+    ttk.Entry(root, width=30, textvariable=credenciais["senha"], show="*").grid(
+        column=1, row=2, sticky=tk.W
+    )
+
+    ttk.Label(root, text="DB Name:").grid(column=0, row=3, sticky=tk.W)
+    ttk.Entry(root, width=30, textvariable=credenciais["db_name"]).grid(
+        column=1, row=3, sticky=tk.W
+    )
+
+    ttk.Checkbutton(
+        root,
+        text="Lembrar de mim",
+        variable=credenciais["remember_me"],
+    ).grid(column=0, row=4, sticky=tk.W)
+
+    ttk.Button(
+        root,
+        text="Logar",
+        command=lambda: logar(root, credenciais),
+    ).grid(column=1, row=4, sticky=tk.E)
+
+    root.bind("<Return>", lambda event: logar(root, credenciais))
+
+    for widget in root.winfo_children():
+        widget.grid(padx=5, pady=5)
+
+
+def logar(root, credenciais):
+    ip = credenciais["ip"].get()
+    usuario = credenciais["usuario"].get()
+    senha = credenciais["senha"].get()
+    db_name = credenciais["db_name"].get()
+
+    if validar_login(ip, usuario, senha, db_name):
+        Conexao.configurar(
+            host=ip,
+            user=usuario,
+            password=senha,
+            db_name=db_name,
+        )
+        if Conexao.is_connected():
+            if credenciais["remember_me"].get():
+                salvar_credenciais(credenciais)
+            root.destroy()
+
+
 def abrir_tela_login():
     root = tk.Tk()
     root.title("Conectar ao banco")
     root.resizable(False, False)
 
-    # Variáveis para armazenar os valores dos campos de entrada
     credenciais = {
         "ip": tk.StringVar(value="localhost"),
         "usuario": tk.StringVar(),
@@ -49,67 +106,8 @@ def abrir_tela_login():
         "remember_me": tk.StringVar(),
     }
 
-    # Tenta carregar as credenciais salvas
     carregar_credenciais(credenciais)
-
-    # Input IP
-    ttk.Label(root, text="IP:").grid(column=0, row=0, sticky=tk.W)
-    ip_input = ttk.Entry(root, width=30, textvariable=credenciais["ip"])
-    ip_input.grid(column=1, row=0, sticky=tk.W)
-
-    # Input Usuário
-    ttk.Label(root, text="Usuario:").grid(column=0, row=1, sticky=tk.W)
-    user_input = ttk.Entry(root, width=30, textvariable=credenciais["usuario"])
-    user_input.grid(column=1, row=1, sticky=tk.W)
-
-    # Input Senha
-    ttk.Label(root, text="Senha:").grid(column=0, row=2, sticky=tk.W)
-    password_input = ttk.Entry(
-        root, width=30, textvariable=credenciais["senha"], show="*"
-    )
-    password_input.grid(column=1, row=2, sticky=tk.W)
-
-    # Input Nome do Banco
-    ttk.Label(root, text="DB Name:").grid(column=0, row=3, sticky=tk.W)
-    db_name_input = ttk.Entry(root, width=30, textvariable=credenciais["db_name"])
-    db_name_input.grid(column=1, row=3, sticky=tk.W)
-
-    # Lembrar de mim
-    remember_me_check = ttk.Checkbutton(
-        root,
-        text="Lembrar de mim",
-        variable=credenciais["remember_me"],
-    )
-    remember_me_check.grid(column=0, row=4, sticky=tk.W)
-
-    # Função do botão de login
-    def logar():
-        ip = credenciais["ip"].get()
-        usuario = credenciais["usuario"].get()
-        senha = credenciais["senha"].get()
-        db_name = credenciais["db_name"].get()
-
-        if validar_login(ip, usuario, senha, db_name):
-            Conexao.configurar(
-                host=ip,
-                user=usuario,
-                password=senha,
-                db_name=db_name,
-            )
-            if Conexao.is_connected():
-                if credenciais["remember_me"].get():
-                    salvar_credenciais(credenciais)
-                root.destroy()
-
-    # Botão de login
-    btn = ttk.Button(root, text="Logar", command=logar)
-    btn.grid(column=1, row=4, sticky=tk.E)
-    root.bind("<Return>", lambda event: btn.invoke())
-
-    # Adiciona espaçamento para cada widget
-    for widget in root.winfo_children():
-        widget.grid(padx=5, pady=5)
-
+    criar_widgets_login(root, credenciais)
     centraliza_janela(root)
 
     root.mainloop()
