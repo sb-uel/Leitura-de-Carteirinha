@@ -61,7 +61,7 @@ def consultar_reunioes(data: date = None):
     params = None
     if data is not None:
         sql += " WHERE r.Data = %s"
-        sql +=  "GROUP BY r.ID_Reuniões, r.Data"
+        sql += "GROUP BY r.ID_Reuniões, r.Data"
         params = (data,)
     else:
         sql += "GROUP BY r.ID_Reuniões, r.Data ORDER BY Data"
@@ -75,7 +75,22 @@ def consultar_reunioes(data: date = None):
 
 
 def consultar_reuniao_pelo_id(id: int):
-    ...
+    print(f"EXECUTANDO SELECT REUNIAO ID={id}")
+    conn = Conexao.get_conexao()
+    sql = (
+        "SELECT u.Nome, c.Curso, p.Presente "
+        "FROM presenças p "
+        "INNER JOIN usuário u ON p.ID_Usuário = u.ID_Usuário "
+        "INNER JOIN curso c ON u.ID_Curso = c.ID_Curso "
+        "WHERE p.ID_Reuniões = %s"
+    )
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id,))
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
 def atualizar_reuniao():
