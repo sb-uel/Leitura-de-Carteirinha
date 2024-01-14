@@ -128,7 +128,7 @@ def abrir_aba_editar_rg(
         notebook, width=notebook.winfo_width(), height=notebook.winfo_height()
     )
     frame_editar_rg.pack(fill="both", expand=True)
-    criar_tela_editar_rg(frame_editar_rg, imagens_dict["EditarRG"], int(id))
+    criar_tela_editar_rg(frame_editar_rg, imagens_dict["EditarRG"], int(id), notebook)
     notebook.add(frame_editar_rg, text="Editar RG")
     notebook.select(frame_editar_rg)
     notebook.bind(
@@ -189,3 +189,9 @@ def ao_trocar_aba(event, notebook: ttk.Notebook):
     aba_selecionada = notebook.tab(notebook.select(), "text")
     frame_aba = notebook.nametowidget(notebook.select())
     atualizar_aba(aba_selecionada, frame_aba)
+
+def selecionar_aba_por_nome(notebook: ttk.Notebook, nome_da_aba: str):
+    for indice_aba in range(notebook.index('end')):
+        if notebook.tab(indice_aba, "text") == nome_da_aba:
+            notebook.select(indice_aba)
+            break

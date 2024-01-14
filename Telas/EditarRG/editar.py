@@ -3,13 +3,14 @@
 
 from datetime import date
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox, ttk
 from tkcalendar import DateEntry
 import tkinter as tk
 import sys
 from cruds.Presenca import consultar_presencas_pelo_id
 
-from cruds.Reuniao import atualizar_reuniao, consultar_reuniao_pelo_id
+from cruds.Reuniao import atualizar_reuniao, consultar_reuniao_pelo_id, deletar_reunioes
+from tab_functions import selecionar_aba_por_nome
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
@@ -26,7 +27,9 @@ def relative_to_assets(path: str) -> Path:
 from tkinter import Tk, Canvas, Text, Button, PhotoImage
 
 
-def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict], id_reuniao: int):
+def criar_tela_editar_rg(
+    frame: ttk.Frame, imagens: dict[str, dict], id_reuniao: int, notebook: ttk.Notebook
+):
     def criar_imagens():
         imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
         imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
@@ -132,7 +135,13 @@ def criar_tela_editar_rg(frame: ttk.Frame, imagens: dict[str, dict], id_reuniao:
             tabela.item(item_id, values=valores_atuais, tags=tags_atuais)
 
     def deletar_rg():
-        ...
+        resposta = messagebox.askyesno(
+            title="Confirmação de exclusão",
+            message="Deseja excluir essa reunião e todas suas presenças?",
+        )
+        if resposta:
+            deletar_reunioes(id_reuniao)
+            selecionar_aba_por_nome(notebook,"Consultar RG")
 
     def salvar_rg():
         lista_presencas = []
