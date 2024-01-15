@@ -2,11 +2,15 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
+from datetime import date
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, ttk
 from tkcalendar import DateEntry
 import tkinter as tk
 import sys
+
+from cruds.Reuniao import buscar_reuniao
+from excel_functions import exportar_presencas
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
@@ -57,7 +61,7 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
             fill="#FFFFFF",
             font=(FONTE_TELAS, 48 * -1),
         )
-        
+
     def criar_botao(x, y, image, command):
         button = Button(
             frame,
@@ -68,7 +72,7 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
             relief="flat",
         )
         button.place(x=x, y=y, width=image.width(), height=image.height())
-        
+
     def criar_tabela():
         def criar_frame_tabela():
             frame_tabela = ttk.Frame(frame)
@@ -85,9 +89,7 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
             tabela.configure(yscrollcommand=scrollbar.set)
 
         frame_tabela = criar_frame_tabela()
-        tabela = ttk.Treeview(
-            frame_tabela, columns=("data"), show="headings"
-        )
+        tabela = ttk.Treeview(frame_tabela, columns=("data"), show="headings")
         criar_scrollbar(frame_tabela, tabela)
         tabela.heading("data", text="Data da RG")
         tabela.grid(row=0, column=0, sticky="nsew")
@@ -98,12 +100,50 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
         date_entry.place(x=x, y=y, width=200)
         return date_entry
 
+    def carregar_dados_tabela(data_inicial: date, data_final: date):
+        tabela.delete(*tabela.get_children())
+        reunioes = buscar_reuniao(data_inicial, data_final)
+        for id, data_reuniao in reunioes:
+            data_reuniao: date
+            tabela.insert(
+                "",
+                tk.END,
+                iid=id,
+                values=(data_reuniao.strftime("%d/%m/%Y")),
+            )
+
+    def escolher_pasta(pasta_escolhida):
+        pasta = filedialog.askdirectory()
+        pasta_escolhida.set(pasta)
+
     # Criação e configuração dos elementos da tela
+    local_de_salvamento = tk.StringVar()
     carregar_imagens()
     criar_canvas()
     date_entry_inicio = criar_input_data(153.0, 44.0)
     date_entry_fim = criar_input_data(615.0, 44.0)
     tabela = criar_tabela()
-    criar_botao(1072.0, 31.0, imagens["button_1"], lambda: print("Selecionar"))
-    criar_botao(1027.0, 182.0, imagens["button_2"], lambda: print("Local"))
-    criar_botao(1076.0, 642.0, imagens["button_3"], lambda: print("Exportar"))
+    criar_botao(
+        x=1072.0,
+        y=31.0,
+        image=imagens["button_1"],
+        command=lambda: carregar_dados_tabela(
+            date_entry_inicio.get_date(), date_entry_fim.get_date()
+        ),
+    )
+    criar_botao(
+        x=1027.0,
+        y=182.0,
+        image=imagens["button_2"],
+        command=lambda: escolher_pasta(local_de_salvamento),
+    )
+    criar_botao(
+        x=1076.0,
+        y=642.0,
+        image=imagens["button_3"],
+        command=lambda: exportar_presencas(
+            local_de_salvamento.get(),
+            date_entry_inicio.get_date(),
+            date_entry_fim.get_date(),
+        ),
+    )
