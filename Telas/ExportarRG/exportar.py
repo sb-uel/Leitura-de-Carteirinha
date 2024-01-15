@@ -4,8 +4,9 @@
 
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
+from tkcalendar import DateEntry
+import tkinter as tk
 import sys
-
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 ROOT_PATH = Path(__file__).parent.parent.parent
@@ -22,8 +23,6 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
     def carregar_imagens():
         imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
         imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
-        imagens["entry_1"] = PhotoImage(file=relative_to_assets("entry_1.png"))
-        imagens["entry_2"] = PhotoImage(file=relative_to_assets("entry_2.png"))
         imagens["button_1"] = PhotoImage(file=relative_to_assets("button_1.png"))
         imagens["button_2"] = PhotoImage(file=relative_to_assets("button_2.png"))
         imagens["button_3"] = PhotoImage(file=relative_to_assets("button_3.png"))
@@ -42,12 +41,6 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
 
         canvas.create_image(682.0, 384.0, image=imagens["image_1"])
         canvas.create_image(1180.0, 448.0, image=imagens["image_2"])
-        canvas.create_image(262.0, 69.0, image=imagens["entry_1"])
-        canvas.create_image(724.0, 69.0, image=imagens["entry_2"])
-        canvas.create_rectangle(153.0, 44.0, 354.0, 89.0, fill="#FFFFFF", outline="")
-        canvas.create_rectangle(615.0, 44.0, 816.0, 89.0, fill="#FFFFFF", outline="")
-        canvas.create_rectangle(22.0, 182.0, 994.0, 251.0, fill="#D9D9D9", outline="")
-        canvas.create_rectangle(22.0, 251.0, 994.0, 719.0, fill="#FFFFFF", outline="")
         canvas.create_text(
             36.0,
             37.0,
@@ -64,27 +57,7 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
             fill="#FFFFFF",
             font=(FONTE_TELAS, 48 * -1),
         )
-        canvas.create_text(
-            85.0,
-            185.0,
-            anchor="nw",
-            text="Data da RG",
-            fill="#000000",
-            font=(FONTE_TELAS, 48 * -1),
-        )
-
-    def criar_entrada_texto(x, y, width, height):
-        entry = Text(
-            frame,
-            bd=0,
-            bg="#FFFFFF",
-            fg="#000716",
-            highlightthickness=0,
-            font=(FONTE_INPUT, 20),
-        )
-        entry.place(x=x, y=y, width=width, height=height)
-        return entry
-
+        
     def criar_botao(x, y, image, command):
         button = Button(
             frame,
@@ -95,12 +68,42 @@ def criar_tela_exportar(frame: ttk.Frame, imagens: dict[str, dict]):
             relief="flat",
         )
         button.place(x=x, y=y, width=image.width(), height=image.height())
+        
+    def criar_tabela():
+        def criar_frame_tabela():
+            frame_tabela = ttk.Frame(frame)
+            frame_tabela.place(x=22.0, y=182.0, width=972.0, height=537.0, anchor="nw")
+            frame_tabela.columnconfigure(0, weight=1)
+            frame_tabela.rowconfigure(0, weight=1)
+            return frame_tabela
+
+        def criar_scrollbar(frame_tabela, tabela):
+            scrollbar = ttk.Scrollbar(
+                frame_tabela, orient=tk.VERTICAL, command=tabela.yview
+            )
+            scrollbar.grid(row=0, column=1, sticky="ns")
+            tabela.configure(yscrollcommand=scrollbar.set)
+
+        frame_tabela = criar_frame_tabela()
+        tabela = ttk.Treeview(
+            frame_tabela, columns=("data"), show="headings"
+        )
+        criar_scrollbar(frame_tabela, tabela)
+        tabela.heading("data", text="Data da RG")
+        tabela.grid(row=0, column=0, sticky="nsew")
+        return tabela
+
+    def criar_input_data(x, y):
+        date_entry = DateEntry(master=frame, font=(FONTE_TELAS, 20))
+        date_entry.place(x=x, y=y, width=200)
+        return date_entry
 
     # Criação e configuração dos elementos da tela
     carregar_imagens()
     criar_canvas()
-    entry_inicio = criar_entrada_texto(181.0, 54.0, 162.0, 28.0)
-    entry_fim = criar_entrada_texto(643.0, 54.0, 162.0, 28.0)
+    date_entry_inicio = criar_input_data(153.0, 44.0)
+    date_entry_fim = criar_input_data(615.0, 44.0)
+    tabela = criar_tabela()
     criar_botao(1072.0, 31.0, imagens["button_1"], lambda: print("Selecionar"))
     criar_botao(1027.0, 182.0, imagens["button_2"], lambda: print("Local"))
     criar_botao(1076.0, 642.0, imagens["button_3"], lambda: print("Exportar"))
