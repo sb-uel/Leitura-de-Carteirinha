@@ -89,6 +89,36 @@ def consultar_reuniao_pelo_id(id: int):
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
+def buscar_reuniao(data_inicial: date, data_final: date):
+    conn = Conexao.get_conexao()
+    sql = "SELECT ID_Reuniões,Data FROM reuniões WHERE Data BETWEEN %s AND %s"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (data_inicial, data_final))
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter reuniões", message=e)
+
+
+def exportar_reuniao(data_inicial: date, data_final: date):
+    conn = Conexao.get_conexao()
+    sql = (
+        "SELECT u.N_Matricula, u.Nome, SUM(p.Presente) AS TotalPresencas "
+        "FROM usuário u "
+        "LEFT JOIN presenças p ON u.ID_Usuário = p.ID_Usuário "
+        "LEFT JOIN reuniões r ON p.ID_Reuniões = r.ID_Reuniões "
+        "WHERE r.Data BETWEEN %s AND %s GROUP BY u.N_Matricula, u.Nome"
+    )
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (data_inicial, data_final))
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter dados de exportação", message=e)
+
+
 def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
     conn = Conexao.get_conexao()
     atualizar_presencas_pela_reuniao(id_reuniao, presencas)
@@ -108,6 +138,8 @@ def deletar_reunioes(id_reuniao: int):
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id_reuniao,))
-        messagebox.showinfo("Reunião Deletada", message="Reunião e presenças deletadas com sucesso!")
+        messagebox.showinfo(
+            "Reunião Deletada", message="Reunião e presenças deletadas com sucesso!"
+        )
     except Exception as e:
         messagebox.showerror(title="Erro ao deletar reunião", message=e)
