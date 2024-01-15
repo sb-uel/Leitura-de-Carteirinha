@@ -2,7 +2,7 @@ from tkinter import messagebox
 from cruds.Conexao import Conexao
 from datetime import date
 
-from cruds.Presenca import atualizar_presencas, deletar_presencas
+from cruds.Presenca import atualizar_presencas_pela_reuniao, deletar_presencas
 
 
 def cadastrar_reuniao():
@@ -91,7 +91,7 @@ def consultar_reuniao_pelo_id(id: int):
 
 def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
     conn = Conexao.get_conexao()
-    atualizar_presencas(id_reuniao, presencas)
+    atualizar_presencas_pela_reuniao(id_reuniao, presencas)
     sql = "UPDATE reuniões SET Data = %s WHERE (ID_Reuniões = %s)"
     try:
         with conn.cursor() as cursor:

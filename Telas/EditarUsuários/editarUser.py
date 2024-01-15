@@ -8,7 +8,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk
 import tkinter as tk
 import sys
-from cruds.Presenca import consultar_presencas_pelo_usuario
+from cruds.Presenca import atualizar_presencas_pelo_usuario, consultar_dias_presentes, consultar_presencas_pelo_usuario
 from cruds.Usuario import atualizar_usuario, consultar_usuario_pelo_id
 
 from widgets_functions import cria_menu_cursos
@@ -25,7 +25,9 @@ def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
 
-def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_usuario: int):
+def criar_tela_edicao_usuarios(
+    frame: ttk.Frame, imagens: dict[str, dict], id_usuario: int
+):
     def criar_imagens():
         imagens["image_1"] = PhotoImage(file=relative_to_assets("image_1.png"))
         imagens["image_2"] = PhotoImage(file=relative_to_assets("image_2.png"))
@@ -51,7 +53,6 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_us
         canvas.create_image(391.0, 152.5, image=imagens["entry_1"])
         canvas.create_image(458.0, 241.5, image=imagens["entry_2"])
         canvas.create_image(391.5, 424.5, image=imagens["entry_3"])
-        canvas.create_rectangle(307.0, 484.0, 394.0, 529.0, fill="#FFFFFF", outline="")
         canvas.create_text(
             514.0,
             25.0,
@@ -107,7 +108,15 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_us
         id_curso_var = tk.StringVar()
         n_carteirinha_var = tk.StringVar(value=n_carteirinha)
         email_var = tk.StringVar(value=email)
-        return nome_var, id_curso_var, n_carteirinha_var, email_var, curso
+        n_presencas_var = tk.StringVar(value=consultar_dias_presentes(id_usuario))
+        return (
+            nome_var,
+            id_curso_var,
+            n_carteirinha_var,
+            email_var,
+            curso,
+            n_presencas_var,
+        )
 
     def criar_entry(frame, text_variable, x, y, width, height):
         entry = Entry(
@@ -153,7 +162,7 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_us
         tabela.delete(*tabela.get_children())
         reunioes = consultar_presencas_pelo_usuario(id_usuario)
         for id_reuniao, data, presenca in reunioes:
-            data : date
+            data: date
             tabela.insert(
                 "",
                 tk.END,
@@ -183,6 +192,23 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_us
 
             tabela.item(item_id, values=valores_atuais, tags=tags_atuais)
 
+    def atualizar_presencas():
+        lista_presencas = []
+        todos_itens = tabela.get_children()
+        for item_id in todos_itens:
+            # Obtém a presença
+            valores = tabela.item(item_id, "values")
+            presente = 1 if valores[1] == "Sim" else 0
+
+            # Obtém o id do usuário
+            tabela.focus(item_id)
+            id_reuniao = tabela.focus()
+            lista_presencas.append((id_reuniao, presente))
+
+        atualizar_presencas_pelo_usuario(id_usuario, lista_presencas)
+        
+        n_presencas_var.set(consultar_dias_presentes(id_usuario))
+
     def criar_botoes():
         button_editar = Button(
             master=frame,
@@ -196,18 +222,21 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_us
             activebackground="#FFD708",
         )
         button_editar.place(x=1126.0, y=665.0, width=170.0, height=68.0)
-        
+
         button_salvar = Button(
             frame,
             image=imagens["button_3"],
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: atualizar_usuario(
-                id_usuario=id_usuario,
-                nome=nome_var.get(),
-                email=email_var.get(),
-                id_curso=id_curso_var.get(),
-                n_carteirinha=n_carteirinha_var.get(),
+            command=lambda: (
+                atualizar_usuario(
+                    id_usuario=id_usuario,
+                    nome=nome_var.get(),
+                    email=email_var.get(),
+                    id_curso=id_curso_var.get(),
+                    n_carteirinha=n_carteirinha_var.get(),
+                ),
+                atualizar_presencas(),
             ),
             relief="flat",
         )
@@ -224,13 +253,19 @@ def criar_tela_edicao_usuarios(frame: ttk.Frame, imagens: dict[str, dict], id_us
     criar_imagens()
     criar_canvas()
     tabela = criar_tabela()
-    nome_var, id_curso_var, n_carteirinha_var, email_var, curso = configurar_variaveis()
-    entry_nome = criar_entry(frame, nome_var, 126.0, 130.0, 530.0, 43.0)
-    entry_n_carteirinha = criar_entry(
-        frame, n_carteirinha_var, 272.0, 219.0, 372.0, 43.0
-    )
-    entry_email = criar_entry(frame, email_var, 139.0, 402.0, 505.0, 43.0)
+    (
+        nome_var,
+        id_curso_var,
+        n_carteirinha_var,
+        email_var,
+        curso,
+        n_presencas_var,
+    ) = configurar_variaveis()
+    criar_entry(frame, nome_var, 126.0, 130.0, 530.0, 43.0)
+    criar_entry(frame, n_carteirinha_var, 272.0, 219.0, 372.0, 43.0)
+    criar_entry(frame, email_var, 139.0, 402.0, 505.0, 43.0)
+    entry_presencas = criar_entry(frame, n_presencas_var, 307.0, 484.0, 87.0, 45.0)
+    entry_presencas.config(state="disabled", justify="center")
     criar_botoes()
     criar_menu_cursos()
     frame.bind("<F5>", lambda event: atualizar_tabela())
-

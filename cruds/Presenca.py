@@ -62,7 +62,8 @@ def consultar_presencas_pelo_usuario(id_usuario: int):
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT r.ID_Reuniões, r.Data, p.Presente FROM reuniões r "
+        "SELECT r.ID_Reuniões, r.Data, p.Presente "
+        "FROM reuniões r "
         "LEFT JOIN presenças p ON r.ID_Reuniões = p.ID_Reuniões AND p.ID_Usuário = %s "
     )
     try:
@@ -75,10 +76,10 @@ def consultar_presencas_pelo_usuario(id_usuario: int):
 
 
 def consultar_dias_presentes(id_usuario: int):
-    print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
+    print(f"CONTANDO DIAS PRESENTES ID={id_usuario}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT COUNT(DISTINCT ID_Reuniões) AS TotalPresenças"
+        "SELECT COUNT(DISTINCT ID_Reuniões) AS TotalPresenças "
         "FROM presenças WHERE ID_Usuário = %s AND Presente = 1"
     )
     try:
@@ -87,10 +88,10 @@ def consultar_dias_presentes(id_usuario: int):
             resultados = cursor.fetchone()
         return resultados[0]
     except Exception as e:
-        messagebox.showerror(title="Erro ao obter presenças", message=e)
+        messagebox.showerror(title="Erro ao obter número de presenças", message=e)
 
 
-def atualizar_presencas(id_reuniao: int, presencas: list):
+def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list):
     conn = Conexao.get_conexao()
     sql = "UPDATE presenças SET Presente = CASE ID_Usuário "  # Atualize a tabela presenças nos seguintes casos
     placeholders = []
@@ -101,6 +102,23 @@ def atualizar_presencas(id_reuniao: int, presencas: list):
 
     sql += "END WHERE ID_Reuniões = %s"  # Onde ID da reunião for ...
     placeholders.append(id_reuniao)
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, placeholders)
+    except Exception as e:
+        messagebox.showerror(title="Erro ao atualizar presenças", message=e)
+
+def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list):
+    conn = Conexao.get_conexao()
+    sql = "UPDATE presenças SET Presente = CASE ID_Reuniões "  # Atualize a tabela presenças nos seguintes casos
+    placeholders = []
+
+    for id_reuniao, presente in presencas:
+        sql += "WHEN %s THEN %s "  # Quando o ID da reunião for ... então Presente = ...
+        placeholders.extend([id_reuniao, presente])
+
+    sql += "END WHERE ID_Usuário = %s"  # Onde ID do usuário for ...
+    placeholders.append(id_usuario)
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, placeholders)
