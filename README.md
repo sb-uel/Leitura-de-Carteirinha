@@ -5,10 +5,9 @@ Este projeto tem como objetivo principal facilitar a organização e registro de
 
 ## 🚀 Começando
 
-Essas instruções permitirão que você obtenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
+Estas instruções permitirão que você obtenha uma cópia do projeto em operação na sua máquina local para fins de desenvolvimento e teste.
 
 ### 📋 Pré-requisitos
-
 
 **Instalando o Python**
 
@@ -36,21 +35,19 @@ python -m venv venv
 
 **Instalando MySQL**
 
-Certifique-se também de ter o [MySQL](https://dev.mysql.com/downloads/installer/) instalado, além disso para funcionar 
-corretamente é necessário que tenha o `mysqldump` configurado nas variáveis de ambiente do sistema no PATH.
-Você pode verificar a configuração executando o comando:
+Certifique-se de ter o [MySQL](https://dev.mysql.com/downloads/installer/) instalado. É necessário que o `mysqldump` esteja configurado nas variáveis de ambiente do sistema no PATH. Você pode verificar a configuração executando o comando:
+
 ```bash
 mysqldump --version
 ```
 
 **Fontes Customizadas**
 
-O projeto usa as fontes [Horta](https://fontmeme.com/fontes/fonte-horta/) e a [Courierprime](https://fonts.google.com/specimen/Courier+Prime) 
-portanto para visualizar o design do projeto corretamente é necessário instalá-las manualmente
+O projeto utiliza as fontes [Horta](https://fontmeme.com/fontes/fonte-horta/) e [Courierprime](https://fonts.google.com/specimen/Courier+Prime), portanto, para visualizar o design do projeto corretamente, é necessário instalá-las manualmente.
 
 ### 🔧 Instalação
 
-**Instalando dependências**  
+**Instalando Dependências**
 
 Instale todas as dependências necessárias para o projeto executando:
 
@@ -66,7 +63,7 @@ Sincronize seu servidor local com o modelo fornecido em [Carteirinha.mwb](https:
 
 **Sem o MySQL Workbench:**
 
-Se você não possui o MySQL Workbench instalado, pode criar o esquema do banco de dados executando o script SQL diretamente no terminal. Certifique-se de que esteja logado no MySQL antes de prosseguir. Siga estas etapas:
+Se você não possui o MySQL Workbench instalado, pode criar o esquema do banco de dados executando o script SQL diretamente no terminal. Certifique-se de estar logado no MySQL antes de prosseguir.
 
 1. Baixe o script SQL em [Carteirinha.sql](https://github.com/sb-uel/Leitura-de-Carteirinha/blob/main/db/Carteirinha.sql).
 
@@ -88,10 +85,12 @@ Se você não possui o MySQL Workbench instalado, pode criar o esquema do banco 
 
    Substitua "Caminho/Do/Arquivo/" pelo caminho real onde o arquivo `Carteirinha.sql` está localizado no seu sistema.
 
-**Executando o programa**  
+**Executando o Programa**
 
-Para executar o programa utilize o seguinte comando no diretório raiz do projeto:  
-OBS: Se estiver usando um ambiente virtual será necessário ativá-lo sempre que for executar o programa
+Para executar o programa, utilize o seguinte comando no diretório raiz do projeto:
+
+OBS: Se estiver usando um ambiente virtual, será necessário ativá-lo sempre que for executar o programa.
+
 ```bash
 python main.py
 ```
