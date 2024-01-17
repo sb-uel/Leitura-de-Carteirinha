@@ -1,6 +1,7 @@
 # Leitura de Carteirinha
 
-Bem-vindo ao projeto de desenvolvimento do Sistema de Leitura de Carteirinha para o IEEE na Universidade Estadual de Londrina (UEL). Este projeto tem como objetivo principal facilitar a organização e registro de presenças dos membros do IEEE na UEL.
+Bem-vindo ao projeto de desenvolvimento do Sistema de Leitura de Carteirinha para o IEEE na Universidade Estadual de Londrina (UEL). 
+Este projeto tem como objetivo principal facilitar a organização e registro de presenças dos membros do IEEE na UEL.
 
 ## 🚀 Começando
 
@@ -13,7 +14,8 @@ Essas instruções permitirão que você obtenha uma cópia do projeto em opera�
 
 Certifique-se de ter o [Python3 instalado](https://realpython.com/installing-python/) em sua máquina.
 
-Dependendo da sua instalação, você pode ter acesso ao interpretador Python3 executando `python` ou `python3`. O mesmo vale para o gerenciador de pacotes pip, você pode acessá-lo executando `pip` ou `pip3`.
+Dependendo da sua instalação, você pode ter acesso ao interpretador Python3 executando `python` ou `python3`. 
+O mesmo vale para o gerenciador de pacotes pip, você pode acessá-lo executando `pip` ou `pip3`.
 
 Você pode ver a versão do seu Python executando:
 
@@ -34,7 +36,8 @@ python -m venv venv
 
 **Instalando MySQL**
 
-Certifique-se também de ter o [MySQL](https://dev.mysql.com/downloads/installer/) instalado, além disso para funcionar corretamente é necessário que tenha o `mysqldump` configurado nas variáveis de ambiente do sistema no PATH.
+Certifique-se também de ter o [MySQL](https://dev.mysql.com/downloads/installer/) instalado, além disso para funcionar 
+corretamente é necessário que tenha o `mysqldump` configurado nas variáveis de ambiente do sistema no PATH.
 Você pode verificar a configuração executando o comando:
 ```bash
 mysqldump --version
@@ -42,18 +45,51 @@ mysqldump --version
 
 **Fontes Customizadas**
 
-O projeto usa as fontes [Horta](https://fontmeme.com/fontes/fonte-horta/) e a [Courierprime](https://fonts.google.com/specimen/Courier+Prime) portanto para visualizar o design do projeto corretamente é necessário instalá-las manualmente
+O projeto usa as fontes [Horta](https://fontmeme.com/fontes/fonte-horta/) e a [Courierprime](https://fonts.google.com/specimen/Courier+Prime) 
+portanto para visualizar o design do projeto corretamente é necessário instalá-las manualmente
 
 ### 🔧 Instalação
 
-**Instalando dependências**
+**Instalando dependências**  
+
 Instale todas as dependências necessárias para o projeto executando:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Executando o programa**
+**Criando o Esquema do Banco de Dados**
+
+**Com o MySQL Workbench:**
+
+Sincronize seu servidor local com o modelo fornecido em [Carteirinha.mwb](https://github.com/sb-uel/Leitura-de-Carteirinha/blob/main/db/Carteirinha.mwb) usando o MySQL Workbench.
+
+**Sem o MySQL Workbench:**
+
+Se você não possui o MySQL Workbench instalado, pode criar o esquema do banco de dados executando o script SQL diretamente no terminal. Certifique-se de que esteja logado no MySQL antes de prosseguir. Siga estas etapas:
+
+1. Baixe o script SQL em [Carteirinha.sql](https://github.com/sb-uel/Leitura-de-Carteirinha/blob/main/db/Carteirinha.sql).
+
+2. No terminal, navegue até o diretório onde você baixou o script.
+
+3. Certifique-se de estar logado no MySQL.
+
+    ```bash
+    mysql -u seu_usuario -p
+    ```
+
+   Substitua `seu_usuario` pelo nome do seu usuário MySQL. O sistema solicitará a senha após executar esse comando.
+
+4. Execute o seguinte comando para aplicar o esquema ao seu banco de dados local:
+
+    ```bash
+    source Caminho/Do/Arquivo/Carteirinha.sql;
+    ```
+
+   Substitua "Caminho/Do/Arquivo/" pelo caminho real onde o arquivo `Carteirinha.sql` está localizado no seu sistema.
+
+**Executando o programa**  
+
 Para executar o programa utilize o seguinte comando no diretório raiz do projeto:  
 OBS: Se estiver usando um ambiente virtual será necessário ativá-lo sempre que for executar o programa
 ```bash
