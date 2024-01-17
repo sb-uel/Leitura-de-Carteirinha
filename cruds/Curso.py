@@ -7,7 +7,7 @@ def consultar_cursos():
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT ID_Curso, Curso FROM curso")
+            cursor.execute("SELECT id_curso, curso FROM cursos")
             resultados = cursor.fetchall()
         return resultados
     except Exception as e:

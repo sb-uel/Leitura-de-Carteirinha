@@ -12,7 +12,7 @@ def cadastrar_reuniao():
     # Verifica se já não existe uma reunião com a data de hoje
     print("EXECUTADO SELECT REUNIOES")
     conn = Conexao.get_conexao()
-    sql = "SELECT `ID_Reuniões` FROM `reuniões` WHERE `Data` = %s"
+    sql = "SELECT id_reuniao FROM reunioes WHERE data = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (data_atual,))
@@ -31,7 +31,7 @@ def cadastrar_reuniao():
         else:
             return None
     else:
-        sql = "INSERT INTO `reuniões` (`Data`) VALUES (%s)"
+        sql = "INSERT INTO reunioes (data) VALUES (%s)"
         id_inserido = None
         try:
             with conn.cursor() as cursor:
@@ -40,8 +40,8 @@ def cadastrar_reuniao():
                 # Inicializa com os ids presentes na tabela usuário e com as presenças como falso (0)
                 # E usando o id da reunião criada anteriormente
                 sql = (
-                    "INSERT INTO `presenças` (`ID_Usuário`, `Presente`, `ID_Reuniões`)"
-                    "SELECT `ID_Usuário`, 0, %s FROM `usuário`"
+                    "INSERT INTO presencas (id_usuario, presente, id_reuniao)"
+                    "SELECT id_usuario, 0, %s FROM usuarios"
                 )
                 cursor.execute(sql, (id_inserido,))
                 messagebox.showinfo(
@@ -57,16 +57,16 @@ def consultar_reunioes(data: date = None):
     print("EXECUTANDO SELECT REUNIOES + PRESENCAS")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT r.ID_Reuniões, r.Data, COUNT(p.ID_Presenças) AS TotalPresencas "
-        "FROM reuniões r LEFT JOIN presenças p ON r.ID_Reuniões = p.ID_Reuniões AND p.Presente = 1 "
+        "SELECT r.id_reuniao, r.data, COUNT(p.id_presenca) AS TotalPresencas "
+        "FROM reunioes r LEFT JOIN presencas p ON r.id_reuniao = p.id_reuniao AND p.presente = 1 "
     )
     params = None
     if data is not None:
-        sql += " WHERE r.Data = %s"
-        sql += "GROUP BY r.ID_Reuniões, r.Data"
+        sql += " WHERE r.data = %s"
+        sql += "GROUP BY r.id_reuniao, r.data"
         params = (data,)
     else:
-        sql += "GROUP BY r.ID_Reuniões, r.Data ORDER BY Data"
+        sql += "GROUP BY r.id_reuniao, r.data ORDER BY data"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
@@ -79,7 +79,7 @@ def consultar_reunioes(data: date = None):
 def consultar_reuniao_pelo_id(id: int):
     print(f"EXECUTANDO SELECT REUNIAO ID={id}")
     conn = Conexao.get_conexao()
-    sql = "SELECT Data FROM reuniões WHERE ID_Reuniões = %s"
+    sql = "SELECT data FROM reunioes WHERE id_reuniao = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id,))
@@ -91,7 +91,7 @@ def consultar_reuniao_pelo_id(id: int):
 
 def buscar_reuniao(data_inicial: date, data_final: date):
     conn = Conexao.get_conexao()
-    sql = "SELECT ID_Reuniões,Data FROM reuniões WHERE Data BETWEEN %s AND %s"
+    sql = "SELECT id_reuniao,data FROM reunioes WHERE data BETWEEN %s AND %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (data_inicial, data_final))
@@ -104,11 +104,11 @@ def buscar_reuniao(data_inicial: date, data_final: date):
 def exportar_reuniao(data_inicial: date, data_final: date):
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT u.N_Matricula, u.Nome, SUM(p.Presente) AS TotalPresencas "
-        "FROM usuário u "
-        "LEFT JOIN presenças p ON u.ID_Usuário = p.ID_Usuário "
-        "LEFT JOIN reuniões r ON p.ID_Reuniões = r.ID_Reuniões "
-        "WHERE r.Data BETWEEN %s AND %s GROUP BY u.N_Matricula, u.Nome"
+        "SELECT u.n_matricula, u.nome, SUM(p.presente) AS TotalPresencas "
+        "FROM usuarios u "
+        "LEFT JOIN presencas p ON u.id_usuario = p.id_usuario "
+        "LEFT JOIN reunioes r ON p.id_reuniao = r.id_reuniao "
+        "WHERE r.data BETWEEN %s AND %s GROUP BY u.n_matricula, u.nome"
     )
     try:
         with conn.cursor() as cursor:
@@ -122,7 +122,7 @@ def exportar_reuniao(data_inicial: date, data_final: date):
 def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
     conn = Conexao.get_conexao()
     atualizar_presencas_pela_reuniao(id_reuniao, presencas)
-    sql = "UPDATE reuniões SET Data = %s WHERE (ID_Reuniões = %s)"
+    sql = "UPDATE reunioes SET data = %s WHERE (id_reuniao = %s)"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (data, id_reuniao))
@@ -134,7 +134,7 @@ def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
 def deletar_reunioes(id_reuniao: int):
     conn = Conexao.get_conexao()
     deletar_presencas(id_reuniao)
-    sql = "DELETE FROM reuniões WHERE ID_Reuniões = %s"
+    sql = "DELETE FROM reunioes WHERE id_reuniao = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id_reuniao,))

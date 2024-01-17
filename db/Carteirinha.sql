@@ -16,76 +16,76 @@ CREATE SCHEMA IF NOT EXISTS `RamoIEEE` DEFAULT CHARACTER SET utf8 ;
 USE `RamoIEEE` ;
 
 -- -----------------------------------------------------
--- Table `RamoIEEE`.`Curso`
+-- Table `RamoIEEE`.`cursos`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `RamoIEEE`.`Curso` ;
+DROP TABLE IF EXISTS `RamoIEEE`.`cursos` ;
 
-CREATE TABLE IF NOT EXISTS `RamoIEEE`.`Curso` (
-  `ID_Curso` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Curso` VARCHAR(50) NOT NULL,
-  PRIMARY KEY (`ID_Curso`),
-  UNIQUE INDEX `Curso_UNIQUE` (`Curso` ASC) VISIBLE)
+CREATE TABLE IF NOT EXISTS `RamoIEEE`.`cursos` (
+  `id_curso` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `curso` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id_curso`),
+  UNIQUE INDEX `Curso_UNIQUE` (`curso` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RamoIEEE`.`Usuário`
+-- Table `RamoIEEE`.`usuarios`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `RamoIEEE`.`Usuário` ;
+DROP TABLE IF EXISTS `RamoIEEE`.`usuarios` ;
 
-CREATE TABLE IF NOT EXISTS `RamoIEEE`.`Usuário` (
-  `ID_Usuário` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `N_Carteirinha` VARCHAR(20) NOT NULL,
-  `N_Matricula` VARCHAR(20) NOT NULL,
-  `Nome` VARCHAR(100) NOT NULL,
-  `Email` VARCHAR(45) NOT NULL,
-  `ID_Curso` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`ID_Usuário`),
-  INDEX `fk_Usuário_Curso1_idx` (`ID_Curso` ASC) VISIBLE,
-  UNIQUE INDEX `N_Carteirinha_UNIQUE` (`N_Carteirinha` ASC) VISIBLE,
-  UNIQUE INDEX `N_Matricula_UNIQUE` (`N_Matricula` ASC) VISIBLE,
+CREATE TABLE IF NOT EXISTS `RamoIEEE`.`usuarios` (
+  `id_usuario` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `n_carteirinha` VARCHAR(20) NOT NULL,
+  `n_matricula` VARCHAR(20) NOT NULL,
+  `nome` VARCHAR(100) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `id_curso` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id_usuario`),
+  INDEX `fk_Usuário_Curso1_idx` (`id_curso` ASC) VISIBLE,
+  UNIQUE INDEX `N_Carteirinha_UNIQUE` (`n_carteirinha` ASC) VISIBLE,
+  UNIQUE INDEX `N_Matricula_UNIQUE` (`n_matricula` ASC) VISIBLE,
   CONSTRAINT `fk_Usuário_Curso1`
-    FOREIGN KEY (`ID_Curso`)
-    REFERENCES `RamoIEEE`.`Curso` (`ID_Curso`)
+    FOREIGN KEY (`id_curso`)
+    REFERENCES `RamoIEEE`.`cursos` (`id_curso`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RamoIEEE`.`Reuniões`
+-- Table `RamoIEEE`.`reunioes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `RamoIEEE`.`Reuniões` ;
+DROP TABLE IF EXISTS `RamoIEEE`.`reunioes` ;
 
-CREATE TABLE IF NOT EXISTS `RamoIEEE`.`Reuniões` (
-  `ID_Reuniões` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Data` DATE NOT NULL,
-  PRIMARY KEY (`ID_Reuniões`),
-  UNIQUE INDEX `Data_UNIQUE` (`Data` ASC) VISIBLE)
+CREATE TABLE IF NOT EXISTS `RamoIEEE`.`reunioes` (
+  `id_reuniao` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `data` DATE NOT NULL,
+  PRIMARY KEY (`id_reuniao`),
+  UNIQUE INDEX `Data_UNIQUE` (`data` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RamoIEEE`.`Presenças`
+-- Table `RamoIEEE`.`presencas`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `RamoIEEE`.`Presenças` ;
+DROP TABLE IF EXISTS `RamoIEEE`.`presencas` ;
 
-CREATE TABLE IF NOT EXISTS `RamoIEEE`.`Presenças` (
-  `ID_Presenças` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `Presente` BIT NOT NULL,
-  `ID_Reuniões` INT UNSIGNED NOT NULL,
-  `ID_Usuário` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`ID_Presenças`),
-  INDEX `fk_Presenças_Reuniões1_idx` (`ID_Reuniões` ASC) VISIBLE,
-  INDEX `fk_Presenças_Usuário1_idx` (`ID_Usuário` ASC) VISIBLE,
+CREATE TABLE IF NOT EXISTS `RamoIEEE`.`presencas` (
+  `id_presenca` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `presente` BIT NOT NULL,
+  `id_reuniao` INT UNSIGNED NOT NULL,
+  `id_usuario` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`id_presenca`),
+  INDEX `fk_Presenças_Reuniões1_idx` (`id_reuniao` ASC) VISIBLE,
+  INDEX `fk_Presenças_Usuário1_idx` (`id_usuario` ASC) VISIBLE,
   CONSTRAINT `fk_Presenças_Reuniões1`
-    FOREIGN KEY (`ID_Reuniões`)
-    REFERENCES `RamoIEEE`.`Reuniões` (`ID_Reuniões`)
+    FOREIGN KEY (`id_reuniao`)
+    REFERENCES `RamoIEEE`.`reunioes` (`id_reuniao`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Presenças_Usuário1`
-    FOREIGN KEY (`ID_Usuário`)
-    REFERENCES `RamoIEEE`.`Usuário` (`ID_Usuário`)
+    FOREIGN KEY (`id_usuario`)
+    REFERENCES `RamoIEEE`.`usuarios` (`id_usuario`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

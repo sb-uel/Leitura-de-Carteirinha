@@ -9,7 +9,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
     # Verifica se existe um usuário com a carteirinha especificada
     print("EXECUTADO SELECT USUÁRIOS")
     conn = Conexao.get_conexao()
-    sql = "SELECT `ID_Usuário` FROM `usuário` WHERE `N_Carteirinha` = %s"
+    sql = "SELECT id_usuario FROM usuarios WHERE n_carteirinha = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (n_carteirinha,))
@@ -20,7 +20,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
     # Se existe então confirma presença
     if resultados:
         id_usuario = resultados[0]
-        sql = "UPDATE `presenças` SET `Presente` = 1 WHERE (`ID_Usuário` = %s AND `ID_Reuniões` = %s)"
+        sql = "UPDATE presencas SET presente = 1 WHERE (id_usuario = %s AND id_reuniao = %s)"
         try:
             with conn.cursor() as cursor:
                 cursor.execute(sql, (id_usuario, id_reuniao))
@@ -43,11 +43,11 @@ def consultar_presencas_pela_reuniao(id_reuniao: int):
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_reuniao}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT u.ID_Usuário, u.Nome, c.Curso, p.Presente "
-        "FROM presenças p "
-        "INNER JOIN usuário u ON p.ID_Usuário = u.ID_Usuário "
-        "INNER JOIN curso c ON u.ID_Curso = c.ID_Curso "
-        "WHERE p.ID_Reuniões = %s"
+        "SELECT u.id_usuario, u.nome, c.curso, p.presente "
+        "FROM presencas p "
+        "INNER JOIN usuarios u ON p.id_usuario = u.id_usuario "
+        "INNER JOIN cursos c ON u.id_curso = c.id_curso "
+        "WHERE p.id_reuniao = %s"
     )
     try:
         with conn.cursor() as cursor:
@@ -62,9 +62,9 @@ def consultar_presencas_pelo_usuario(id_usuario: int):
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT r.ID_Reuniões, r.Data, p.Presente "
-        "FROM reuniões r "
-        "LEFT JOIN presenças p ON r.ID_Reuniões = p.ID_Reuniões AND p.ID_Usuário = %s "
+        "SELECT r.id_reuniao, r.data, p.presente "
+        "FROM reunioes r "
+        "LEFT JOIN presencas p ON r.id_reuniao = p.id_reuniao AND p.id_usuario = %s "
     )
     try:
         with conn.cursor() as cursor:
@@ -79,8 +79,8 @@ def consultar_dias_presentes(id_usuario: int):
     print(f"CONTANDO DIAS PRESENTES ID={id_usuario}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT COUNT(DISTINCT ID_Reuniões) AS TotalPresenças "
-        "FROM presenças WHERE ID_Usuário = %s AND Presente = 1"
+        "SELECT COUNT(DISTINCT id_reuniao) AS TotalPresenças "
+        "FROM presencas WHERE id_usuario = %s AND presente = 1"
     )
     try:
         with conn.cursor() as cursor:
@@ -93,14 +93,14 @@ def consultar_dias_presentes(id_usuario: int):
 
 def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list):
     conn = Conexao.get_conexao()
-    sql = "UPDATE presenças SET Presente = CASE ID_Usuário "  # Atualize a tabela presenças nos seguintes casos
+    sql = "UPDATE presencas SET presente = CASE id_usuario "  # Atualize a tabela presenças nos seguintes casos
     placeholders = []
 
     for id_usuario, presente in presencas:
-        sql += "WHEN %s THEN %s "  # Quando o ID do usuário for ... então Presente = ...
+        sql += "WHEN %s THEN %s "  # Quando o ID do usuário for ... então presente = ...
         placeholders.extend([id_usuario, presente])
 
-    sql += "END WHERE ID_Reuniões = %s"  # Onde ID da reunião for ...
+    sql += "END WHERE id_reuniao = %s"  # Onde ID da reunião for ...
     placeholders.append(id_reuniao)
     try:
         with conn.cursor() as cursor:
@@ -110,14 +110,14 @@ def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list):
 
 def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list):
     conn = Conexao.get_conexao()
-    sql = "UPDATE presenças SET Presente = CASE ID_Reuniões "  # Atualize a tabela presenças nos seguintes casos
+    sql = "UPDATE presencas SET presente = CASE id_reuniao "  # Atualize a tabela presenças nos seguintes casos
     placeholders = []
 
     for id_reuniao, presente in presencas:
-        sql += "WHEN %s THEN %s "  # Quando o ID da reunião for ... então Presente = ...
+        sql += "WHEN %s THEN %s "  # Quando o ID da reunião for ... então presente = ...
         placeholders.extend([id_reuniao, presente])
 
-    sql += "END WHERE ID_Usuário = %s"  # Onde ID do usuário for ...
+    sql += "END WHERE id_usuario = %s"  # Onde ID do usuário for ...
     placeholders.append(id_usuario)
     try:
         with conn.cursor() as cursor:
@@ -128,7 +128,7 @@ def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list):
 
 def deletar_presencas(id_reuniao: int):
     conn = Conexao.get_conexao()
-    sql = "DELETE FROM presenças WHERE ID_Reuniões = %s"
+    sql = "DELETE FROM presencas WHERE id_reuniao = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id_reuniao,))

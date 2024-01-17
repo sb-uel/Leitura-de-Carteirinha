@@ -27,7 +27,7 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
     n_matricula = n_carteirinha[:10]
 
     sql = (
-        "INSERT INTO `usuário` (`N_Carteirinha`, `N_Matricula`, `Nome`, `Email`, `ID_Curso`)"
+        "INSERT INTO usuarios (n_carteirinha, n_matricula, nome, email, id_curso)"
         "VALUES(%s,%s,%s,%s,%s)"
     )
     values = (n_carteirinha, n_matricula, nome, email, id_curso)
@@ -46,12 +46,12 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
 def consultar_usuarios(termo: str = None):
     print("EXECUTADO SELECT USUARIOS")
     conn = Conexao.get_conexao()
-    sql = "SELECT `ID_Usuário`, `Nome`, `N_Matricula`, `Email` FROM `usuário`"
+    sql = "SELECT id_usuario, nome, n_matricula, email FROM usuarios"
     params = None
     if termo is not None and termo.strip() != "":
-        sql += " WHERE `Nome` LIKE %s"
+        sql += " WHERE nome LIKE %s"
         params = (f"%{termo}%",)
-    sql += " ORDER BY `Nome`"
+    sql += " ORDER BY nome"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
@@ -65,10 +65,10 @@ def consultar_usuario_pelo_id(id: int):
     print(f"EXECUTADO SELECT USUARIO ID={id}")
     conn = Conexao.get_conexao()
     sql = (
-        "SELECT u.`Nome`, u.`N_Carteirinha`, u.`Email`, c.`Curso` "
-        "FROM `usuário` u "
-        "INNER JOIN `curso` c ON u.`ID_Curso` = c.`ID_Curso` "
-        "WHERE u.`ID_Usuário` = %s"
+        "SELECT u.nome, u.n_carteirinha, u.email, c.curso "
+        "FROM usuarios u "
+        "INNER JOIN cursos c ON u.id_curso = c.id_curso "
+        "WHERE u.id_usuario = %s"
     )
     try:
         with conn.cursor() as cursor:
@@ -85,8 +85,8 @@ def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
     n_matricula = n_carteirinha[:10]
 
     sql = (
-        "UPDATE `usuário` SET `N_Carteirinha` = %s, `N_Matricula` = %s, `Nome` = %s, `Email` = %s, `ID_Curso` = %s "
-        "WHERE (`ID_Usuário` = %s)"
+        "UPDATE usuarios SET n_carteirinha = %s, n_matricula = %s, nome = %s, email = %s, id_curso = %s "
+        "WHERE (id_usuario = %s)"
     )
     values = (n_carteirinha, n_matricula, nome, email, id_curso, id_usuario)
     conn = Conexao.get_conexao()
@@ -104,7 +104,7 @@ def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
 def deletar_usuarios(ids: list[int]):
     # Cria os placeholders com base no número de ids
     placeholders = ', '.join(['%s' for _ in ids])
-    sql = f"DELETE FROM `usuário` WHERE `ID_Usuário` IN ({placeholders})"
+    sql = f"DELETE FROM usuarios WHERE id_usuario IN ({placeholders})"
 
     conn = Conexao.get_conexao()
     try:
