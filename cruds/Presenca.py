@@ -35,7 +35,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
     else:
         messagebox.showwarning(
             title="Usuário não cadastrado",
-            message="Este número de carteirinha não foi encontrado no sistema",
+            message=f"Este número de carteirinha não foi encontrado no sistema {n_carteirinha}",
         )
 
 

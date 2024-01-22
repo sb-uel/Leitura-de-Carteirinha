@@ -69,7 +69,10 @@ def criar_tela_leitura(
             image=imagens["button_image_1"],
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: ler_carteirinha(n_carteirinha_var.get(), id_reuniao),
+            command=lambda: (
+                ler_carteirinha(n_carteirinha_var.get(), id_reuniao),
+                n_carteirinha_var.set(""),
+            ),
             relief="flat",
         )
         button_enviar.place(x=552.0, y=610.0, width=261.0, height=92.0)
@@ -86,7 +89,7 @@ def criar_tela_leitura(
             activebackground="#FFFFFF",
         )
         button_terminar.place(x=33.0, y=681.0, width=143.0, height=47.0)
-        return button_enviar,button_terminar
+        return button_enviar, button_terminar
 
     def terminar_reuniao(local_de_salvamento):
         notebook.forget(frame)
@@ -97,6 +100,6 @@ def criar_tela_leitura(
     carregar_imagens()
     criar_canvas()
     n_carteirinha_var, entry_entrada_carteirinha = criar_entrada_texto()
-    button_enviar, button_terminar  = criar_botoes(n_carteirinha_var)
+    button_enviar, button_terminar = criar_botoes(n_carteirinha_var)
     entry_entrada_carteirinha.bind("<Return>", lambda event: button_enviar.invoke())
     entry_entrada_carteirinha.bind("<Escape>", lambda event: button_terminar.invoke())
