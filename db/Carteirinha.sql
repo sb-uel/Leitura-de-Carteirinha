@@ -35,10 +35,10 @@ DROP TABLE IF EXISTS `RamoIEEE`.`usuarios` ;
 
 CREATE TABLE IF NOT EXISTS `RamoIEEE`.`usuarios` (
   `id_usuario` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `n_carteirinha` VARCHAR(20) NOT NULL,
-  `n_matricula` VARCHAR(20) NOT NULL,
+  `n_carteirinha` CHAR(10) NOT NULL,
+  `n_matricula` CHAR(14) NOT NULL,
   `nome` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(45) NULL,
   `id_curso` INT UNSIGNED NOT NULL,
   PRIMARY KEY (`id_usuario`),
   INDEX `fk_Usuário_Curso1_idx` (`id_curso` ASC) VISIBLE,

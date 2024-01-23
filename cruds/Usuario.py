@@ -5,12 +5,12 @@ from cruds.Conexao import Conexao
 
 def validar_campos(n_carteirinha: str, nome: str, email: str):
     email_pattern = r"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+"
-    if not (n_carteirinha.strip() and nome.strip() and email.strip()):
+    if not (n_carteirinha.strip() and nome.strip()):
         messagebox.showerror(
-            "Erro de validação", "Todos os campos devem ser preenchidos."
+            "Erro de validação", "Todos os campos obrigatórios devem ser preenchidos."
         )
         return False
-    elif not re.match(email_pattern, email):
+    elif not re.match(email_pattern, email) and email.strip():
         messagebox.showerror("Erro de validação", "O e-mail inserido não é válido.")
         return False
     elif not (n_carteirinha.isdigit() and len(n_carteirinha) >= 10):
