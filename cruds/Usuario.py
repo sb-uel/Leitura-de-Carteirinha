@@ -46,12 +46,15 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
 def consultar_usuarios(termo: str = None):
     print("EXECUTADO SELECT USUARIOS")
     conn = Conexao.get_conexao()
-    sql = "SELECT id_usuario, nome, n_matricula, email FROM usuarios"
+    sql = (
+        "SELECT u.id_usuario, u.nome, u.n_matricula, c.curso FROM usuarios u "
+        "INNER JOIN cursos c ON u.id_curso = c.id_curso"
+    )
     params = None
     if termo is not None and termo.strip() != "":
-        sql += " WHERE nome LIKE %s"
+        sql += " WHERE u.nome LIKE %s"
         params = (f"%{termo}%",)
-    sql += " ORDER BY nome"
+    sql += " ORDER BY u.nome"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, params)
@@ -103,7 +106,7 @@ def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
 
 def deletar_usuarios(ids: list[int]):
     # Cria os placeholders com base no número de ids
-    placeholders = ', '.join(['%s' for _ in ids])
+    placeholders = ", ".join(["%s" for _ in ids])
     sql = f"DELETE FROM usuarios WHERE id_usuario IN ({placeholders})"
 
     conn = Conexao.get_conexao()
@@ -116,5 +119,3 @@ def deletar_usuarios(ids: list[int]):
         )
     except Exception as e:
         messagebox.showerror(title="Erro ao excluir do banco", message=e)
-
-

@@ -129,12 +129,12 @@ def criar_tela_consultar_usuarios(
 
         frame_tabela = criar_frame_tabela()
         tabela = ttk.Treeview(
-            frame_tabela, columns=("nome", "matrícula", "email"), show="headings"
+            frame_tabela, columns=("nome", "matrícula", "curso"), show="headings"
         )
         criar_scrollbar(frame_tabela, tabela)
         tabela.heading("nome", text="Nome")
         tabela.heading("matrícula", text="Matrícula")
-        tabela.heading("email", text="Email")
+        tabela.heading("curso", text="Curso")
         tabela.grid(row=0, column=0, sticky="nsew")
         return tabela
 
