@@ -9,7 +9,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
     # Verifica se existe um usuário com a carteirinha especificada
     print("EXECUTADO SELECT USUÁRIOS")
     conn = Conexao.get_conexao()
-    sql = "SELECT id_usuario FROM usuarios WHERE n_carteirinha = %s"
+    sql = "SELECT id_usuario,nome FROM usuarios WHERE n_carteirinha = %s"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (n_carteirinha,))
@@ -27,7 +27,7 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
                 # Notifica que a presença foi confirmada
                 notification.notify(
                     title="Presença confirmada",
-                    message="A presença foi confirmada",
+                    message=f"{resultados[1]} está presente!",
                     timeout=2,
                 )
         except Exception as e:
@@ -107,6 +107,7 @@ def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list):
             cursor.execute(sql, placeholders)
     except Exception as e:
         messagebox.showerror(title="Erro ao atualizar presenças", message=e)
+
 
 def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list):
     conn = Conexao.get_conexao()
