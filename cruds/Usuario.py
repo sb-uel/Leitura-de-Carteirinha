@@ -21,7 +21,7 @@ def validar_campos(n_carteirinha: str, nome: str, email: str):
     return True
 
 
-def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
+def cadastrar_usuario(n_carteirinha, nome, email, id_curso, show_msg=True):
     if not validar_campos(n_carteirinha, nome, email):
         return
     n_matricula = n_carteirinha[:10]
@@ -35,10 +35,11 @@ def cadastrar_usuario(n_carteirinha, nome, email, id_curso):
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, values)
-        messagebox.showinfo(
-            title="Cadastro bem sucedido",
-            message="O usuário foi cadastrado com sucesso!",
-        )
+        if show_msg:
+            messagebox.showinfo(
+                title="Cadastro bem sucedido",
+                message="O usuário foi cadastrado com sucesso!",
+            )
     except Exception as e:
         messagebox.showerror(title="Erro ao inserir usuário no banco", message=e)
 
