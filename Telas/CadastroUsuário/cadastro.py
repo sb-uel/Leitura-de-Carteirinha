@@ -4,7 +4,7 @@
 
 from pathlib import Path
 from tkinter import Canvas, Entry, Text, Button, PhotoImage, ttk
-import sys
+
 import tkinter as tk
 
 from cruds.Usuario import cadastrar_usuario
@@ -12,9 +12,7 @@ from widgets_functions import cria_menu_cursos
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 from Telas.defs import *
 from cruds.Curso import consultar_cursos
 

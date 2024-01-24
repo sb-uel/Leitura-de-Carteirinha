@@ -7,7 +7,7 @@ from msilib.text import tables
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk
 import tkinter as tk
-import sys
+
 from cruds.Presenca import atualizar_presencas_pelo_usuario, consultar_dias_presentes, consultar_presencas_pelo_usuario
 from cruds.Usuario import atualizar_usuario, consultar_usuario_pelo_id
 
@@ -15,9 +15,7 @@ from widgets_functions import cria_menu_cursos
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 from Telas.defs import *
 
 

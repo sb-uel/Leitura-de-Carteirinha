@@ -7,16 +7,14 @@ from pathlib import Path
 from tkinter import Canvas, Button, PhotoImage, messagebox, ttk
 from tkcalendar import DateEntry
 import tkinter as tk
-import sys
+
 from Telas.defs import *
 from cruds.Reuniao import consultar_reunioes
 from tab_functions import abrir_aba_editar_rg
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 
 
 def relative_to_assets(path: str) -> Path:

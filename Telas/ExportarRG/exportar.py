@@ -7,15 +7,13 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, ttk
 from tkcalendar import DateEntry
 import tkinter as tk
-import sys
+
 
 from cruds.Reuniao import buscar_reuniao
 from excel_functions import exportar_presencas
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 from Telas.defs import *
 
 

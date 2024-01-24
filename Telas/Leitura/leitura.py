@@ -3,16 +3,14 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, ttk
 import tkinter as tk
-import sys
+
 from cruds.Conexao import Conexao
 from cruds.Presenca import ler_carteirinha
 from tab_functions import abrir_aba_comecar_rg
 from Telas.defs import *
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 
 
 def relative_to_assets(path: str) -> Path:

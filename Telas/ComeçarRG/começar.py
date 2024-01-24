@@ -15,15 +15,13 @@ from tkinter import (
     ttk,
 )
 import tkinter as tk
-import sys
+
 
 from cruds.Reuniao import cadastrar_reuniao
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 from Telas.defs import *
 from tab_functions import abrir_aba_leitura
 

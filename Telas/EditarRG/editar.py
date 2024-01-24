@@ -6,7 +6,7 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox, ttk
 from tkcalendar import DateEntry
 import tkinter as tk
-import sys
+
 from cruds.Presenca import consultar_presencas_pela_reuniao
 
 from cruds.Reuniao import atualizar_reuniao, consultar_reuniao_pelo_id, deletar_reunioes
@@ -14,9 +14,7 @@ from tab_functions import selecionar_aba_por_nome
 
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
+
 from Telas.defs import *
 
 

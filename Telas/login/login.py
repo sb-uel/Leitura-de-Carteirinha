@@ -1,13 +1,7 @@
 import json
-from pathlib import Path
-import sys
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-
-ROOT_PATH = Path(__file__).parent.parent.parent
-if str(ROOT_PATH) not in sys.path:
-    sys.path.append(str(ROOT_PATH))
 from cruds.Conexao import Conexao
 
 
