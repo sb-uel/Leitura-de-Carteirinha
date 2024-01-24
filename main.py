@@ -1,17 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
-from Telas.defs import *
-from tkinter import ttk
-from Telas.login.login import abrir_tela_login
+
 from cruds.Conexao import Conexao
-from tab_functions import (
-    abrir_aba_cadastrar_usuario,
-    abrir_aba_consultar_rg,
-    abrir_aba_comecar_rg,
-    abrir_aba_consultar_usuarios,
-    abrir_aba_exportar,
-    ao_trocar_aba,
-)
+from tab_functions import (abrir_aba_cadastrar_usuario, abrir_aba_comecar_rg,
+                           abrir_aba_consultar_rg,
+                           abrir_aba_consultar_usuarios, abrir_aba_exportar,
+                           ao_trocar_aba)
+from Telas.defs import *
+from Telas.login.login import abrir_tela_login
 
 abrir_tela_login()
 if Conexao.is_connected():

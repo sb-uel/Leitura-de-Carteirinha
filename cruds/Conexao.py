@@ -1,8 +1,9 @@
+import subprocess
 from datetime import date
 from pathlib import Path
 from tkinter import messagebox
+
 import mysql.connector as mysql
-import subprocess
 
 
 # Usa o padrão de projeto Singleton para a conexão do banco de dados

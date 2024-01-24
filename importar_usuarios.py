@@ -1,9 +1,10 @@
-from Telas.login.login import abrir_tela_login
+from openpyxl.worksheet.worksheet import Worksheet
+
 from cruds.Conexao import Conexao
 from cruds.Curso import consultar_cursos
 from cruds.Usuario import cadastrar_usuario
 from excel_functions import obtem_planilha_importacao
-from openpyxl.worksheet.worksheet import Worksheet
+from Telas.login.login import abrir_tela_login
 
 # CONSIDERA-SE QUE O CABEÇALHO DA PLANILHA ESTEJA PRESENTE E OS DADOS ESTEJAM DISPOSTOS ASSIM:
 # | Nome | Número de Carteirinha | Curso | E-mail |

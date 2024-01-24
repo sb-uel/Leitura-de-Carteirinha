@@ -1,6 +1,9 @@
 from tkinter import messagebox
-from cruds.Conexao import Conexao
+
 import mysql.connector as mysql
+
+from cruds.Conexao import Conexao
+
 
 def consultar_cursos():
     print("EXECUTADO SELECT CURSOS")

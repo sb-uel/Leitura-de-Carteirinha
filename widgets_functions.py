@@ -1,7 +1,8 @@
-from tkinter import ttk
 import tkinter as tk
-from Telas.defs import *
+from tkinter import ttk
+
 from cruds.Curso import consultar_cursos
+from Telas.defs import *
 
 
 def cria_menu_cursos(frame: ttk.Frame, id_curso_var: tk.StringVar, x : int, y : int):

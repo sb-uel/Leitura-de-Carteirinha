@@ -1,7 +1,7 @@
-from tkinter import messagebox
-from cruds.Conexao import Conexao
 from datetime import date
+from tkinter import messagebox
 
+from cruds.Conexao import Conexao
 from cruds.Presenca import atualizar_presencas_pela_reuniao, deletar_presencas
 
 

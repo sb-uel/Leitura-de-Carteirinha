@@ -2,12 +2,13 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
+import tkinter as tk
 from datetime import date
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, ttk
-from tkcalendar import DateEntry
-import tkinter as tk
+from tkinter import (Button, Canvas, Entry, PhotoImage, Text, Tk, filedialog,
+                     ttk)
 
+from tkcalendar import DateEntry
 
 from cruds.Reuniao import buscar_reuniao
 from excel_functions import exportar_presencas

@@ -2,17 +2,17 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
+import tkinter as tk
 from datetime import date
 from msilib.text import tables
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Button, PhotoImage, ttk
-import tkinter as tk
+from tkinter import Button, Canvas, Entry, PhotoImage, Tk, ttk
 
-from cruds.Presenca import atualizar_presencas_pelo_usuario, consultar_dias_presentes, consultar_presencas_pelo_usuario
+from cruds.Presenca import (atualizar_presencas_pelo_usuario,
+                            consultar_dias_presentes,
+                            consultar_presencas_pelo_usuario)
 from cruds.Usuario import atualizar_usuario, consultar_usuario_pelo_id
-
 from widgets_functions import cria_menu_cursos
-
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 

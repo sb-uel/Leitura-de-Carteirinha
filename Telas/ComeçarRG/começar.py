@@ -2,28 +2,17 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
-from pathlib import Path
-from tkinter import (
-    Tk,
-    Canvas,
-    Entry,
-    Text,
-    Button,
-    PhotoImage,
-    filedialog,
-    messagebox,
-    ttk,
-)
 import tkinter as tk
-
+from pathlib import Path
+from tkinter import (Button, Canvas, Entry, PhotoImage, Text, Tk, filedialog,
+                     messagebox, ttk)
 
 from cruds.Reuniao import cadastrar_reuniao
 
-
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 
-from Telas.defs import *
 from tab_functions import abrir_aba_leitura
+from Telas.defs import *
 
 
 def relative_to_assets(path: str) -> Path:

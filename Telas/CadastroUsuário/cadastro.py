@@ -2,19 +2,17 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
-from pathlib import Path
-from tkinter import Canvas, Entry, Text, Button, PhotoImage, ttk
-
 import tkinter as tk
+from pathlib import Path
+from tkinter import Button, Canvas, Entry, PhotoImage, Text, ttk
 
 from cruds.Usuario import cadastrar_usuario
 from widgets_functions import cria_menu_cursos
 
-
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 
-from Telas.defs import *
 from cruds.Curso import consultar_cursos
+from Telas.defs import *
 
 
 def relative_to_assets(path: str) -> Path:

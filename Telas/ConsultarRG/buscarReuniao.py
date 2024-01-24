@@ -2,16 +2,16 @@
 # https://github.com/ParthJadhav/Tkinter-Designer
 
 
+import tkinter as tk
 from datetime import date
 from pathlib import Path
-from tkinter import Canvas, Button, PhotoImage, messagebox, ttk
-from tkcalendar import DateEntry
-import tkinter as tk
+from tkinter import Button, Canvas, PhotoImage, messagebox, ttk
 
-from Telas.defs import *
+from tkcalendar import DateEntry
+
 from cruds.Reuniao import consultar_reunioes
 from tab_functions import abrir_aba_editar_rg
-
+from Telas.defs import *
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 
