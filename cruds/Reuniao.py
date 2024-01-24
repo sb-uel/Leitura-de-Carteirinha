@@ -5,8 +5,9 @@ from cruds.Conexao import Conexao
 from cruds.Presenca import atualizar_presencas_pela_reuniao, deletar_presencas
 
 
-def cadastrar_reuniao():
-    data_atual = date.today()
+def cadastrar_reuniao(data_reuniao : date = None, show_msg = True):
+    if data_reuniao is None:
+        data_reuniao = date.today()
     resultados = None
 
     # Verifica se já não existe uma reunião com a data de hoje
@@ -15,7 +16,7 @@ def cadastrar_reuniao():
     sql = "SELECT id_reuniao FROM reunioes WHERE data = %s"
     try:
         with conn.cursor() as cursor:
-            cursor.execute(sql, (data_atual,))
+            cursor.execute(sql, (data_reuniao,))
             resultados = cursor.fetchone()
     except Exception as e:
         messagebox.showerror(title="Erro ao obter reuniões", message=e)
@@ -24,7 +25,7 @@ def cadastrar_reuniao():
     if resultados:
         resposta = messagebox.askyesno(
             "Reunião existente",
-            f"Já existe uma reunião com a data de hoje {data_atual.strftime('%d/%m/%Y')}\nDeseja continuar a partir dela?",
+            f"Já existe uma reunião com a data de hoje {data_reuniao.strftime('%d/%m/%Y')}\nDeseja continuar a partir dela?",
         )
         if resposta:
             return resultados[0]
@@ -35,7 +36,7 @@ def cadastrar_reuniao():
         id_inserido = None
         try:
             with conn.cursor() as cursor:
-                cursor.execute(sql, (data_atual,))
+                cursor.execute(sql, (data_reuniao,))
                 id_inserido = cursor.lastrowid
                 # Inicializa com os ids presentes na tabela usuário e com as presenças como falso (0)
                 # E usando o id da reunião criada anteriormente
@@ -44,10 +45,11 @@ def cadastrar_reuniao():
                     "SELECT id_usuario, 0, %s FROM usuarios"
                 )
                 cursor.execute(sql, (id_inserido,))
-                messagebox.showinfo(
-                    title="Reunião iniciada",
-                    message="Reunião iniciada com sucesso!",
-                )
+                if show_msg:
+                    messagebox.showinfo(
+                        title="Reunião iniciada",
+                        message="Reunião iniciada com sucesso!",
+                    )
                 return id_inserido
         except Exception as e:
             messagebox.showerror(title="Erro ao iniciar reunião", message=e)

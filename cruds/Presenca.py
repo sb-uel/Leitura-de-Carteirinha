@@ -5,7 +5,7 @@ from plyer import notification
 from cruds.Conexao import Conexao
 
 
-def ler_carteirinha(n_carteirinha, id_reuniao):
+def ler_carteirinha(n_carteirinha, id_reuniao, show_notif=True):
     resultados = None
 
     # Verifica se existe um usuário com a carteirinha especificada
@@ -27,11 +27,12 @@ def ler_carteirinha(n_carteirinha, id_reuniao):
             with conn.cursor() as cursor:
                 cursor.execute(sql, (id_usuario, id_reuniao))
                 # Notifica que a presença foi confirmada
-                notification.notify(
-                    title="Presença confirmada",
-                    message=f"{resultados[1]} está presente!",
-                    timeout=2,
-                )
+                if show_notif:
+                    notification.notify(
+                        title="Presença confirmada",
+                        message=f"{resultados[1]} está presente!",
+                        timeout=2,
+                    )
         except Exception as e:
             messagebox.showerror(title="Erro ao contabilizar presença", message=e)
     else:
