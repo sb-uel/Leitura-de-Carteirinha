@@ -100,6 +100,7 @@ python main.py
 * [Python](https://www.python.org/) - Linguagem de programação
 * [MySQL](https://www.mysql.com/) - Sistema de gerenciamento de banco de dados relacional (SGBDR)
 * [Tkinter](https://docs.python.org/pt-br/3/library/tkinter.html) - Biblioteca usada para criação das interfaces
+* [TkDesigner](https://github.com/ParthJadhav/Tkinter-Designer) - Biblioteca usada inicialmente na criação de interfaces usando o Figma para gerar códigos em tkinter
 
 ## 📄 Licença
 
