@@ -13,7 +13,7 @@ Estas instruções permitirão que você obtenha uma cópia do projeto em opera�
 
 Certifique-se de ter o [Python3 instalado](https://realpython.com/installing-python/) em sua máquina.
 
-Dependendo da sua instalação, você pode ter acesso ao interpretador Python3 executando `python` ou `python3`. 
+Dependendo da sua instalação, você pode ter acesso ao interpretador Python3 executando `python` ou `python3` lembrando de ter marcado a opção de adicionar nas variáveis de ambiente na PATH. 
 O mesmo vale para o gerenciador de pacotes pip, você pode acessá-lo executando `pip` ou `pip3`.
 
 Você pode ver a versão do seu Python executando:
