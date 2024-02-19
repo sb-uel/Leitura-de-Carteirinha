@@ -11,7 +11,7 @@ def validar_campos(n_carteirinha: str, nome: str, email: str):
             "Erro de validação", "Todos os campos obrigatórios devem ser preenchidos."
         )
         return False
-    elif not re.match(email_pattern, email) and email.strip():
+    elif email is not None and not re.match(email_pattern, email) and email.strip():
         messagebox.showerror("Erro de validação", "O e-mail inserido não é válido.")
         return False
     elif not (n_carteirinha.isdigit() and len(n_carteirinha) >= 10):
@@ -22,7 +22,15 @@ def validar_campos(n_carteirinha: str, nome: str, email: str):
     return True
 
 
-def cadastrar_usuario(n_carteirinha, nome, email, id_curso, show_msg=True):
+def cadastrar_usuario(
+    n_carteirinha: str | int,
+    nome: str,
+    email: str,
+    id_curso: int,
+    show_msg: bool = True,
+):
+    if not isinstance(n_carteirinha, str):
+        n_carteirinha = str(n_carteirinha)
     if not validar_campos(n_carteirinha, nome, email):
         return
     n_matricula = n_carteirinha[:10]

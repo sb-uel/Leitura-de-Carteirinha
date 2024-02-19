@@ -59,7 +59,7 @@ pip install -r requirements.txt
 
 **Com o MySQL Workbench:**
 
-Sincronize seu servidor local com o modelo fornecido em [Carteirinha.mwb](https://github.com/sb-uel/Leitura-de-Carteirinha/blob/main/db/Carteirinha.mwb) usando o MySQL Workbench.
+Execute o script SQL fornecido em [Carteirinha.sql](https://github.com/sb-uel/Leitura-de-Carteirinha/blob/main/db/Carteirinha.sql) usando o MySQL Workbench.
 
 **Sem o MySQL Workbench:**
 

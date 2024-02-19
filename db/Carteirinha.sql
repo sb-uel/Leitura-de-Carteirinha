@@ -27,6 +27,15 @@ CREATE TABLE IF NOT EXISTS `RamoIEEE`.`cursos` (
   UNIQUE INDEX `Curso_UNIQUE` (`curso` ASC) VISIBLE)
 ENGINE = InnoDB;
 
+--
+-- Dumping data for table `cursos`
+--
+
+LOCK TABLES `cursos` WRITE;
+/*!40000 ALTER TABLE `cursos` DISABLE KEYS */;
+INSERT INTO `cursos` VALUES (1,'COMPUTAÇÃO'),(2,'ELÉTRICA');
+/*!40000 ALTER TABLE `cursos` ENABLE KEYS */;
+UNLOCK TABLES;
 
 -- -----------------------------------------------------
 -- Table `RamoIEEE`.`usuarios`

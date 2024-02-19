@@ -22,9 +22,12 @@ if Conexao.is_connected():
     for usuario in aba.iter_rows(max_col=4, values_only=True):
         nome, n_carteirinha, curso, email = usuario
         # Pula o cabeçalho
-        if nome == "Nome":
+        if nome.upper() == "NOME":
             continue
         id_curso = obter_id_curso(curso)
+        if nome is None or n_carteirinha is None or curso is None:
+            print("Pulado usuário:", end=" ")
+        else:
+            cadastrar_usuario(n_carteirinha,nome,email,id_curso,False)
         print(nome, n_carteirinha, id_curso, email)
-        cadastrar_usuario(n_carteirinha,nome,email,id_curso,False)
 Conexao.fechar_conexao()
