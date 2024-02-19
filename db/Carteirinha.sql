@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `RamoIEEE`.`usuarios` ;
 CREATE TABLE IF NOT EXISTS `RamoIEEE`.`usuarios` (
   `id_usuario` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `n_carteirinha` CHAR(14) NOT NULL,
-  `n_matricula` CHAR(10) NOT NULL,
+  `n_matricula` CHAR(12) NOT NULL,
   `nome` VARCHAR(100) NOT NULL,
   `email` VARCHAR(45) NULL,
   `id_curso` INT UNSIGNED NOT NULL,

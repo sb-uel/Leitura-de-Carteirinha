@@ -39,7 +39,7 @@ def cadastrar_usuario(
         "INSERT INTO usuarios (n_carteirinha, n_matricula, nome, email, id_curso)"
         "VALUES(%s,%s,%s,%s,%s)"
     )
-    values = (n_carteirinha, n_matricula, nome, email, id_curso)
+    values = (n_carteirinha, f"20{n_matricula}", nome, email, id_curso)
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:
@@ -101,7 +101,7 @@ def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
         "UPDATE usuarios SET n_carteirinha = %s, n_matricula = %s, nome = %s, email = %s, id_curso = %s "
         "WHERE (id_usuario = %s)"
     )
-    values = (n_carteirinha, n_matricula, nome, email, id_curso, id_usuario)
+    values = (n_carteirinha, f"20{n_matricula}", nome, email, id_curso, id_usuario)
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:

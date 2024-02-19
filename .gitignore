@@ -27,6 +27,9 @@ ENV/
 dist/
 build/
 
+# Temp file mysql
+*.bak
+
 # Pipenv
 Pipfile.lock
 
