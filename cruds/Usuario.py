@@ -1,6 +1,6 @@
 import re
 from tkinter import messagebox
-
+from mysql.connector import IntegrityError
 from cruds.Conexao import Conexao
 from cruds.Presenca import deletar_presencas_pelo_usuario
 
@@ -57,13 +57,13 @@ def cadastrar_usuario(
         n_carteirinha = str(n_carteirinha)
     if not validar_campos(n_carteirinha, nome, email):
         return
-    n_matricula = n_carteirinha[:10]
+    n_matricula = f"20{n_carteirinha[:10]}"
 
     sql = (
         "INSERT INTO usuarios (n_carteirinha, n_matricula, nome, email, id_curso)"
         "VALUES(%s,%s,%s,%s,%s)"
     )
-    values = (n_carteirinha, f"20{n_matricula}", nome, email, id_curso)
+    values = (n_carteirinha, n_matricula, nome, email, id_curso)
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:
@@ -73,6 +73,27 @@ def cadastrar_usuario(
                 title="Cadastro bem sucedido",
                 message="O usuário foi cadastrado com sucesso!",
             )
+    except IntegrityError as e:
+        if e.errno == 1062:
+            # Código de erro para chave duplicada
+            # Seleciona o usuário que tem o mesmo número de matrícula e exibe
+            sql = "SELECT nome, n_carteirinha, n_matricula FROM usuarios WHERE n_matricula = %s"
+            with conn.cursor() as cursor:
+                cursor.execute(sql, (n_matricula,))
+                resultado = cursor.fetchall()
+            nome_banco, n_carteirinha_banco, n_matricula_banco = resultado[0]
+            mensagem = (
+                f"O número de matrícula/carteirinha já está cadastrado:\n"
+                f"Nome: {nome_banco}\n"
+                f"Número de carteirinha: {n_carteirinha_banco}\n"
+                f"Número de matrícula: {n_matricula_banco}\n"
+            )
+            messagebox.showerror(
+                title="Erro ao inserir usuário no banco",
+                message=mensagem,
+            )
+        else:
+            raise
     except Exception as e:
         messagebox.showerror(title="Erro ao inserir usuário no banco", message=e)
 
@@ -152,13 +173,13 @@ def atualizar_usuario(
     """
     if not validar_campos(n_carteirinha, nome, email):
         return
-    n_matricula = n_carteirinha[:10]
+    n_matricula = f"20{n_carteirinha[:10]}"
 
     sql = (
         "UPDATE usuarios SET n_carteirinha = %s, n_matricula = %s, nome = %s, email = %s, id_curso = %s "
         "WHERE (id_usuario = %s)"
     )
-    values = (n_carteirinha, f"20{n_matricula}", nome, email, id_curso, id_usuario)
+    values = (n_carteirinha, n_matricula, nome, email, id_curso, id_usuario)
     conn = Conexao.get_conexao()
     try:
         with conn.cursor() as cursor:

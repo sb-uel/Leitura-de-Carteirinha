@@ -1,3 +1,4 @@
+from datetime import date
 from tkinter import messagebox
 
 from plyer import notification
@@ -7,7 +8,7 @@ from cruds.Conexao import Conexao
 
 def ler_carteirinha(n_carteirinha: str, id_reuniao: int, show_notif: bool = True):
     """
-    Verifica se um usuário com o número da carteirinha especificada está cadastrado no sistema e, 
+    Verifica se um usuário com o número da carteirinha especificada está cadastrado no sistema e,
     se estiver, confirma sua presença em uma reunião.
 
     Args:
@@ -51,7 +52,9 @@ def ler_carteirinha(n_carteirinha: str, id_reuniao: int, show_notif: bool = True
         )
 
 
-def consultar_presencas_pela_reuniao(id_reuniao: int) -> list[tuple[int, str, str, bool]]:
+def consultar_presencas_pela_reuniao(
+    id_reuniao: int,
+) -> list[tuple[int, str, str, bool]]:
     """
     Consulta as presenças dos usuários em uma reunião específica.
 
@@ -59,7 +62,7 @@ def consultar_presencas_pela_reuniao(id_reuniao: int) -> list[tuple[int, str, st
         id_reuniao (int): O id da reunião.
 
     Returns:
-        list[tuple[int, str, str, bool]]: Uma lista de tuplas, onde cada tupla contém o id do usuário, o nome do usuário, 
+        list[tuple[int, str, str, bool]]: Uma lista de tuplas, onde cada tupla contém o id do usuário, o nome do usuário,
         o curso do usuário e se o usuário estava presente ou não.
             Exemplo: [(1, 'João', 'Computação', True), (2, 'Maria', 'Elétrica', False), ...]
     """
@@ -81,12 +84,38 @@ def consultar_presencas_pela_reuniao(id_reuniao: int) -> list[tuple[int, str, st
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
+def consultar_presencas_pelo_usuario(id_usuario: int) -> list[tuple[int, date, bool]]:
+    """
+    Retorna as presenças de um determinado usuário em todas as suas reuniões.
+
+    Args:
+        id_usuario (int): Id do usuário especificado
+
+    Returns:
+        list[tuple[int, date, bool]]: Retorna uma lista de tuplas contendo o id da reunião, a data da reunião
+        e o estado de presença do usuário na reunião.
+    """
+    print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
+    conn = Conexao.get_conexao()
+    sql = (
+        "SELECT r.id_reuniao, r.data, p.presente "
+        "FROM reunioes r "
+        "LEFT JOIN presencas p ON r.id_reuniao = p.id_reuniao AND p.id_usuario = %s ORDER BY r.data"
+    )
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id_usuario,))
+            resultados = cursor.fetchall()
+        return resultados
+    except Exception as e:
+        messagebox.showerror(title="Erro ao obter reunião", message=e)
+
 
 def consultar_dias_presentes(id_usuario: int) -> int:
     """
-    Recebe o id do usuário e contabiliza o total de dias presentes dele 
+    Recebe o id do usuário e contabiliza o total de dias presentes dele
     e retorna a quantidade desses dias.
-    
+
     Args:
         id_usuario (int): O id do usuário
 
@@ -108,7 +137,9 @@ def consultar_dias_presentes(id_usuario: int) -> int:
         messagebox.showerror(title="Erro ao obter número de presenças", message=e)
 
 
-def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list[tuple[int,bool]]):
+def atualizar_presencas_pela_reuniao(
+    id_reuniao: int, presencas: list[tuple[int, bool]]
+):
     """
     Atualiza as presenças dos usuários de uma determinada reunião
 
@@ -134,7 +165,9 @@ def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list[tuple[int,
         messagebox.showerror(title="Erro ao atualizar presenças", message=e)
 
 
-def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list[tuple[int,bool]]):
+def atualizar_presencas_pelo_usuario(
+    id_usuario: int, presencas: list[tuple[int, bool]]
+):
     """
     Atualiza as presenças de um determinado usuário nas reuniões
 
@@ -174,7 +207,8 @@ def deletar_presencas_pela_reuniao(id_reuniao: int):
             cursor.execute(sql, (id_reuniao,))
     except Exception as e:
         messagebox.showerror(title="Erro ao deletar presenças", message=e)
-        
+
+
 def deletar_presencas_pelo_usuario(id_usuario: int):
     """
     Deleta as presenças de um determinado usuário
