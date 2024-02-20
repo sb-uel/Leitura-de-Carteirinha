@@ -93,7 +93,7 @@ def consultar_reuniao_pelo_id(id: int):
 
 def buscar_reuniao(data_inicial: date, data_final: date):
     conn = Conexao.get_conexao()
-    sql = "SELECT id_reuniao,data FROM reunioes WHERE data BETWEEN %s AND %s"
+    sql = "SELECT id_reuniao,data FROM reunioes WHERE data BETWEEN %s AND %s ORDER BY data"
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (data_inicial, data_final))
@@ -110,7 +110,7 @@ def exportar_reuniao(data_inicial: date, data_final: date):
         "FROM usuarios u "
         "LEFT JOIN presencas p ON u.id_usuario = p.id_usuario "
         "LEFT JOIN reunioes r ON p.id_reuniao = r.id_reuniao "
-        "WHERE r.data BETWEEN %s AND %s GROUP BY u.n_matricula, u.nome"
+        "WHERE r.data BETWEEN %s AND %s GROUP BY u.n_matricula, u.nome ORDER BY r.data"
     )
     try:
         with conn.cursor() as cursor:

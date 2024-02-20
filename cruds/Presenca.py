@@ -50,7 +50,7 @@ def consultar_presencas_pela_reuniao(id_reuniao: int):
         "FROM presencas p "
         "INNER JOIN usuarios u ON p.id_usuario = u.id_usuario "
         "INNER JOIN cursos c ON u.id_curso = c.id_curso "
-        "WHERE p.id_reuniao = %s"
+        "WHERE p.id_reuniao = %s ORDER BY u.nome"
     )
     try:
         with conn.cursor() as cursor:
@@ -67,7 +67,7 @@ def consultar_presencas_pelo_usuario(id_usuario: int):
     sql = (
         "SELECT r.id_reuniao, r.data, p.presente "
         "FROM reunioes r "
-        "LEFT JOIN presencas p ON r.id_reuniao = p.id_reuniao AND p.id_usuario = %s "
+        "LEFT JOIN presencas p ON r.id_reuniao = p.id_reuniao AND p.id_usuario = %s ORDER BY r.data"
     )
     try:
         with conn.cursor() as cursor:
