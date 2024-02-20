@@ -25,5 +25,7 @@ if Conexao.is_connected():
         for n_carteirinha in n_carteirinhas:
             if n_carteirinha is not None:
                 ler_carteirinha(n_carteirinha, id_reuniao, False)
+            else:
+                break
         print(data, n_carteirinhas)
 Conexao.fechar_conexao()
