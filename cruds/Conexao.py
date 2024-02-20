@@ -26,9 +26,6 @@ class Conexao:
             user (str): O nome de usuário para autenticação no banco de dados.
             password (str): A senha para autenticação no banco de dados.
             db_name (str): O nome do banco de dados a ser utilizado.
-
-        Raises:
-            Exception: Se houver um erro na conexão com o banco de dados.
         """
 
         if cls._conexao:
