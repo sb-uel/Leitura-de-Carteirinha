@@ -5,7 +5,17 @@ from cruds.Conexao import Conexao
 from cruds.Presenca import atualizar_presencas_pela_reuniao, deletar_presencas
 
 
-def cadastrar_reuniao(data_reuniao : date = None, show_msg = True):
+def cadastrar_reuniao(data_reuniao: date = None, show_msg: bool = True) -> int:
+    """
+    Cadastra a reunião com a data de hoje, caso não seja especificada, e retorna o id da reunião criada.
+
+    Args:
+        data_reuniao (date, optional): Data da reunião a ser criada. Padrão é None.
+        show_msg (bool, optional): Define se exibe uma messagebox ao usuário ou não. Padrão é True.
+
+    Returns:
+        int: Retorna o id da reunião criada no banco de dados
+    """
     if data_reuniao is None:
         data_reuniao = date.today()
     resultados = None
@@ -55,7 +65,18 @@ def cadastrar_reuniao(data_reuniao : date = None, show_msg = True):
             messagebox.showerror(title="Erro ao iniciar reunião", message=e)
 
 
-def consultar_reunioes(data: date = None):
+def consultar_reunioes(data: date = None) -> list[tuple[int, date, int]]:
+    """
+    Consulta as reuniões no banco de dados.
+
+    Args:
+        data (date, optional): Se informado pesquisa pela data especificada. Padrão é None.
+
+    Returns:
+        list[tuple[int, date, int]]: Retorna uma lista de tuplas contendo o id da reunião, a data da reunião e
+        o número de presenças da reunião
+            Exemplo: [(1, '2022-05-30', 23), ...]
+    """
     print("EXECUTANDO SELECT REUNIOES + PRESENCAS")
     conn = Conexao.get_conexao()
     sql = (
@@ -78,20 +99,40 @@ def consultar_reunioes(data: date = None):
         messagebox.showerror(title="Erro ao obter reuniões", message=e)
 
 
-def consultar_reuniao_pelo_id(id: int):
-    print(f"EXECUTANDO SELECT REUNIAO ID={id}")
+def consultar_reuniao_pelo_id(id_reuniao: int) -> date:
+    """
+    Retorna a data da reunião pelo id
+
+    Args:
+        id_reuniao (int): O id da reunião
+
+    Returns:
+        date: Data da reunião do id informado
+    """
+    print(f"EXECUTANDO SELECT REUNIAO ID={id_reuniao}")
     conn = Conexao.get_conexao()
     sql = "SELECT data FROM reunioes WHERE id_reuniao = %s"
     try:
         with conn.cursor() as cursor:
-            cursor.execute(sql, (id,))
+            cursor.execute(sql, (id_reuniao,))
             resultados = cursor.fetchone()
         return resultados[0]
     except Exception as e:
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
-def buscar_reuniao(data_inicial: date, data_final: date):
+def buscar_reuniao(data_inicial: date, data_final: date) -> list[tuple[int, date]]:
+    """
+    Busca todas as reuniões de um determinado período
+
+    Args:
+        data_inicial (date): Data inicial para filtragem
+        data_final (date): Data final para filtragem
+
+    Returns:
+        list[tuple[int,date]]:  Uma lista com os ids e datas das reuniões encontradas no intervalo informado
+            Exemplo:  [(1,'2022-05-30'),(2,'2022-06-14')]
+    """
     conn = Conexao.get_conexao()
     sql = "SELECT id_reuniao,data FROM reunioes WHERE data BETWEEN %s AND %s ORDER BY data"
     try:
@@ -103,7 +144,21 @@ def buscar_reuniao(data_inicial: date, data_final: date):
         messagebox.showerror(title="Erro ao obter reuniões", message=e)
 
 
-def exportar_reuniao(data_inicial: date, data_final: date):
+def exportar_reuniao(
+    data_inicial: date, data_final: date
+) -> list[tuple[int, str, int]]:
+    """
+    Consulta todos os dados da tabela reuniões entre a data inicial e a data final
+
+    Args:
+        data_inicial (date): Data inicial para filtragem
+        data_final (date): Data final para filtragem
+
+    Returns:
+        list[tuple[int, str, int]]: Uma lista de tuplas contendo o número de matrícula, o nome do participante
+        e o número de presenças
+            Exemplo:  [(111111111,'Maria',10), (222222222,'João',8)]
+    """
     conn = Conexao.get_conexao()
     sql = (
         "SELECT u.n_matricula, u.nome, SUM(p.presente) AS TotalPresencas "
@@ -121,7 +176,16 @@ def exportar_reuniao(data_inicial: date, data_final: date):
         messagebox.showerror(title="Erro ao obter dados de exportação", message=e)
 
 
-def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
+def atualizar_reuniao(id_reuniao: int, presencas: list[tuple[int, bool]], data: date):
+    """
+    Atualiza a reunião determinada pelo id com novos dados especificados
+
+    Args:
+        id_reuniao (int): O id da reunião a ser alterada
+        presencas (list[tuple[int, bool]]): Uma lista de tuplas com os ids dos usuários e seus respectivos estados de presença
+            Exemplo: [(1, True), (2, False), ...]
+        data (date): A nova data da reunião
+    """
     conn = Conexao.get_conexao()
     atualizar_presencas_pela_reuniao(id_reuniao, presencas)
     sql = "UPDATE reunioes SET data = %s WHERE (id_reuniao = %s)"
@@ -134,6 +198,12 @@ def atualizar_reuniao(id_reuniao: int, presencas: list, data: date):
 
 
 def deletar_reunioes(id_reuniao: int):
+    """
+    Deleta a reunião especificada pelo id
+
+    Args:
+        id_reuniao (int): O id da reunião a ser deletada
+    """
     conn = Conexao.get_conexao()
     deletar_presencas(id_reuniao)
     sql = "DELETE FROM reunioes WHERE id_reuniao = %s"

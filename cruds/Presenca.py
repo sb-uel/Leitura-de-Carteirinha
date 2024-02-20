@@ -12,7 +12,7 @@ def ler_carteirinha(n_carteirinha: str, id_reuniao: int, show_notif: bool = True
 
     Args:
         n_carteirinha (str): O número da carteirinha do usuário.
-        id_reuniao (int): O ID da reunião na qual a presença será confirmada.
+        id_reuniao (int): O id da reunião na qual a presença será confirmada.
         show_notif (bool, optional): Se True, uma notificação será exibida quando a presença for confirmada. Padrão é True.
     """
     resultados = None
@@ -56,10 +56,10 @@ def consultar_presencas_pela_reuniao(id_reuniao: int) -> list[tuple[int, str, st
     Consulta as presenças dos usuários em uma reunião específica.
 
     Args:
-        id_reuniao (int): O ID da reunião.
+        id_reuniao (int): O id da reunião.
 
     Returns:
-        list[tuple[int, str, str, bool]]: Uma lista de tuplas, onde cada tupla contém o ID do usuário, o nome do usuário, 
+        list[tuple[int, str, str, bool]]: Uma lista de tuplas, onde cada tupla contém o id do usuário, o nome do usuário, 
         o curso do usuário e se o usuário estava presente ou não.
             Exemplo: [(1, 'João', 'Computação', True), (2, 'Maria', 'Elétrica', False), ...]
     """
@@ -88,7 +88,7 @@ def consultar_dias_presentes(id_usuario: int) -> int:
     e retorna a quantidade desses dias.
     
     Args:
-        id_usuario (int): O ID do usuário
+        id_usuario (int): O id do usuário
 
     Returns:
         int: Retorna o número de dias presentes deste usuário
@@ -122,10 +122,10 @@ def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list[tuple[int,
     placeholders = []
 
     for id_usuario, presente in presencas:
-        sql += "WHEN %s THEN %s "  # Quando o ID do usuário for ... então presente = ...
+        sql += "WHEN %s THEN %s "  # Quando o id do usuário for ... então presente = ...
         placeholders.extend([id_usuario, presente])
 
-    sql += "END WHERE id_reuniao = %s"  # Onde ID da reunião for ...
+    sql += "END WHERE id_reuniao = %s"  # Onde id da reunião for ...
     placeholders.append(id_reuniao)
     try:
         with conn.cursor() as cursor:
@@ -148,10 +148,10 @@ def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list[tuple[int,
     placeholders = []
 
     for id_reuniao, presente in presencas:
-        sql += "WHEN %s THEN %s "  # Quando o ID da reunião for ... então presente = ...
+        sql += "WHEN %s THEN %s "  # Quando o id da reunião for ... então presente = ...
         placeholders.extend([id_reuniao, presente])
 
-    sql += "END WHERE id_usuario = %s"  # Onde ID do usuário for ...
+    sql += "END WHERE id_usuario = %s"  # Onde id do usuário for ...
     placeholders.append(id_usuario)
     try:
         with conn.cursor() as cursor:
@@ -165,7 +165,7 @@ def deletar_presencas(id_reuniao: int):
     Deleta as presenças de uma determinada reunião
 
     Args:
-        id_reuniao (int): O ID da reunião a ser deletada
+        id_reuniao (int): O id da reunião a ser deletada
     """
     conn = Conexao.get_conexao()
     sql = "DELETE FROM presencas WHERE id_reuniao = %s"
