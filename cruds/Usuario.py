@@ -2,6 +2,7 @@ import re
 from tkinter import messagebox
 
 from cruds.Conexao import Conexao
+from cruds.Presenca import deletar_presencas_pelo_usuario
 
 
 def validar_campos(n_carteirinha: str, nome: str, email: str) -> bool:
@@ -182,6 +183,8 @@ def deletar_usuarios(ids: list[int]):
     sql = f"DELETE FROM usuarios WHERE id_usuario IN ({placeholders})"
 
     conn = Conexao.get_conexao()
+    for id_usuario in ids:
+        deletar_presencas_pelo_usuario(id_usuario)
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, ids)

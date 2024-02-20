@@ -2,7 +2,7 @@ from datetime import date
 from tkinter import messagebox
 
 from cruds.Conexao import Conexao
-from cruds.Presenca import atualizar_presencas_pela_reuniao, deletar_presencas
+from cruds.Presenca import atualizar_presencas_pela_reuniao, deletar_presencas_pela_reuniao
 
 
 def cadastrar_reuniao(data_reuniao: date = None, show_msg: bool = True) -> int:
@@ -205,7 +205,7 @@ def deletar_reunioes(id_reuniao: int):
         id_reuniao (int): O id da reunião a ser deletada
     """
     conn = Conexao.get_conexao()
-    deletar_presencas(id_reuniao)
+    deletar_presencas_pela_reuniao(id_reuniao)
     sql = "DELETE FROM reunioes WHERE id_reuniao = %s"
     try:
         with conn.cursor() as cursor:

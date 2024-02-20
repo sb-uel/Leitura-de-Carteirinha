@@ -160,7 +160,7 @@ def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list[tuple[int,
         messagebox.showerror(title="Erro ao atualizar presenças", message=e)
 
 
-def deletar_presencas(id_reuniao: int):
+def deletar_presencas_pela_reuniao(id_reuniao: int):
     """
     Deleta as presenças de uma determinada reunião
 
@@ -172,5 +172,20 @@ def deletar_presencas(id_reuniao: int):
     try:
         with conn.cursor() as cursor:
             cursor.execute(sql, (id_reuniao,))
+    except Exception as e:
+        messagebox.showerror(title="Erro ao deletar presenças", message=e)
+        
+def deletar_presencas_pelo_usuario(id_usuario: int):
+    """
+    Deleta as presenças de um determinado usuário
+
+    Args:
+        id_usuario (int): O id do usuário a ser deletado
+    """
+    conn = Conexao.get_conexao()
+    sql = "DELETE FROM presencas WHERE id_usuario = %s"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (id_usuario,))
     except Exception as e:
         messagebox.showerror(title="Erro ao deletar presenças", message=e)
