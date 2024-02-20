@@ -4,7 +4,19 @@ from tkinter import messagebox
 from cruds.Conexao import Conexao
 
 
-def validar_campos(n_carteirinha: str, nome: str, email: str):
+def validar_campos(n_carteirinha: str, nome: str, email: str) -> bool:
+    """
+    Valida os campos de entrada do formulário.
+
+    Args:
+        n_carteirinha (str): Número da carteirinha
+        nome (str): Nome completo
+        email (str): Email do usuário
+
+    Returns:
+        bool: Retorna True se todos os campos estiverem preenchidos corretamente e False caso algum
+        campo esteja inválido e além disso exibe uma messagebox específica para cada campo
+    """
     email_pattern = r"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+"
     if not (n_carteirinha.strip() and nome.strip()):
         messagebox.showerror(
@@ -29,6 +41,17 @@ def cadastrar_usuario(
     id_curso: int,
     show_msg: bool = True,
 ):
+    """
+    Cadastra um novo usuário no banco de dados.
+
+    Args:
+        n_carteirinha (str | int): Número da carteirinha
+        nome (str): Nome do usuário
+        email (str): Email do usuário
+        id_curso (int): Id do curso do usuário
+        show_msg (bool, optional): Define se é mostrada uma messagebox ao usuário quando é
+        efetivada com sucesso a operação. Padrão é True.
+    """
     if not isinstance(n_carteirinha, str):
         n_carteirinha = str(n_carteirinha)
     if not validar_campos(n_carteirinha, nome, email):
@@ -53,7 +76,18 @@ def cadastrar_usuario(
         messagebox.showerror(title="Erro ao inserir usuário no banco", message=e)
 
 
-def consultar_usuarios(termo: str = None):
+def consultar_usuarios(termo: str = None) -> list[tuple[int, str, str, str]]:
+    """
+    Retorna todos os usuários ou apenas os usuários pesquisados.
+
+    Args:
+        termo (str, optional): Nome do usuário a ser pesquisado. Padrão é None.
+
+    Returns:
+        list[tuple[int,str,str,str]]:  Uma lista de tuplas contendo o id, nome, número de matrícula e o nome do curso
+        dos usuários.
+            Exemplo:  [(id,"Nome","Número de matrícula","Curso"),...]
+    """
     print("EXECUTADO SELECT USUARIOS")
     conn = Conexao.get_conexao()
     sql = (
@@ -74,7 +108,17 @@ def consultar_usuarios(termo: str = None):
         messagebox.showerror(title="Erro ao obter usuários", message=e)
 
 
-def consultar_usuario_pelo_id(id: int):
+def consultar_usuario_pelo_id(id: int) -> list[tuple[str, str, str, str]]:
+    """
+    Busca um usuário pelo seu id.
+
+    Args:
+        id (int): Id do usuário a ser consultado
+
+    Returns:
+        list[tuple[str,str,str,str]]: Retorna uma lista de tuplas contendo o nome do usuário o número de carteirinha
+        o email do usuário e o nome do curso
+    """
     print(f"EXECUTADO SELECT USUARIO ID={id}")
     conn = Conexao.get_conexao()
     sql = (
@@ -92,7 +136,19 @@ def consultar_usuario_pelo_id(id: int):
         messagebox.showerror(title="Erro ao obter usuários", message=e)
 
 
-def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
+def atualizar_usuario(
+    id_usuario: int, n_carteirinha: str, nome: str, email: str, id_curso: int
+):
+    """
+    Atualiza o usuário do id especificado com os dados fornecidos
+
+    Args:
+        id_usuario (int): Id do usuário a ser atualizado
+        n_carteirinha (str): Número da carteirinha
+        nome (str): Nome do usuário
+        email (str): Email do usuário
+        id_curso (int): Id do curso do usuário
+    """
     if not validar_campos(n_carteirinha, nome, email):
         return
     n_matricula = n_carteirinha[:10]
@@ -115,6 +171,12 @@ def atualizar_usuario(id_usuario, n_carteirinha, nome, email, id_curso):
 
 
 def deletar_usuarios(ids: list[int]):
+    """
+    Deleta todos usuários especificados pelo id dentro da lista
+
+    Args:
+        ids (list[int]): Lista contendo o id de todos os usuários a serem deletados
+    """
     # Cria os placeholders com base no número de ids
     placeholders = ", ".join(["%s" for _ in ids])
     sql = f"DELETE FROM usuarios WHERE id_usuario IN ({placeholders})"
