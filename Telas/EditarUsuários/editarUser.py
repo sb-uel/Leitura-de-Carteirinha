@@ -12,7 +12,7 @@ from cruds.Presenca import (atualizar_presencas_pelo_usuario,
                             consultar_dias_presentes,
                             consultar_presencas_pelo_usuario)
 from cruds.Usuario import atualizar_usuario, consultar_usuario_pelo_id
-from widgets_functions import cria_menu_cursos
+from functions.widgets_functions import cria_menu_cursos
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 

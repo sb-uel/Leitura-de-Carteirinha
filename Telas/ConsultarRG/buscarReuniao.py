@@ -10,7 +10,7 @@ from tkinter import Button, Canvas, PhotoImage, messagebox, ttk
 from tkcalendar import DateEntry
 
 from cruds.Reuniao import consultar_reunioes
-from tab_functions import abrir_aba_editar_rg
+from functions.tab_functions import abrir_aba_editar_rg
 from Telas.defs import *
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"

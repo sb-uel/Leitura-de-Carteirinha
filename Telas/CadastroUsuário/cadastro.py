@@ -7,7 +7,7 @@ from pathlib import Path
 from tkinter import Button, Canvas, Entry, PhotoImage, Text, ttk
 
 from cruds.Usuario import cadastrar_usuario
-from widgets_functions import cria_menu_cursos
+from functions.widgets_functions import cria_menu_cursos
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 

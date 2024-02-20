@@ -6,7 +6,7 @@ from tkinter import Button, Canvas, Entry, PhotoImage, Text, Tk, ttk
 
 from cruds.Conexao import Conexao
 from cruds.Presenca import ler_carteirinha
-from tab_functions import abrir_aba_comecar_rg
+from functions.tab_functions import abrir_aba_comecar_rg
 from Telas.defs import *
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"

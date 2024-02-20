@@ -11,7 +11,7 @@ from tkinter import (Button, Canvas, Entry, PhotoImage, Text, Tk, filedialog,
 from tkcalendar import DateEntry
 
 from cruds.Reuniao import buscar_reuniao
-from excel_functions import exportar_presencas
+from functions.excel_functions import exportar_presencas
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 

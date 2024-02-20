@@ -11,7 +11,7 @@ from cruds.Reuniao import cadastrar_reuniao
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 
-from tab_functions import abrir_aba_leitura
+from functions.tab_functions import abrir_aba_leitura
 from Telas.defs import *
 
 

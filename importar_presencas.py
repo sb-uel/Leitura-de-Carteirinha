@@ -4,7 +4,7 @@ from Telas.login.login import abrir_tela_login
 from cruds.Conexao import Conexao
 from cruds.Presenca import ler_carteirinha
 from cruds.Reuniao import cadastrar_reuniao
-from excel_functions import obtem_planilha_importacao
+from functions.excel_functions import obtem_planilha_importacao
 
 # CONSIDERA-SE QUE A PLANILHA NÃO TENHA CABEÇALHO E OS DADOS ESTEJAM DISPOSTOS ASSIM:
 # |  Data RG      | Data RG      |  Data RG      |

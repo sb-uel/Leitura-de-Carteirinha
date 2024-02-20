@@ -12,7 +12,7 @@ from tkcalendar import DateEntry
 from cruds.Presenca import consultar_presencas_pela_reuniao
 from cruds.Reuniao import (atualizar_reuniao, consultar_reuniao_pelo_id,
                            deletar_reunioes)
-from tab_functions import selecionar_aba_por_nome
+from functions.tab_functions import selecionar_aba_por_nome
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 

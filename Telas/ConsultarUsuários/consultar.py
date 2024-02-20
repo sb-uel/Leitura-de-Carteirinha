@@ -6,7 +6,7 @@ from pathlib import Path
 from tkinter import Button, Canvas, Entry, PhotoImage, Text, messagebox, ttk
 
 from cruds.Usuario import consultar_usuarios, deletar_usuarios
-from tab_functions import abrir_aba_editar_usuario
+from functions.tab_functions import abrir_aba_editar_usuario
 
 ASSETS_PATH = Path(__file__).parent / "assets" / "frame0"
 
