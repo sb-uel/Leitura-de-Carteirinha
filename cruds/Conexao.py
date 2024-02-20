@@ -6,17 +6,30 @@ from tkinter import messagebox
 import mysql.connector as mysql
 
 
-# Usa o padrão de projeto Singleton para a conexão do banco de dados
 class Conexao:
+    """
+    Classe de conexão com o banco de dados MySQL usando singleton.
+    """
+
     _conexao = None  # Atributo Protegido!!!
     __user = None
     __password = None
     __db = None
 
     @classmethod
-    def configurar(cls, host, user, password, db_name):
-        # Certifique-se de fechar a conexão existente, se houver
+    def configurar(cls, host: str, user: str, password: str, db_name: str):
+        """
+        Configura a conexão com o banco de dados.
+
+        Args:
+            host (str): O endereço do host do banco de dados.
+            user (str): O nome de usuário para autenticação no banco de dados.
+            password (str): A senha para autenticação no banco de dados.
+            db_name (str): O nome do banco de dados a ser utilizado.
+        """
+
         if cls._conexao:
+            # Fecha a conexão se já existir uma
             cls._conexao.close()
 
         try:
@@ -37,6 +50,15 @@ class Conexao:
 
     @classmethod
     def get_conexao(cls):
+        """
+        Retorna a conexão com o banco de dados.
+
+        Returns:
+            Connection: A conexão com o banco de dados.
+
+        Raises:
+            Exception: Se a conexão não estiver configurada.
+        """
         if cls._conexao is None:
             raise Exception(
                 "A conexão não está configurada. Use o método 'configurar' primeiro."
@@ -45,18 +67,31 @@ class Conexao:
 
     @classmethod
     def fechar_conexao(cls):
+        """
+        Fecha a conexão com o banco de dados.
+        """
         if cls._conexao:
             cls._conexao.close()
             print("Conexão fechada.")
 
     @classmethod
-    def is_connected(cls):
+    def is_connected(cls) -> bool:
+        """
+        Verifica se a conexão com o banco de dados está ativa.
+
+        Returns:
+            bool: True se a conexão estiver ativa, False caso contrário.
+        """
         return cls._conexao is not None and cls._conexao.is_connected()
 
     @classmethod
     def fazer_backup(cls, local_de_salvamento: Path):
-        """Faz backup da base de dados"""
+        """
+        Faz backup da base de dados.
 
+        Args:
+            local_de_salvamento (Path): O caminho do diretório onde o backup será salvo.
+        """
         # Obtém a data do dia atual para nomear o arquivo
         data_atual = date.today().strftime("%d_%m_%Y")
 
@@ -75,10 +110,13 @@ class Conexao:
 
             # Executa no console
             subprocess.run(comando_mysqldump, shell=True, check=True)
-            
+
             # Exibe uma mensagem de sucesso
-            messagebox.showinfo("Backup Concluído", f"Backup realizado com sucesso em {caminho_completo}")
-            
+            messagebox.showinfo(
+                "Backup Concluído",
+                f"Backup realizado com sucesso em {caminho_completo}",
+            )
+
         except Exception as e:
             # Exibe uma mensagem de erro
             messagebox.showerror("Erro ao fazer backup", f"Erro durante o backup: {e}")
@@ -86,4 +124,3 @@ class Conexao:
         finally:
             # Remove o arquivo de opções após o uso
             arquivo_opcoes.unlink()
-

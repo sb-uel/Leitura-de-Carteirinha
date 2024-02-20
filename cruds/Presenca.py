@@ -5,7 +5,16 @@ from plyer import notification
 from cruds.Conexao import Conexao
 
 
-def ler_carteirinha(n_carteirinha, id_reuniao, show_notif=True):
+def ler_carteirinha(n_carteirinha: str, id_reuniao: int, show_notif: bool = True):
+    """
+    Verifica se um usuário com o número da carteirinha especificada está cadastrado no sistema e, 
+    se estiver, confirma sua presença em uma reunião.
+
+    Args:
+        n_carteirinha (str): O número da carteirinha do usuário.
+        id_reuniao (int): O id da reunião na qual a presença será confirmada.
+        show_notif (bool, optional): Se True, uma notificação será exibida quando a presença for confirmada. Padrão é True.
+    """
     resultados = None
 
     # Verifica se existe um usuário com a carteirinha especificada
@@ -42,7 +51,18 @@ def ler_carteirinha(n_carteirinha, id_reuniao, show_notif=True):
         )
 
 
-def consultar_presencas_pela_reuniao(id_reuniao: int):
+def consultar_presencas_pela_reuniao(id_reuniao: int) -> list[tuple[int, str, str, bool]]:
+    """
+    Consulta as presenças dos usuários em uma reunião específica.
+
+    Args:
+        id_reuniao (int): O id da reunião.
+
+    Returns:
+        list[tuple[int, str, str, bool]]: Uma lista de tuplas, onde cada tupla contém o id do usuário, o nome do usuário, 
+        o curso do usuário e se o usuário estava presente ou não.
+            Exemplo: [(1, 'João', 'Computação', True), (2, 'Maria', 'Elétrica', False), ...]
+    """
     print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_reuniao}")
     conn = Conexao.get_conexao()
     sql = (
@@ -61,24 +81,18 @@ def consultar_presencas_pela_reuniao(id_reuniao: int):
         messagebox.showerror(title="Erro ao obter reunião", message=e)
 
 
-def consultar_presencas_pelo_usuario(id_usuario: int):
-    print(f"EXECUTANDO SELECT PRESENCAS -> REUNIAO ID={id_usuario}")
-    conn = Conexao.get_conexao()
-    sql = (
-        "SELECT r.id_reuniao, r.data, p.presente "
-        "FROM reunioes r "
-        "LEFT JOIN presencas p ON r.id_reuniao = p.id_reuniao AND p.id_usuario = %s ORDER BY r.data"
-    )
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute(sql, (id_usuario,))
-            resultados = cursor.fetchall()
-        return resultados
-    except Exception as e:
-        messagebox.showerror(title="Erro ao obter reunião", message=e)
 
+def consultar_dias_presentes(id_usuario: int) -> int:
+    """
+    Recebe o id do usuário e contabiliza o total de dias presentes dele 
+    e retorna a quantidade desses dias.
+    
+    Args:
+        id_usuario (int): O id do usuário
 
-def consultar_dias_presentes(id_usuario: int):
+    Returns:
+        int: Retorna o número de dias presentes deste usuário
+    """
     print(f"CONTANDO DIAS PRESENTES ID={id_usuario}")
     conn = Conexao.get_conexao()
     sql = (
@@ -94,16 +108,24 @@ def consultar_dias_presentes(id_usuario: int):
         messagebox.showerror(title="Erro ao obter número de presenças", message=e)
 
 
-def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list):
+def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list[tuple[int,bool]]):
+    """
+    Atualiza as presenças dos usuários de uma determinada reunião
+
+    Args:
+        id_reuniao (int): ID da reunião a ser atualizada
+        presencas (list[tuple[int,bool]]): Uma lista de tuplas com os ids dos usuários e seus respectivos estados de presença
+            Exemplo: [(1, True), (2, False), ...]
+    """
     conn = Conexao.get_conexao()
     sql = "UPDATE presencas SET presente = CASE id_usuario "  # Atualize a tabela presenças nos seguintes casos
     placeholders = []
 
     for id_usuario, presente in presencas:
-        sql += "WHEN %s THEN %s "  # Quando o ID do usuário for ... então presente = ...
+        sql += "WHEN %s THEN %s "  # Quando o id do usuário for ... então presente = ...
         placeholders.extend([id_usuario, presente])
 
-    sql += "END WHERE id_reuniao = %s"  # Onde ID da reunião for ...
+    sql += "END WHERE id_reuniao = %s"  # Onde id da reunião for ...
     placeholders.append(id_reuniao)
     try:
         with conn.cursor() as cursor:
@@ -112,16 +134,24 @@ def atualizar_presencas_pela_reuniao(id_reuniao: int, presencas: list):
         messagebox.showerror(title="Erro ao atualizar presenças", message=e)
 
 
-def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list):
+def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list[tuple[int,bool]]):
+    """
+    Atualiza as presenças de um determinado usuário nas reuniões
+
+    Args:
+        id_reuniao (int): ID do usuário a ser atualizado
+        presencas (list[tuple[int,bool]]): Uma lista de tuplas com os ids das reuniões e seus respectivos estados de presença
+            Exemplo: [(1, True), (2, False), ...]
+    """
     conn = Conexao.get_conexao()
     sql = "UPDATE presencas SET presente = CASE id_reuniao "  # Atualize a tabela presenças nos seguintes casos
     placeholders = []
 
     for id_reuniao, presente in presencas:
-        sql += "WHEN %s THEN %s "  # Quando o ID da reunião for ... então presente = ...
+        sql += "WHEN %s THEN %s "  # Quando o id da reunião for ... então presente = ...
         placeholders.extend([id_reuniao, presente])
 
-    sql += "END WHERE id_usuario = %s"  # Onde ID do usuário for ...
+    sql += "END WHERE id_usuario = %s"  # Onde id do usuário for ...
     placeholders.append(id_usuario)
     try:
         with conn.cursor() as cursor:
@@ -131,6 +161,12 @@ def atualizar_presencas_pelo_usuario(id_usuario: int, presencas: list):
 
 
 def deletar_presencas(id_reuniao: int):
+    """
+    Deleta as presenças de uma determinada reunião
+
+    Args:
+        id_reuniao (int): O id da reunião a ser deletada
+    """
     conn = Conexao.get_conexao()
     sql = "DELETE FROM presencas WHERE id_reuniao = %s"
     try:
