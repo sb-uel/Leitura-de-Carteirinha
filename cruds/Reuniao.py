@@ -165,7 +165,7 @@ def exportar_reuniao(
         "FROM usuarios u "
         "LEFT JOIN presencas p ON u.id_usuario = p.id_usuario "
         "LEFT JOIN reunioes r ON p.id_reuniao = r.id_reuniao "
-        "WHERE r.data BETWEEN %s AND %s GROUP BY u.n_matricula, u.nome ORDER BY r.data"
+        "WHERE r.data BETWEEN %s AND %s GROUP BY u.n_matricula, u.nome ORDER BY u.nome"
     )
     try:
         with conn.cursor() as cursor:
